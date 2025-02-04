@@ -3,6 +3,7 @@ import { configureStore, createSlice } from "@reduxjs/toolkit";
 
 const noteInitialState = {
   notes: [],
+  archivedNotes: [],
   noteDetail: {},
   newNoteI: false,
 };
@@ -13,6 +14,9 @@ const noteSlice = createSlice({
   reducers: {
     allNotes(state, action) {
       state.notes = action.payload;
+    },
+    allArchivedNotes(state, action) {
+      state.archivedNotes = action.payload;
     },
     InitiateCreateNote(state) {
       state.newNoteI = !state.newNoteI;
