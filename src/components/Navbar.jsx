@@ -1,7 +1,11 @@
 import { NavLink, useLocation } from "react-router-dom";
 import arrowLeft from "/images/icon-arrow-left.svg";
+import { useDispatch } from "react-redux";
+import { noteAction } from "../store";
+import Tags from "./Tags";
 
 function Navbar() {
+  const dispatch = useDispatch();
   const location = useLocation();
   const isAllNotesActive = location.pathname === "/all-notes" || location.pathname === "/";
 
@@ -55,6 +59,7 @@ function Navbar() {
         <NavLink
           to="archive-notes"
           end
+          onClick={dispatch(noteAction.InitiateCreateNote())}
           className={({ isActive }) =>
             `flex justify-between w-full px-3 py-[10px] rounded-lg group hover:bg-gray-200 active:scale-95 ${
               isActive ? "bg-gray-200 text-blue-500" : ""
@@ -93,6 +98,10 @@ function Navbar() {
             <img src={arrowLeft} alt="" className="rotate-180" />
           </div>
         </NavLink>
+      </div>
+
+      <div className="">
+        <Tags />
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ function NoteForm() {
     }
   }, [newNoteI, noteDetail]);
 
-  // Check if any changes were made in update mode.
+  // Checks if any changes were made in update mode.
   const changesMade =
     !newNoteI &&
     noteDetail.id &&
