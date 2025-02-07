@@ -5,6 +5,8 @@ const noteInitialState = {
   notes: [],
   archivedNotes: [],
   noteDetail: {},
+  filteredNotes: [],
+  filteredTag: null,
   newNoteI: false,
 };
 
@@ -21,6 +23,7 @@ const noteSlice = createSlice({
     InitiateCreateNote(state) {
       state.newNoteI = !state.newNoteI;
       state.noteDetail = {}; // clear any existing detail
+      state.filteredTag = null
     },
     showNoteDetail(state, action) {
       state.noteDetail = action.payload;
@@ -52,8 +55,13 @@ const noteSlice = createSlice({
         }
         // Set the new first note as the active one
         state.noteDetail = state.notes.length > 0 ? state.notes[0] : {};
-    }
+    },
     
+    filterBasedTags(state, action) {
+      const allAndArchiveNotes = [...state.notes, ...state.archivedNotes]
+      state.filteredNotes = allAndArchiveNotes.filter(note => note.tags.includes(action.payload));
+      state.filteredTag = action.payload;
+    }
   },
 });
 
