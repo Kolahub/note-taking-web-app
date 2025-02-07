@@ -14,6 +14,11 @@ function NoteBars() {
   const filteredNotes = useSelector((state) => state.filteredNotes);
   const filteredTag = useSelector((state) => state.filteredTag);
 
+  const searchQueryNotes = useSelector((state) => state.searchQueryNotes);
+  const searchQuery = useSelector((state) => state.searchQuery);
+
+  console.log(searchQuery, searchQueryNotes, '😍😍🟢🟢');
+
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -25,26 +30,17 @@ function NoteBars() {
   // Determine which list to use if no filter is applied.
   const allOrArchiveNotes = allNotePath ? notes : archiveNotePath ? archiveNotes : [];
 
-  // If a filter is active (filteredTag is truthy), then use the filtered list.
-  // Otherwise, use the regular list.
-  const displayNotes = filteredTag ? filteredNotes : allOrArchiveNotes;
-
-  // --- Handle creating a new note
-  const handleNavigateAndCreate = (e) => {
-    e.preventDefault();
-    navigate('/all-notes');
-    dispatch(noteAction.InitiateCreateNote());
-  };
+  const displayNotes = filteredTag ? filteredNotes : searchQuery ? searchQueryNotes : allOrArchiveNotes;
 
   const handleInitiateCreateNote = () => {
-    if (allNotePath) {
-      dispatch(noteAction.InitiateCreateNote());
-    }
-    if (archiveNotePath) {
+    // If you're not on the all-notes page, navigate there.
+    if (!allNotePath) {
       navigate('/all-notes');
-      dispatch(noteAction.InitiateCreateNote());
     }
+    
+    dispatch(noteAction.InitiateCreateNote());
   };
+  
 
   const handleShowNoteDetail = (note) => {
     dispatch(noteAction.showNoteDetail(note));
@@ -74,7 +70,7 @@ function NoteBars() {
       dispatch(noteAction.showNoteDetail(displayNotes[0]));
     }
   }, [dispatch, newNoteI, displayNotes, noteDetail?.id]);
-  
+
   return (
     <div className="px-4 py-5 border-r-2 h-full flex flex-col">
       <button className="flex justify-center w-full py-3 rounded-lg bg-blue-500 active:scale-95 text-white mb-4" onClick={handleInitiateCreateNote}>
@@ -87,7 +83,9 @@ function NoteBars() {
         <p className="capitalize">create new note</p>
       </button>
 
-      {(archiveNotePath && !filteredTag) && <div className="w-full mb-4">All your archived notes are stored here. You can restore or delete them anytime.</div>}
+      {archiveNotePath && !filteredTag && (
+        <div className="w-full mb-4">All your archived notes are stored here. You can restore or delete them anytime.</div>
+      )}
 
       {(newNoteI && !filteredTag) && <div className="bg-gray-100 text-lg font-semibold rounded-lg p-2 mb-4">Untitled Note</div>}
 
@@ -98,15 +96,25 @@ function NoteBars() {
         </div>
       )}
 
+      {searchQuery && searchQueryNotes.length === 0 && (
+        <div className="bg-gray-100 rounded-lg p-2 mb-4">
+          No notes match your search. Try a different keyword or{' '}
+          <button className="underline" onClick={handleInitiateCreateNote}>
+            create a new note.
+          </button>
+          .
+        </div>
+      )}
+
       <div className="flex-1 overflow-y-auto scrollbar-hide">
-        {displayNotes.length === 0 ? (
+        {(displayNotes.length === 0 && !filteredTag && !searchQuery) ? (
           <div className="bg-gray-100 rounded-lg p-2">
             {allNotePath ? (
               'You don’t have any notes yet. Start a new note to capture your thoughts and ideas.'
             ) : archiveNotePath ? (
               <>
                 No notes have been archived yet. Move notes here for safekeeping, or{' '}
-                <button className="underline" onClick={handleNavigateAndCreate}>
+                <button className="underline" onClick={handleInitiateCreateNote}>
                   create a new note.
                 </button>
               </>

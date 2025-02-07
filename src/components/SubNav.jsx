@@ -1,23 +1,44 @@
 // import React from 'react'
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { noteAction } from '../store';
 
 function SubNav() {
+  const dispatch = useDispatch()
   const filteredTag = useSelector((state) => state.filteredTag);
+  const searchQuery = useSelector((state) => state.searchQuery)
+
+  const otherDisplayHeading = filteredTag || searchQuery
+
+  const handleSearchQueryNotes = function (query) {
+    dispatch(noteAction.allSearchQueryNotes(query))
+    console.log(query)
+  }
   return (
     <div className="w-full flex items-center justify-between px-8 py-[18.5px]">
       <h1 className="capitalize text-3xl font-bold">
-        {!filteredTag ? (
+        {!otherDisplayHeading ? (
           'All Notes'
         ) : (
           <>
-            <span className="text-gray-600">Note tagged:</span> {filteredTag}
+            <span className="text-gray-600">{filteredTag ? 'note tagged:' : searchQuery ? 'showing results for:' : null}</span> {otherDisplayHeading}
           </>
         )}
       </h1>
 
-      <div className="flex gap-4">
-        <input type="text" className="border-2 rounded-lg focus:outline-none p-2 w-[320px]" />
+      <div className="flex gap-8">
+        <div className="flex items-center gap-3 border-2 rounded-lg text-gray-500 px-4 py-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path
+              fill="currentColor"
+              fillRule="evenodd"
+              d="M11.248 3.5a7.289 7.289 0 1 0 0 14.577 7.289 7.289 0 0 0 0-14.577ZM2.46 10.79a8.789 8.789 0 1 1 17.577 0 8.789 8.789 0 0 1-17.577 0Z"
+              clipRule="evenodd"
+            />
+            <path fill="currentColor" fillRule="evenodd" d="m16.736 15.648 5.616 5.6-1.06 1.063-5.615-5.601 1.06-1.062Z" clipRule="evenodd" />
+          </svg>
+          <input type="text" className="focus:outline-none w-[320px] text-black" onChange={(e) => handleSearchQueryNotes(e.target.value)} />
+        </div>
         <button type="button">
           <div className="text-gray-500">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">

@@ -7,6 +7,8 @@ const noteInitialState = {
   noteDetail: {},
   filteredNotes: [],
   filteredTag: null,
+  searchQuery: null,
+  searchQueryNotes: [],
   newNoteI: false,
 };
 
@@ -20,17 +22,31 @@ const noteSlice = createSlice({
     allArchivedNotes(state, action) {
       state.archivedNotes = action.payload;
     },
+
     InitiateCreateNote(state) {
-      state.newNoteI = !state.newNoteI;
-      state.noteDetail = {}; // clear any existing detail
-      state.filteredTag = null
+      state.newNoteI = true;           // explicitly enter create mode
+      state.noteDetail = {};           // clear any existing note detail
+      state.filteredTag = null;        // clear tag filter
+      state.searchQuery = '';          // clear search query
+      state.searchQueryNotes = [];     // clear search results
     },
+    
+    // clearFilters(state) {
+    //   state.filteredTag = null;
+    //   state.searchQuery = '';
+    //   state.searchQueryNotes = [];
+    // },
+    
     showNoteDetail(state, action) {
       state.noteDetail = action.payload;
       state.newNoteI = false; // ensure we’re not in create mode
     },
     cancelNote(state) {
+      console.log('🟢🟢🟢', state.newNoteI);
+
       state.newNoteI = false;
+      console.log('🟢🟢🟢', state.newNoteI);
+      
       // Optionally clear noteDetail if you want:
       // state.noteDetail = {};
     },
@@ -61,6 +77,31 @@ const noteSlice = createSlice({
       const allAndArchiveNotes = [...state.notes, ...state.archivedNotes]
       state.filteredNotes = allAndArchiveNotes.filter(note => note.tags.includes(action.payload));
       state.filteredTag = action.payload;
+    },
+
+    allSearchQueryNotes(state, action) {
+      const allAndArchiveNotes = [...state.notes, ...state.archivedNotes];
+    
+      if (!action.payload || typeof action.payload !== 'string') {
+        state.searchQueryNotes = [];
+        state.searchQuery = '';
+        return;
+      }
+    
+      const query = action.payload.trim().toLowerCase();
+    
+      state.searchQueryNotes = allAndArchiveNotes.filter(note => {
+      const allAndArchiveNotes = [...state.notes, ...state.archivedNotes];
+        const tagsArray = [...new Set(allAndArchiveNotes.map((note) => note.tags).join(',').split(','))];
+    
+        return (
+          tagsArray.some(tag => String(tag).toLowerCase().includes(query)) || 
+          (note.title?.toLowerCase().includes(query)) ||
+          (note.note_details?.toLowerCase().includes(query))
+        );
+      });
+    
+      state.searchQuery = action.payload;
     }
   },
 });

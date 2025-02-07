@@ -100,7 +100,9 @@ function NoteForm() {
   };
 
   const handleCancel = (e) => {
-    e.preventDefault();
+    e.preventDefault();    
+    console.log('handleCancel', newNoteI, "🤣🤣✅✅");
+
     if (!newNoteI && noteDetail.id) {
       // Reset to original note values in update mode.
       setFormData({
@@ -113,6 +115,8 @@ function NoteForm() {
       // Clear the form and exit create mode.
       setFormData({ title: '', tags: '', last_edited: '', noteDetails: '' });
       dispatch(noteAction.cancelNote());
+    console.log('handleCancel', newNoteI, "🤣🤣✅✅");
+
       dispatch(noteAction.showNoteDetail(allNotes[0]));
     }
   };
@@ -241,6 +245,7 @@ function NoteForm() {
           </button>
           <button
             onClick={handleCancel}
+            type='button'
             disabled={!newNoteI && !changesMade}
             className={`capitalize rounded-lg px-4 py-3 active:scale-95 ${!newNoteI && !changesMade ? 'bg-gray-300 text-gray-500' : 'bg-gray-100'}`}
           >
