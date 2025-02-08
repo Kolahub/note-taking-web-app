@@ -7,12 +7,14 @@ import { noteAction } from '../store';
 import { format } from 'date-fns';
 
 function NoteForm() {
-  const allNotes = useSelector((state) => state.notes);
   const newNoteI = useSelector((state) => state.newNoteI);
   const noteDetail = useSelector((state) => state.noteDetail);
   const dispatch = useDispatch();
   const location = useLocation();
   const currentPath = location.pathname;
+
+  console.log(newNoteI, "🤣🤣💕💕");
+
 
   // Always use controlled inputs.
   const [formData, setFormData] = useState({
@@ -68,11 +70,8 @@ function NoteForm() {
       } else if (data) {
         // Clear the form.
         setFormData({ title: '', tags: '', noteDetails: '' });
-        // Toggle off the create mode.
-        dispatch(noteAction.InitiateCreateNote());
-        // Add the new note to the Redux store.
+        dispatch(noteAction.cancelNote());
         dispatch(noteAction.addNote(data[0]));
-        // set this note as the currently active one.
         dispatch(noteAction.showNoteDetail(data[0]));
       }
     } else {
@@ -91,38 +90,36 @@ function NoteForm() {
       }
       if (data) {
         console.log('Updated:', data);
-        // Update the note in the Redux store.
         dispatch(noteAction.updateNote(data[0]));
-        // Optionally, update the noteDetail so it reflects the updated data.
         dispatch(noteAction.showNoteDetail(data[0]));
       }
     }
   };
 
   const handleCancel = (e) => {
-    e.preventDefault();    
-    console.log('handleCancel', newNoteI, "🤣🤣✅✅");
+    e.preventDefault();
+    console.log('handleCancel', newNoteI, '🤣🤣✅✅');
 
     if (!newNoteI && noteDetail.id) {
       // Reset to original note values in update mode.
       setFormData({
         title: noteDetail.title || '',
         tags: noteDetail.tags || '',
-        last_edited: noteDetail.created_at || '',
         noteDetails: noteDetail.note_details || '',
       });
+      console.log('Resetting form data to original note values:', noteDetail);
+      dispatch(noteAction.showNoteDetail(noteDetail)); // Ensure the original note is displayed as active
     } else {
       // Clear the form and exit create mode.
       setFormData({ title: '', tags: '', last_edited: '', noteDetails: '' });
       dispatch(noteAction.cancelNote());
-    console.log('handleCancel', newNoteI, "🤣🤣✅✅");
-
-      dispatch(noteAction.showNoteDetail(allNotes[0]));
+      console.log('Clearing form and exiting create mode');
+      dispatch(noteAction.showNoteDetail(noteDetail)); // Ensure the first note is displayed as active
     }
   };
 
   return (
-    <Form onSubmit={handleSaveNote} className="px-6 py-5 flex flex-col border-r-2 border-gray-200" style={{ height: 'calc(100vh - 85px)' }}>
+    <Form onSubmit={(e) => handleSaveNote(e)} className="px-6 py-5 flex flex-col border-r-2 border-gray-200" style={{ height: 'calc(100vh - 85px)' }}>
       {/* Title Input */}
       <input
         type="text"
@@ -244,8 +241,8 @@ function NoteForm() {
             {newNoteI ? 'save note' : 'update note'}
           </button>
           <button
-            onClick={handleCancel}
-            type='button'
+            onClick={(e) => handleCancel(e)}
+            type="button"
             disabled={!newNoteI && !changesMade}
             className={`capitalize rounded-lg px-4 py-3 active:scale-95 ${!newNoteI && !changesMade ? 'bg-gray-300 text-gray-500' : 'bg-gray-100'}`}
           >

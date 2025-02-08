@@ -1,13 +1,30 @@
 import { NavLink, useLocation } from "react-router-dom";
 import arrowLeft from "/images/icon-arrow-left.svg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { noteAction } from "../store";
 import Tags from "./Tags";
+import { useEffect } from "react";
 
 function Navbar() {
+  const newNoteI = useSelector((state) => state.newNoteI);
+
   const dispatch = useDispatch();
   const location = useLocation();
-  const isAllNotesActive = location.pathname === "/all-notes" || location.pathname === "/";
+  const currentPath = location.pathname;
+
+  const archiveNotePath = currentPath === '/archive-notes';
+  const allNotePath = currentPath === '/' || currentPath === '/all-notes';
+
+  useEffect(() => {
+    if (newNoteI && archiveNotePath) {
+      // delay the cancel dispatch a little bit to allow the navigation to complete.
+      const timer = setTimeout(() => {
+        dispatch(noteAction.cancelNote());
+      }, 100); // 100ms delay (adjust as necessary)
+      return () => clearTimeout(timer);
+    }
+  }, [newNoteI, archiveNotePath, dispatch]);
+  
 
   return (
     <div>
@@ -16,7 +33,7 @@ function Navbar() {
           to={"all-notes"}
           end
           className={`flex justify-between w-full px-3 py-[10px] rounded-lg group hover:bg-gray-200 ${
-            isAllNotesActive ? "bg-gray-200 text-blue-500" : ""
+            allNotePath ? "bg-gray-200 text-blue-500" : ""
           }`}
         >
           <div className="flex gap-2">
@@ -59,7 +76,6 @@ function Navbar() {
         <NavLink
           to="archive-notes"
           end
-          onClick={dispatch(noteAction.InitiateCreateNote())}
           className={({ isActive }) =>
             `flex justify-between w-full px-3 py-[10px] rounded-lg group hover:bg-gray-200 active:scale-95 ${
               isActive ? "bg-gray-200 text-blue-500" : ""

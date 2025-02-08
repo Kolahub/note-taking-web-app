@@ -18,6 +18,8 @@ function NoteBars() {
   const searchQuery = useSelector((state) => state.searchQuery);
 
   console.log(searchQuery, searchQueryNotes, '😍😍🟢🟢');
+  console.log(newNoteI, "🤣🤣💕💕✅");
+  
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -32,14 +34,13 @@ function NoteBars() {
 
   const displayNotes = filteredTag ? filteredNotes : searchQuery ? searchQueryNotes : allOrArchiveNotes;
 
-  const handleInitiateCreateNote = () => {
-    // If you're not on the all-notes page, navigate there.
-    if (!allNotePath) {
-      navigate('/all-notes');
-    }
-    
-    dispatch(noteAction.InitiateCreateNote());
-  };
+const handleInitiateCreateNote = () => {
+  if (!allNotePath) {
+    navigate('/all-notes');
+  }
+  // Dispatch after navigation
+  dispatch(noteAction.InitiateCreateNote());
+};
   
 
   const handleShowNoteDetail = (note) => {
@@ -48,7 +49,10 @@ function NoteBars() {
 
   useEffect(() => {
     const fetchNotes = async () => {
-      const { data, error } = await supabase.from('notes').select().order('created_at', { ascending: false });
+      const { data, error } = await supabase
+        .from('notes')
+        .select()
+        .order('created_at', { ascending: false });
       if (error) {
         console.log(error);
         return;
@@ -60,16 +64,26 @@ function NoteBars() {
         dispatch(noteAction.allArchivedNotes(archivedData));
       }
     };
+  
     fetchNotes();
+    // This effect runs only once on mount.
   }, [dispatch]);
-
+  
   useEffect(() => {
-    if (newNoteI) {
-      dispatch(noteAction.showNoteDetail(newNoteI));
-    } else if (displayNotes.length > 0 && (!noteDetail?.id || !displayNotes.some((note) => note.id === noteDetail.id))) {
+    if (!newNoteI && displayNotes.length > 0) {
+      // This will set the active note detail when displayNotes change.
       dispatch(noteAction.showNoteDetail(displayNotes[0]));
     }
-  }, [dispatch, newNoteI, displayNotes, noteDetail?.id]);
+  }, [dispatch, newNoteI, displayNotes]);
+  
+
+  // useEffect(() => {
+  //   if (newNoteI) {
+  //     dispatch(noteAction.showNoteDetail(newNoteI));
+  //   } else if (displayNotes.length > 0 && (!noteDetail?.id || !displayNotes.some((note) => note.id === noteDetail.id))) {
+  //     dispatch(noteAction.showNoteDetail(displayNotes[0]));
+  //   }
+  // }, [dispatch, newNoteI, displayNotes, noteDetail?.id]);
 
   return (
     <div className="px-4 py-5 border-r-2 h-full flex flex-col">

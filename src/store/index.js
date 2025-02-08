@@ -24,11 +24,11 @@ const noteSlice = createSlice({
     },
 
     InitiateCreateNote(state) {
-      state.newNoteI = true;           // explicitly enter create mode
-      state.noteDetail = {};           // clear any existing note detail
-      state.filteredTag = null;        // clear tag filter
-      state.searchQuery = '';          // clear search query
-      state.searchQueryNotes = [];     // clear search results
+      state.newNoteI = true; // Instead of toggling
+      state.noteDetail = {}; 
+      state.filteredTag = null;
+      state.searchQuery = '';
+      state.searchQueryNotes = [];
     },
     
     // clearFilters(state) {
@@ -39,17 +39,17 @@ const noteSlice = createSlice({
     
     showNoteDetail(state, action) {
       state.noteDetail = action.payload;
-      state.newNoteI = false; // ensure we’re not in create mode
+      // Only reset newNoteI if we're showing an existing note with an ID.
+      // if (action.payload && action.payload.id) {
+      //   state.newNoteI = false;
+      // }
     },
+    
+    
     cancelNote(state) {
-      console.log('🟢🟢🟢', state.newNoteI);
-
       state.newNoteI = false;
-      console.log('🟢🟢🟢', state.newNoteI);
-      
-      // Optionally clear noteDetail if you want:
-      // state.noteDetail = {};
     },
+    
     // New reducer to add a note to the array.
     addNote(state, action) {
       // Prepend the new note (if you want it to appear at the top).
