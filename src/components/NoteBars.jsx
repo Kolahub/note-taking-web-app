@@ -66,7 +66,6 @@ const handleInitiateCreateNote = () => {
     };
   
     fetchNotes();
-    // This effect runs only once on mount.
   }, [dispatch]);
   
   useEffect(() => {
@@ -76,14 +75,6 @@ const handleInitiateCreateNote = () => {
     }
   }, [dispatch, newNoteI, displayNotes]);
   
-
-  // useEffect(() => {
-  //   if (newNoteI) {
-  //     dispatch(noteAction.showNoteDetail(newNoteI));
-  //   } else if (displayNotes.length > 0 && (!noteDetail?.id || !displayNotes.some((note) => note.id === noteDetail.id))) {
-  //     dispatch(noteAction.showNoteDetail(displayNotes[0]));
-  //   }
-  // }, [dispatch, newNoteI, displayNotes, noteDetail?.id]);
 
   return (
     <div className="px-4 py-5 border-r-2 h-full flex flex-col">

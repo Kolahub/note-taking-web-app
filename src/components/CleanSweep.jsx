@@ -33,10 +33,13 @@ function CleanSweep() {
         return;
       }
       if (allData) {
+        // dispatch(noteAction.addNote())
         const unarchivedData = allData.filter((note) => !note.archived);
         const archivedData = allData.filter((note) => note.archived);
         // Dispatch updated notes array based on current route.
-        dispatch(noteAction.allNotes(allNotePath ? unarchivedData : archiveNotePath ? archivedData : []));
+        dispatch(noteAction.allNotes(unarchivedData));
+        dispatch(noteAction.allArchivedNotes(archivedData));
+
         // Set the first note in the updated list as the active note.
         dispatch(noteAction.showNoteDetail(allNotePath ? unarchivedData[0] || {} : archiveNotePath ? archivedData[0] || {} : {}));
       }

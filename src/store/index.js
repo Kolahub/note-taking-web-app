@@ -31,11 +31,11 @@ const noteSlice = createSlice({
       state.searchQueryNotes = [];
     },
     
-    // clearFilters(state) {
-    //   state.filteredTag = null;
-    //   state.searchQuery = '';
-    //   state.searchQueryNotes = [];
-    // },
+    clearFilters(state) {
+      state.filteredTag = null;
+      state.searchQuery = '';
+      state.searchQueryNotes = [];
+    },
     
     showNoteDetail(state, action) {
       state.noteDetail = action.payload;
@@ -55,6 +55,12 @@ const noteSlice = createSlice({
       // Prepend the new note (if you want it to appear at the top).
       state.notes.unshift(action.payload);
     },
+
+    // addArchiveNote(state, action) {
+    //   // Prepend the new note (if you want it to appear at the top).
+    //   state.notes.unshift(action.payload);
+    // },
+
     // New reducer to update an existing note in the array.
     updateNote(state, action) {
       const updatedNote = action.payload;
@@ -81,6 +87,7 @@ const noteSlice = createSlice({
 
     allSearchQueryNotes(state, action) {
       const allAndArchiveNotes = [...state.notes, ...state.archivedNotes];
+      state.filteredTag = null; 
     
       if (!action.payload || typeof action.payload !== 'string') {
         state.searchQueryNotes = [];

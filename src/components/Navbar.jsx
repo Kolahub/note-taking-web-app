@@ -24,6 +24,10 @@ function Navbar() {
       return () => clearTimeout(timer);
     }
   }, [newNoteI, archiveNotePath, dispatch]);
+
+  useEffect(() => {
+    dispatch(noteAction.clearFilters())
+  }, [dispatch])
   
 
   return (
@@ -32,6 +36,7 @@ function Navbar() {
         <NavLink
           to={"all-notes"}
           end
+          onClick={() => dispatch(noteAction.clearFilters())}
           className={`flex justify-between w-full px-3 py-[10px] rounded-lg group hover:bg-gray-200 ${
             allNotePath ? "bg-gray-200 text-blue-500" : ""
           }`}
