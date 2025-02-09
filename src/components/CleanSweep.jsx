@@ -9,13 +9,12 @@ function CleanSweep() {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  // Define current view paths.
+  // Determine the current view based on the path
   const archiveNotePath = currentPath === '/archive-notes';
   const allNotePath = currentPath === '/' || currentPath === '/all-notes';
 
-  // Merged archive/restore function.
+  // Toggle the archived status of a note
   const handleToggleArchive = async () => {
-    // Toggle archived status: if noteDetail.archived is false/undefined, new status becomes true, and vice versa.
     const newArchivedStatus = !noteDetail.archived;
     const { data, error } = await supabase.from('notes').update({ archived: newArchivedStatus }).eq('id', noteDetail.id).select();
 
@@ -26,35 +25,40 @@ function CleanSweep() {
 
     if (data) {
       console.log('Toggle archive data:', data);
-      // Re-fetch all notes to update the UI immediately.
+      // Fetch and update notes in the UI
       const { data: allData, error: fetchError } = await supabase.from('notes').select().order('created_at', { ascending: false });
+
       if (fetchError) {
         console.log('Error fetching notes:', fetchError);
         return;
       }
+
       if (allData) {
-        // dispatch(noteAction.addNote())
         const unarchivedData = allData.filter((note) => !note.archived);
         const archivedData = allData.filter((note) => note.archived);
-        // Dispatch updated notes array based on current route.
+
+        // Update notes based on the current route
         dispatch(noteAction.allNotes(unarchivedData));
         dispatch(noteAction.allArchivedNotes(archivedData));
 
-        // Set the first note in the updated list as the active note.
+        // Set the first note in the list as active
         dispatch(noteAction.showNoteDetail(allNotePath ? unarchivedData[0] || {} : archiveNotePath ? archivedData[0] || {} : {}));
       }
     }
   };
 
+  // Delete a note
   const handleDeleteNow = async () => {
     const { data, error } = await supabase.from('notes').delete().eq('id', noteDetail.id).select();
+
     if (error) {
       console.log('Error deleting note:', error);
       return;
     }
+
     if (data) {
       console.log('Deleted note:', data);
-      // Delete the note from Redux.
+      // Remove the note from Redux
       dispatch(noteAction.deleteNote(noteDetail.id));
     }
   };
@@ -63,7 +67,7 @@ function CleanSweep() {
     <div className="flex flex-col gap-3 pl-4 py-5 mr-6 h-full">
       <button className="flex items-center gap-2 px-4 py-3 border-2 border-gray-300 w-full rounded-lg active:scale-95" onClick={handleToggleArchive}>
         {archiveNotePath ? (
-          // Restore icon (for archived view)
+          // Restore icon
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path
               fill="#0E121B"
@@ -79,7 +83,7 @@ function CleanSweep() {
             />
           </svg>
         ) : allNotePath ? (
-          // Archive icon (for unarchived view)
+          // Archive icon
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path
               stroke="#0E121B"
@@ -88,13 +92,7 @@ function CleanSweep() {
               strokeWidth="1.5"
               d="M21 7.782v8.435C21 19.165 18.919 21 15.974 21H8.026C5.081 21 3 19.165 3 16.216V7.782C3 4.834 5.081 3 8.026 3h7.948C18.919 3 21 4.843 21 7.782Z"
             />
-            <path
-              stroke="#0E121B"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="1.5"
-              d="m15 14-3.002 3L9 14M11.998 17v-7M20.934 7H3.059"
-            />
+            <path stroke="#0E121B" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m15 14-3.002 3L9 14M11.998 17v-7M20.934 7H3.059" />
           </svg>
         ) : null}
         <p className="capitalize">{archiveNotePath ? 'restore note' : allNotePath ? 'archive note' : ''}</p>

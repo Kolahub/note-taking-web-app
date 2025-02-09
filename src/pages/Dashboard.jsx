@@ -5,10 +5,12 @@ import CleanSweep from '../components/CleanSweep';
 import NoteForm from '../components/NoteForm';
 import { useSelector } from 'react-redux';
 import SubNav from '../components/SubNav';
+import Settings from '../components/Settings';
 
 function Dashboard() {
   const allNotes = useSelector((state) => state.notes);
   const newNoteI = useSelector((state) => state.newNoteI);
+  const settingsActive = useSelector((state) => state.settingsActive);
 
   return (
     <div className="grid grid-cols-10 grid-rows-9 lg:h-screen">
@@ -28,12 +30,10 @@ function Dashboard() {
       </div>
 
       <div className="col-start-5 col-span-4 row-start-2 row-span-full">
-        {(newNoteI || allNotes.length > 0) && <NoteForm />}
+        {settingsActive ? <Settings /> : (newNoteI || allNotes.length > 0) && <NoteForm />}
       </div>
 
-      <div className="-col-end-1 col-span-2 row-start-2 row-span-full">
-        {allNotes.length > 0 && <CleanSweep />}
-      </div>
+      <div className="-col-end-1 col-span-2 row-start-2 row-span-full">{settingsActive ? null : allNotes.length > 0 && <CleanSweep />}</div>
     </div>
   );
 }

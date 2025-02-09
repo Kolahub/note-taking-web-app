@@ -1,55 +1,52 @@
-import { NavLink, useLocation } from "react-router-dom";
-import arrowLeft from "/images/icon-arrow-left.svg";
-import { useDispatch, useSelector } from "react-redux";
-import { noteAction } from "../store";
-import Tags from "./Tags";
-import { useEffect } from "react";
+import { NavLink, useLocation } from 'react-router-dom';
+import arrowLeft from '/images/icon-arrow-left.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { noteAction } from '../store';
+import Tags from './Tags';
+import { useEffect } from 'react';
 
 function Navbar() {
   const newNoteI = useSelector((state) => state.newNoteI);
-
   const dispatch = useDispatch();
   const location = useLocation();
   const currentPath = location.pathname;
 
+  // Determine the current path to set active states
   const archiveNotePath = currentPath === '/archive-notes';
   const allNotePath = currentPath === '/' || currentPath === '/all-notes';
 
   useEffect(() => {
     if (newNoteI && archiveNotePath) {
-      // delay the cancel dispatch a little bit to allow the navigation to complete.
+      // Cancel note creation with a delay to ensure navigation completes
       const timer = setTimeout(() => {
         dispatch(noteAction.cancelNote());
-      }, 100); // 100ms delay (adjust as necessary)
+      }, 100); // 100ms delay
       return () => clearTimeout(timer);
     }
   }, [newNoteI, archiveNotePath, dispatch]);
 
   useEffect(() => {
-    dispatch(noteAction.clearFilters())
-  }, [dispatch])
-  
+    // Clear filters on component mount
+    dispatch(noteAction.clearFilters());
+  }, [dispatch]);
+
+  const handleOnclickNav = function () {
+    dispatch(noteAction.clearFilters());
+    dispatch(noteAction.cancelActiveSettings());
+  };
 
   return (
     <div>
       <div className="lg:mt-4 lg:flex flex-col gap-2">
         <NavLink
-          to={"all-notes"}
+          to={'all-notes'}
           end
-          onClick={() => dispatch(noteAction.clearFilters())}
-          className={`flex justify-between w-full px-3 py-[10px] rounded-lg group hover:bg-gray-200 ${
-            allNotePath ? "bg-gray-200 text-blue-500" : ""
-          }`}
+          onClick={handleOnclickNav}
+          className={`flex justify-between w-full px-3 py-[10px] rounded-lg group hover:bg-gray-200 ${allNotePath ? 'bg-gray-200 text-blue-500' : ''}`}
         >
           <div className="flex gap-2">
             <div className="group-hover:text-blue-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
                   fillRule="evenodd"
@@ -81,21 +78,14 @@ function Navbar() {
         <NavLink
           to="archive-notes"
           end
+          onClick={handleOnclickNav}
           className={({ isActive }) =>
-            `flex justify-between w-full px-3 py-[10px] rounded-lg group hover:bg-gray-200 active:scale-95 ${
-              isActive ? "bg-gray-200 text-blue-500" : ""
-            }`
+            `flex justify-between w-full px-3 py-[10px] rounded-lg group hover:bg-gray-200 active:scale-95 ${isActive ? 'bg-gray-200 text-blue-500' : ''}`
           }
         >
           <div className="flex gap-2">
             <div className="group-hover:text-blue-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path
                   stroke="currentColor"
                   strokeLinecap="round"

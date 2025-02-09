@@ -1,6 +1,6 @@
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import supabase from '../config/SupabaseConfig';
-import { useEffect, useState } from 'react';
 import { noteAction } from '../store';
 
 function Tags() {
@@ -27,6 +27,8 @@ function Tags() {
 
   const handleFilterBasedTags = (tag) => {
     dispatch(noteAction.filterBasedTags(tag));
+
+    dispatch(noteAction.cancelActiveSettings());
   };
 
   return (
@@ -69,18 +71,13 @@ function Tags() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <p className='text-gray-800'>{tag}</p>
+                  <p className="text-gray-800">{tag}</p>
                 </div>
 
                 {/* Arrow SVG: Always visible for active tag */}
                 <div className={activeTag === tag ? 'block' : 'hidden group-hover:block'}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" className="rotate-180">
-                    <path
-                      fill="currentColor"
-                      fillRule="evenodd"
-                      d="M15.75 20.414 7.336 12l8.414-8.414L17.164 5l-7 7 7 7-1.414 1.414Z"
-                      clipRule="evenodd"
-                    />
+                    <path fill="currentColor" fillRule="evenodd" d="M15.75 20.414 7.336 12l8.414-8.414L17.164 5l-7 7 7 7-1.414 1.414Z" clipRule="evenodd" />
                   </svg>
                 </div>
               </button>

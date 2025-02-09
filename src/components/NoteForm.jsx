@@ -13,10 +13,7 @@ function NoteForm() {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  console.log(newNoteI, "🤣🤣💕💕");
-
-
-  // Always use controlled inputs.
+  // Controlled inputs for form data
   const [formData, setFormData] = useState({
     title: '',
     tags: '',
@@ -24,7 +21,7 @@ function NoteForm() {
     noteDetails: '',
   });
 
-  // On update mode, initialize formData with noteDetail.
+  // Initialize formData based on noteDetail when updating
   useEffect(() => {
     if (!newNoteI && noteDetail.id) {
       setFormData({
@@ -40,7 +37,7 @@ function NoteForm() {
     }
   }, [newNoteI, noteDetail]);
 
-  // Checks if any changes were made in update mode.
+  // Check for changes in update mode
   const changesMade =
     !newNoteI &&
     noteDetail.id &&
@@ -53,7 +50,7 @@ function NoteForm() {
     e.preventDefault();
 
     if (newNoteI) {
-      // Create new note.
+      // Create new note
       const { data, error } = await supabase
         .from('notes')
         .insert([
@@ -68,14 +65,14 @@ function NoteForm() {
       if (error) {
         console.log(error);
       } else if (data) {
-        // Clear the form.
+        // Clear the form and update state
         setFormData({ title: '', tags: '', noteDetails: '' });
         dispatch(noteAction.cancelNote());
         dispatch(noteAction.addNote(data[0]));
         dispatch(noteAction.showNoteDetail(data[0]));
       }
     } else {
-      // Update mode:
+      // Update existing note
       const { data, error } = await supabase
         .from('notes')
         .update({
@@ -98,23 +95,20 @@ function NoteForm() {
 
   const handleCancel = (e) => {
     e.preventDefault();
-    console.log('handleCancel', newNoteI, '🤣🤣✅✅');
 
     if (!newNoteI && noteDetail.id) {
-      // Reset to original note values in update mode.
+      // Reset form to original note values
       setFormData({
         title: noteDetail.title || '',
         tags: noteDetail.tags || '',
         noteDetails: noteDetail.note_details || '',
       });
-      console.log('Resetting form data to original note values:', noteDetail);
-      dispatch(noteAction.showNoteDetail(noteDetail)); // Ensure the original note is displayed as active
+      dispatch(noteAction.showNoteDetail(noteDetail));
     } else {
-      // Clear the form and exit create mode.
+      // Clear form and exit create mode
       setFormData({ title: '', tags: '', last_edited: '', noteDetails: '' });
       dispatch(noteAction.cancelNote());
-      console.log('Clearing form and exiting create mode');
-      dispatch(noteAction.showNoteDetail(noteDetail)); // Ensure the first note is displayed as active
+      dispatch(noteAction.showNoteDetail(noteDetail));
     }
   };
 
