@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import ColorTheme from './ColorTheme';
 import FontTheme from './FontTheme';
 import ChangePassword from './ChangePassword';
-import Logout from './Logout';
 
 function Settings() {
   const activeSettings = useSelector((state) => state.activeSettings);
@@ -16,8 +15,6 @@ function Settings() {
       {activeSettings?.toLowerCase() === 'font theme' && <FontTheme />}
 
       {activeSettings?.toLowerCase() === 'change password' && <ChangePassword />}
-
-      {activeSettings?.toLowerCase() === 'logout' && <Logout />}
     </div>
   );
 }

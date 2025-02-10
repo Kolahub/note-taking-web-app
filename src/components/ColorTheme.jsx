@@ -88,6 +88,9 @@ function ColorTheme() {
               <div className="w-2 h-2 bg-white rounded-full"></div>
             </div>
           </label>
+          <div className="flex justify-end font-medium">
+          <button className="bg-blue-500 text-white capitalize w-36 rounded-lg py-3 px-4">apply changes</button>
+          </div>
         </form>
       </div>
     </div>

@@ -1,3 +1,4 @@
+// Tags.js
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import supabase from '../config/SupabaseConfig';
@@ -10,12 +11,29 @@ function Tags() {
 
   useEffect(() => {
     const fetchNotes = async () => {
-      const { data, error } = await supabase.from('notes').select().order('created_at', { ascending: false });
+      // Retrieve the current user
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError) {
+        console.error('Error fetching user:', userError);
+        return;
+      }
+      if (!user) {
+        console.error('No user is logged in.');
+        return;
+      }
+      
+      // Fetch only the notes for the current user
+      const { data, error } = await supabase
+        .from('notes')
+        .select()
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
       if (error) {
         console.log(error);
         return;
       }
       if (data) {
+        // Get all tags from the notes, then split and dedupe them
         const getTags = data.map((note) => note.tags);
         const getTagsEach = getTags.join(',').split(',');
         const getTagsSet = [...new Set(getTagsEach)];
@@ -27,7 +45,6 @@ function Tags() {
 
   const handleFilterBasedTags = (tag) => {
     dispatch(noteAction.filterBasedTags(tag));
-
     dispatch(noteAction.cancelActiveSettings());
   };
 
@@ -73,11 +90,22 @@ function Tags() {
                   </svg>
                   <p className="text-gray-800">{tag}</p>
                 </div>
-
                 {/* Arrow SVG: Always visible for active tag */}
                 <div className={activeTag === tag ? 'block' : 'hidden group-hover:block'}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" className="rotate-180">
-                    <path fill="currentColor" fillRule="evenodd" d="M15.75 20.414 7.336 12l8.414-8.414L17.164 5l-7 7 7 7-1.414 1.414Z" clipRule="evenodd" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    className="rotate-180"
+                  >
+                    <path
+                      fill="currentColor"
+                      fillRule="evenodd"
+                      d="M15.75 20.414 7.336 12l8.414-8.414L17.164 5l-7 7 7 7-1.414 1.414Z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                 </div>
               </button>

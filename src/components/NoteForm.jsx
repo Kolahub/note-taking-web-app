@@ -21,6 +21,23 @@ function NoteForm() {
     noteDetails: '',
   });
 
+  // State to hold the current user's id
+  const [userId, setUserId] = useState(null);
+
+  // Fetch current user id on mount
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error('Error fetching user:', error);
+      }
+      if (user) {
+        setUserId(user.id);
+      }
+    };
+    fetchUserId();
+  }, []);
+
   // Initialize formData based on noteDetail when updating
   useEffect(() => {
     if (!newNoteI && noteDetail.id) {
@@ -49,8 +66,14 @@ function NoteForm() {
   const handleSaveNote = async (e) => {
     e.preventDefault();
 
+    // Ensure we have a user id before proceeding
+    if (!userId) {
+      console.error('No user is logged in.');
+      return;
+    }
+
     if (newNoteI) {
-      // Create new note
+      // Create new note including the user_id
       const { data, error } = await supabase
         .from('notes')
         .insert([
@@ -58,6 +81,7 @@ function NoteForm() {
             title: formData.title,
             tags: formData.tags,
             note_details: formData.noteDetails,
+            user_id: userId,
           },
         ])
         .select();
@@ -72,7 +96,7 @@ function NoteForm() {
         dispatch(noteAction.showNoteDetail(data[0]));
       }
     } else {
-      // Update existing note
+      // Update existing note – ensure that only the owner’s note is updated
       const { data, error } = await supabase
         .from('notes')
         .update({
@@ -81,6 +105,7 @@ function NoteForm() {
           note_details: formData.noteDetails,
         })
         .eq('id', noteDetail.id)
+        .eq('user_id', userId) // only update if this note belongs to the user
         .select();
       if (error) {
         console.log(error);
@@ -113,7 +138,11 @@ function NoteForm() {
   };
 
   return (
-    <Form onSubmit={(e) => handleSaveNote(e)} className="px-6 py-5 flex flex-col border-r-2 border-gray-200" style={{ height: 'calc(100vh - 85px)' }}>
+    <Form
+      onSubmit={handleSaveNote}
+      className="px-6 py-5 flex flex-col border-r-2 border-gray-200"
+      style={{ height: 'calc(100vh - 85px)' }}
+    >
       {/* Title Input */}
       <input
         type="text"
@@ -128,7 +157,13 @@ function NoteForm() {
         {/* Tags Section */}
         <div className="flex gap-2 py-1 mb-2">
           <div className="flex items-center gap-1 w-[145px]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke="#0E121B"
                 strokeLinecap="round"
@@ -146,7 +181,7 @@ function NoteForm() {
                 clipRule="evenodd"
               />
             </svg>
-            <p className="">Tags</p>
+            <p>Tags</p>
           </div>
           <input
             type="text"
@@ -160,8 +195,14 @@ function NoteForm() {
 
         {currentPath === '/archive-notes' && (
           <div className="flex gap-2 py-1 mb-2">
-            <div className="flex  items-center gap-1 w-[145px]">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="flex items-center gap-1 w-[145px]">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <path
                   fillRule="evenodd"
                   clipRule="evenodd"
@@ -175,16 +216,27 @@ function NoteForm() {
                   fill="#2B303B"
                 />
               </svg>
-
-              <p className="">Status</p>
+              <p>Status</p>
             </div>
-            <input type="text" name="status" value={'Archived'} disabled className="focus:outline-none w-full bg-inherit" />
+            <input
+              type="text"
+              name="status"
+              value={'Archived'}
+              disabled
+              className="focus:outline-none w-full bg-inherit"
+            />
           </div>
         )}
 
         <div className="flex gap-2 py-1">
           <div className="flex items-center gap-1 w-[145px]">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <path
                 fillRule="evenodd"
                 clipRule="evenodd"
@@ -198,14 +250,17 @@ function NoteForm() {
                 fill="#2B303B"
               />
             </svg>
-
-            <p className="">Last edited</p>
+            <p>Last edited</p>
           </div>
           <input
             type="text"
             name="last_edited"
             placeholder="Not yet saved"
-            value={formData.last_edited ? format(new Date(formData.last_edited), 'dd MMM yyyy') : ''}
+            value={
+              formData.last_edited
+                ? format(new Date(formData.last_edited), 'dd MMM yyyy')
+                : ''
+            }
             disabled
             className="focus:outline-none w-full bg-inherit"
           />
@@ -231,14 +286,19 @@ function NoteForm() {
 
         {/* Footer Buttons */}
         <div className="w-full flex gap-4">
-          <button type="submit" className="capitalize text-white bg-blue-500 rounded-lg px-4 py-3 active:scale-95">
+          <button
+            type="submit"
+            className="capitalize text-white bg-blue-500 rounded-lg px-4 py-3 active:scale-95"
+          >
             {newNoteI ? 'save note' : 'update note'}
           </button>
           <button
-            onClick={(e) => handleCancel(e)}
+            onClick={handleCancel}
             type="button"
             disabled={!newNoteI && !changesMade}
-            className={`capitalize rounded-lg px-4 py-3 active:scale-95 ${!newNoteI && !changesMade ? 'bg-gray-300 text-gray-500' : 'bg-gray-100'}`}
+            className={`capitalize rounded-lg px-4 py-3 active:scale-95 ${
+              !newNoteI && !changesMade ? 'bg-gray-300 text-gray-500' : 'bg-gray-100'
+            }`}
           >
             cancel
           </button>

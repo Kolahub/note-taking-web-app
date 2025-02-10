@@ -1,3 +1,4 @@
+// NoteBars.js
 import { format } from 'date-fns';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,11 +26,6 @@ const SETTINGS_OPT = [
     id: 'so3',
     name: 'change password',
     image: <IconLock />,
-  },
-  {
-    id: 'so4',
-    name: 'logout',
-    image: <IconLogout />,
   },
 ];
 
@@ -71,7 +67,20 @@ function NoteBars() {
 
   useEffect(() => {
     const fetchNotes = async () => {
-      const { data, error } = await supabase.from('notes').select().order('created_at', { ascending: false });
+      // Fetch the current user ID
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError) {
+        console.error('Error fetching user:', userError);
+        return;
+      }
+      if (!user) return;
+      
+      // Fetch only the notes for the current user
+      const { data, error } = await supabase
+        .from('notes')
+        .select()
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
       if (error) {
         console.log(error);
         return;
@@ -94,36 +103,64 @@ function NoteBars() {
     }
   }, [dispatch, newNoteI, displayNotes]);
 
-  const handleApplyActiveSettings = function (opt) {
+  const handleApplyActiveSettings = (opt) => {
     dispatch(noteAction.applyActiveSettings(opt));
+  };
+
+  // Logout function using Supabase's signOut method
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error('Error logging out:', error.message);
+    } else {
+      navigate('/auth/login');
+    }
   };
 
   return (
     <div className="px-4 py-5 border-r-2 flex flex-col" style={{ height: 'calc(100vh - 85px)' }}>
       {settingsActive ? (
-        <div className="flex flex-col gap-4">
-          {SETTINGS_OPT.map((opt) => (
-            <button
-              className={`flex justify-between gap-3 items-center p-2 active:scale-95 ${activeSettings === opt.name && 'bg-gray-200 rounded-lg'}`}
-              key={opt.id}
-              onClick={() => handleApplyActiveSettings(opt.name)}
-            >
-              <div className="flex items-center gap-3">
-                <div className="text-gray-800">{opt.image}</div>
-
-                <h1 className="capitalize">{opt.name}</h1>
-              </div>
-
-              <div className="text-gray-800 rotate-180">
-                <ArrowLeft />
-              </div>
-            </button>
-          ))}
+        <div>
+          <div className="flex flex-col gap-4 border-b-2">
+            {SETTINGS_OPT.map((opt) => (
+              <button
+                className={`flex justify-between gap-3 items-center p-2 active:scale-95 ${
+                  activeSettings === opt.name && 'bg-gray-200 rounded-lg'
+                }`}
+                key={opt.id}
+                onClick={() => handleApplyActiveSettings(opt.name)}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="text-gray-800">{opt.image}</div>
+                  <h1 className="capitalize">{opt.name}</h1>
+                </div>
+                <div className="text-gray-800 rotate-180">
+                  <ArrowLeft />
+                </div>
+              </button>
+            ))}
+          </div>
+          <button
+            className="flex gap-3 items-center p-3 w-full active:scale-95"
+            onClick={handleLogout}
+          >
+            <IconLogout />
+            <p className="capitalize">logout</p>
+          </button>
         </div>
       ) : (
-        <div className="">
-          <button className="flex justify-center w-full py-3 rounded-lg bg-blue-500 active:scale-95 text-white mb-4" onClick={handleInitiateCreateNote}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+        <div>
+          <button
+            className="flex justify-center w-full py-3 rounded-lg bg-blue-500 active:scale-95 text-white mb-4"
+            onClick={handleInitiateCreateNote}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 fill="currentColor"
                 d="M12 5a.75.75 0 0 1 .75.75V11H18a.75.75 0 0 1 0 1.5h-5.25v5.25a.75.75 0 0 1-1.5 0V12.5H6A.75.75 0 0 1 6 11h5.25V5.75A.75.75 0 0 1 12 5Z"
@@ -133,10 +170,14 @@ function NoteBars() {
           </button>
 
           {archiveNotePath && !filteredTag && (
-            <div className="w-full mb-4">All your archived notes are stored here. You can restore or delete them anytime.</div>
+            <div className="w-full mb-4">
+              All your archived notes are stored here. You can restore or delete them anytime.
+            </div>
           )}
 
-          {newNoteI && !filteredTag && <div className="bg-gray-100 text-lg font-semibold rounded-lg p-2 mb-4">Untitled Note</div>}
+          {newNoteI && !filteredTag && (
+            <div className="bg-gray-100 text-lg font-semibold rounded-lg p-2 mb-4">Untitled Note</div>
+          )}
 
           {filteredTag && (
             <div className="bg-gray-100 rounded-lg p-2 mb-4">
@@ -150,7 +191,6 @@ function NoteBars() {
               <button className="underline" onClick={handleInitiateCreateNote}>
                 create a new note.
               </button>
-              .
             </div>
           )}
 
@@ -173,7 +213,9 @@ function NoteBars() {
                 <button
                   key={index}
                   onClick={() => handleShowNoteDetail(note)}
-                  className={`flex flex-col p-2 text-start w-full ${noteDetail?.id === note.id ? 'bg-gray-200' : ''}`}
+                  className={`flex flex-col p-2 text-start w-full ${
+                    noteDetail?.id === note.id ? 'bg-gray-200' : ''
+                  }`}
                 >
                   <div className="flex flex-col gap-3">
                     <h1 className="font-semibold text-lg">{note.title}</h1>

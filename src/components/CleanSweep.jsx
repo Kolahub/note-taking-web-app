@@ -13,10 +13,29 @@ function CleanSweep() {
   const archiveNotePath = currentPath === '/archive-notes';
   const allNotePath = currentPath === '/' || currentPath === '/all-notes';
 
-  // Toggle the archived status of a note
+  // Toggle the archived status of a note (scoped to the current user)
   const handleToggleArchive = async () => {
+    // Retrieve the current user
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+    if (userError) {
+      console.error('Error fetching user:', userError);
+      return;
+    }
+    if (!user) {
+      console.error('No user is logged in.');
+      return;
+    }
+
     const newArchivedStatus = !noteDetail.archived;
-    const { data, error } = await supabase.from('notes').update({ archived: newArchivedStatus }).eq('id', noteDetail.id).select();
+    const { data, error } = await supabase
+      .from('notes')
+      .update({ archived: newArchivedStatus })
+      .eq('id', noteDetail.id)
+      .eq('user_id', user.id) // ensure only the owner’s note is updated
+      .select();
 
     if (error) {
       console.log('Error toggling archive:', error);
@@ -25,8 +44,12 @@ function CleanSweep() {
 
     if (data) {
       console.log('Toggle archive data:', data);
-      // Fetch and update notes in the UI
-      const { data: allData, error: fetchError } = await supabase.from('notes').select().order('created_at', { ascending: false });
+      // Fetch and update notes in the UI for the current user only
+      const { data: allData, error: fetchError } = await supabase
+        .from('notes')
+        .select()
+        .eq('user_id', user.id) // only fetch notes for the current user
+        .order('created_at', { ascending: false });
 
       if (fetchError) {
         console.log('Error fetching notes:', fetchError);
@@ -37,19 +60,38 @@ function CleanSweep() {
         const unarchivedData = allData.filter((note) => !note.archived);
         const archivedData = allData.filter((note) => note.archived);
 
-        // Update notes based on the current route
+        // Update Redux state with the fetched notes
         dispatch(noteAction.allNotes(unarchivedData));
         dispatch(noteAction.allArchivedNotes(archivedData));
 
-        // Set the first note in the list as active
+        // Set the first note in the appropriate list as active
         dispatch(noteAction.showNoteDetail(allNotePath ? unarchivedData[0] || {} : archiveNotePath ? archivedData[0] || {} : {}));
       }
     }
   };
 
-  // Delete a note
+  // Delete a note (scoped to the current user)
   const handleDeleteNow = async () => {
-    const { data, error } = await supabase.from('notes').delete().eq('id', noteDetail.id).select();
+    // Retrieve the current user
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+    if (userError) {
+      console.error('Error fetching user:', userError);
+      return;
+    }
+    if (!user) {
+      console.error('No user is logged in.');
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('notes')
+      .delete()
+      .eq('id', noteDetail.id)
+      .eq('user_id', user.id) // only delete if this note belongs to the user
+      .select();
 
     if (error) {
       console.log('Error deleting note:', error);
@@ -58,7 +100,7 @@ function CleanSweep() {
 
     if (data) {
       console.log('Deleted note:', data);
-      // Remove the note from Redux
+      // Remove the note from Redux state
       dispatch(noteAction.deleteNote(noteDetail.id));
     }
   };
