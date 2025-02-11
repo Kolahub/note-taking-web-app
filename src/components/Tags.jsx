@@ -52,14 +52,14 @@ function Tags() {
     <div>
       {tags.length > 0 && (
         <div className="border-t-2 mt-4 py-2">
-          <h2 className="text-gray-500 text-xl">Tags</h2>
+          <h2 className="text-gray-500 dark:text-gray-400 text-xl">Tags</h2>
           <div className="mt-2">
             {tags.map((tag, i) => (
               <button
                 key={`${tag}${i}`}
                 onClick={() => handleFilterBasedTags(tag)}
                 className={`group flex justify-between items-center w-full mb-1 last:mb-0 rounded-lg p-3 transition
-                  ${activeTag === tag ? 'bg-gray-100 text-blue-500' : 'hover:bg-gray-100'}
+                  ${activeTag === tag ? 'bg-gray-100 dark:bg-gray-700 text-blue-500 dark:text-blue-300' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}
                 `}
               >
                 <div className="flex gap-2">
@@ -69,7 +69,7 @@ function Tags() {
                     height="24"
                     fill="none"
                     viewBox="0 0 24 24"
-                    className={`text-[#0E121B] ${activeTag === tag ? 'text-blue-500' : 'group-hover:text-blue-500'}`}
+                    className={`text-[#0E121B] dark:text-gray-200 ${activeTag === tag ? 'text-blue-500 dark:text-blue-300' : 'group-hover:text-blue-500 dark:group-hover:text-blue-300'}`}
                   >
                     <path
                       stroke="currentColor"
@@ -88,7 +88,7 @@ function Tags() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <p className="text-gray-800">{tag}</p>
+                  <p className="text-gray-800 dark:text-gray-200">{tag}</p>
                 </div>
                 {/* Arrow SVG: Always visible for active tag */}
                 <div className={activeTag === tag ? 'block' : 'hidden group-hover:block'}>

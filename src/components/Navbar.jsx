@@ -39,13 +39,13 @@ function Navbar() {
     <div>
       <div className="lg:mt-4 lg:flex flex-col gap-2">
         <NavLink
-          to={'all-notes'}
+          to={'/all-notes'}
           end
           onClick={handleOnclickNav}
-          className={`flex justify-between w-full px-3 py-[10px] rounded-lg group hover:bg-gray-200 ${allNotePath ? 'bg-gray-200 text-blue-500' : ''}`}
+          className={`flex justify-between w-full px-3 py-[10px] rounded-lg group hover:bg-gray-200 dark:hover:bg-gray-700 ${allNotePath ? 'bg-gray-200 text-blue-500 dark:bg-gray-700 dark:text-blue-300' : ''}`}
         >
           <div className="flex gap-2">
-            <div className="group-hover:text-blue-500">
+            <div className="group-hover:text-blue-500 dark:group-hover:text-blue-300">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
@@ -67,7 +67,7 @@ function Navbar() {
                 />
               </svg>
             </div>
-            <span className="text-gray-950">All Notes</span>
+            <span className="text-gray-950 dark:text-gray-50">All Notes</span>
           </div>
 
           <div>
@@ -76,15 +76,15 @@ function Navbar() {
         </NavLink>
 
         <NavLink
-          to="archive-notes"
+          to="/archive-notes"
           end
           onClick={handleOnclickNav}
           className={({ isActive }) =>
-            `flex justify-between w-full px-3 py-[10px] rounded-lg group hover:bg-gray-200 active:scale-95 ${isActive ? 'bg-gray-200 text-blue-500' : ''}`
+            `flex justify-between w-full px-3 py-[10px] rounded-lg group hover:bg-gray-200 dark:hover:bg-gray-700 active:scale-95 ${isActive ? 'bg-gray-200 text-blue-500 dark:bg-gray-700 dark:text-blue-300' : ''}`
           }
         >
           <div className="flex gap-2">
-            <div className="group-hover:text-blue-500">
+            <div className="group-hover:text-blue-500 dark:group-hover:text-blue-300">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path
                   stroke="currentColor"
@@ -102,7 +102,7 @@ function Navbar() {
                 />
               </svg>
             </div>
-            <span className="text-gray-950">Archived Notes</span>
+            <span className="text-gray-950 dark:text-gray-50">Archived Notes</span>
           </div>
 
           <div>

@@ -1,23 +1,29 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { noteAction } from '../store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function SubNav() {
   const dispatch = useDispatch();
   const filteredTag = useSelector((state) => state.filteredTag);
   const searchQuery = useSelector((state) => state.searchQuery);
   const settingsActive = useSelector((state) => state.settingsActive);
+  const [searchText, setSearchText] = useState('');
 
   // Determine the heading based on filters or search query
   const otherDisplayHeading = filteredTag || searchQuery || settingsActive;
 
   // Dispatch search query action
-  const handleSearchQueryNotes = function (query) {
+  const handleSearchQueryNotes = function (e) {
+    const query = e.target.value;
     dispatch(noteAction.allSearchQueryNotes(query));
+    setSearchText(query);
     console.log(query);
   };
 
   useEffect(() => {
+    if (settingsActive) {
+      setSearchText('');
+    }
     console.log(settingsActive, '😍😍');
   }, [settingsActive]);
 
@@ -27,27 +33,31 @@ function SubNav() {
   };
 
   return (
-    <div className="w-full flex items-center justify-between px-8 py-[18.5px]">
-      <h1 className="capitalize text-3xl font-bold">
-        {!otherDisplayHeading ? (
-          'All Notes'
-        ) : (
-          <>
-            <span className="text-gray-600">
-              {filteredTag ? (
-                'note tagged:'
-              ) : searchQuery ? (
-                'showing results for:'
-              ) : settingsActive ? (
-                <>
-                  <p className="text-gray-800">settings</p>
-                </>
-              ) : null}
-            </span>{' '}
-            {otherDisplayHeading}
-          </>
-        )}
-      </h1>
+    <div className="w-full flex gap-4 items-center justify-between px-8 py-[18.5px]">
+      <div className="">
+<h1 className="capitalize text-3xl font-bold">
+  {!otherDisplayHeading ? (
+    'All Notes'
+  ) : (
+    <div className="flex flex-wrap items-center gap-1">
+      <div className="text-gray-600 whitespace-nowrap">
+        {filteredTag
+          ? 'note tagged: '
+          : searchQuery
+          ? 'showing results for: '
+          : settingsActive
+          ? <span className="text-gray-800">settings</span>
+          : null}
+      </div>
+      <div className="max-w-xs overflow-x-auto scrollbar-hide whitespace-nowrap">
+        {otherDisplayHeading}
+      </div>
+    </div>
+  )}
+</h1>
+
+
+      </div>
 
       <div className="flex gap-8">
         <div className="flex items-center gap-3 border-2 rounded-lg text-gray-500 px-4 py-3">
@@ -60,12 +70,7 @@ function SubNav() {
             />
             <path fill="currentColor" fillRule="evenodd" d="m16.736 15.648 5.616 5.6-1.06 1.063-5.615-5.601 1.06-1.062Z" clipRule="evenodd" />
           </svg>
-          <input
-            type="text"
-            className="focus:outline-none w-[320px] text-black"
-            value={settingsActive ? '' : null}
-            onChange={(e) => handleSearchQueryNotes(e.target.value)}
-          />
+          <input type="text" className="focus:outline-none w-[320px] text-black" value={searchText} onChange={(e) => handleSearchQueryNotes(e)} />
         </div>
         <button type="button" className="active:scale-110 transition-all" onClick={toggleOpenSettings}>
           <div className="text-gray-500">

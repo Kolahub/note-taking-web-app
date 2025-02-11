@@ -53,6 +53,8 @@ function NoteBars() {
   // Select notes to display based on filters and current path
   const allOrArchiveNotes = allNotePath ? notes : archiveNotePath ? archiveNotes : [];
   const displayNotes = filteredTag ? filteredNotes : searchQuery ? searchQueryNotes : allOrArchiveNotes;
+  console.log(allOrArchiveNotes, displayNotes, "😍😭");
+  
 
   const handleInitiateCreateNote = () => {
     if (!allNotePath) {
@@ -219,7 +221,7 @@ function NoteBars() {
                 >
                   <div className="flex flex-col gap-3">
                     <h1 className="font-semibold text-lg">{note.title}</h1>
-                    <div className="flex gap-1">
+                    <div className="flex flex-wrap gap-1">
                       {note.tags.split(',').map((tag, i) => (
                         <div key={i} className="bg-gray-200 brightness-90 rounded-md px-[6px] py-[2px] text-sm">
                           <p className="capitalize">{tag}</p>
