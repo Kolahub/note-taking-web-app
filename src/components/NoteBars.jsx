@@ -10,6 +10,8 @@ import IconFont from '../assets/images/icon-font.svg?react';
 import IconLock from '../assets/images/icon-lock.svg?react';
 import IconLogout from '../assets/images/icon-logout.svg?react';
 import ArrowLeft from '../assets/images/icon-arrow-left.svg?react';
+import { useTheme } from '../context/theme/ThemeContext';
+
 
 const SETTINGS_OPT = [
   {
@@ -30,6 +32,7 @@ const SETTINGS_OPT = [
 ];
 
 function NoteBars() {
+  const { isLoading: themeLoading } = useTheme();
   const notes = useSelector((state) => state.notes);
   const archiveNotes = useSelector((state) => state.archivedNotes);
   const newNoteI = useSelector((state) => state.newNoteI);
@@ -46,15 +49,11 @@ function NoteBars() {
   const navigate = useNavigate();
   const currentPath = location.pathname;
 
-  // Determine the current path to set active states
   const archiveNotePath = currentPath === '/archive-notes';
   const allNotePath = currentPath === '/' || currentPath === '/all-notes';
 
-  // Select notes to display based on filters and current path
   const allOrArchiveNotes = allNotePath ? notes : archiveNotePath ? archiveNotes : [];
   const displayNotes = filteredTag ? filteredNotes : searchQuery ? searchQueryNotes : allOrArchiveNotes;
-  console.log(allOrArchiveNotes, displayNotes, "😍😭");
-  
 
   const handleInitiateCreateNote = () => {
     if (!allNotePath) {
@@ -69,20 +68,17 @@ function NoteBars() {
 
   useEffect(() => {
     const fetchNotes = async () => {
-      // Fetch the current user ID
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
       if (userError) {
         console.error('Error fetching user:', userError);
         return;
       }
       if (!user) return;
-      
-      // Fetch only the notes for the current user
-      const { data, error } = await supabase
-        .from('notes')
-        .select()
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+
+      const { data, error } = await supabase.from('notes').select().eq('user_id', user.id).order('created_at', { ascending: false });
       if (error) {
         console.log(error);
         return;
@@ -109,7 +105,6 @@ function NoteBars() {
     dispatch(noteAction.applyActiveSettings(opt));
   };
 
-  // Logout function using Supabase's signOut method
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -118,32 +113,72 @@ function NoteBars() {
       navigate('/auth/login');
     }
   };
+  
+
+  if (themeLoading) {
+    return (
+      <div className="flex-1 space-y-4 animate-pulse">
+        {/* Search bar skeleton */}
+        <div className="flex gap-2 items-center px-2">
+          <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded-lg flex-1"></div>
+        </div>
+
+        {/* Notes list skeleton */}
+        <div className="space-y-3 px-2">
+          {[1, 2, 3].map((item) => (
+            <div 
+              key={item} 
+              className="p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
+            >
+              <div className="space-y-3">
+                {/* Title */}
+                <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+                
+                {/* Tags */}
+                <div className="flex gap-2">
+                  <div className="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                  <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                </div>
+                
+                {/* Date */}
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="px-4 py-5 border-r-2 flex flex-col" style={{ height: 'calc(100vh - 85px)' }}>
+    <div className="px-4 py-5 border-r-2 dark:border-gray-800 flex flex-col w-full" style={{ height: 'calc(100vh - 85px)' }}>
       {settingsActive ? (
         <div>
-          <div className="flex flex-col gap-4 border-b-2">
+          <div className="flex flex-col gap-4 border-b-2 dark:border-gray-800 pb-3">
             {SETTINGS_OPT.map((opt) => (
               <button
-                className={`flex justify-between gap-3 items-center p-2 active:scale-95 ${
-                  activeSettings === opt.name && 'bg-gray-200 rounded-lg'
-                }`}
+                className={`flex justify-between gap-3 items-center p-2 active:scale-95 transition-colors
+                  ${
+                    activeSettings === opt.name
+                      ? 'bg-gray-200 dark:bg-gray-800 rounded-lg text-gray-900 dark:text-white'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg'
+                  }`}
                 key={opt.id}
                 onClick={() => handleApplyActiveSettings(opt.name)}
               >
                 <div className="flex items-center gap-3">
-                  <div className="text-gray-800">{opt.image}</div>
+                  <div className="text-gray-800 dark:text-gray-200">{opt.image}</div>
                   <h1 className="capitalize">{opt.name}</h1>
                 </div>
-                <div className="text-gray-800 rotate-180">
+                <div className="text-gray-800 dark:text-gray-200 rotate-180">
                   <ArrowLeft />
                 </div>
               </button>
             ))}
           </div>
           <button
-            className="flex gap-3 items-center p-3 w-full active:scale-95"
+            className="flex gap-3 items-center p-3 w-full active:scale-95 text-gray-700 dark:text-gray-200 
+                       hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg mt-3 transition-colors"
             onClick={handleLogout}
           >
             <IconLogout />
@@ -153,16 +188,12 @@ function NoteBars() {
       ) : (
         <div>
           <button
-            className="flex justify-center w-full py-3 rounded-lg bg-blue-500 active:scale-95 text-white mb-4"
+            className="flex justify-center w-full py-3 rounded-lg bg-blue-500 hover:bg-blue-600 
+                       dark:bg-blue-600 dark:hover:bg-blue-700 active:scale-95 text-white mb-4 
+                       transition-colors"
             onClick={handleInitiateCreateNote}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
                 d="M12 5a.75.75 0 0 1 .75.75V11H18a.75.75 0 0 1 0 1.5h-5.25v5.25a.75.75 0 0 1-1.5 0V12.5H6A.75.75 0 0 1 6 11h5.25V5.75A.75.75 0 0 1 12 5Z"
@@ -171,24 +202,27 @@ function NoteBars() {
             <p className="capitalize">create new note</p>
           </button>
 
-          {archiveNotePath && !filteredTag && (
-            <div className="w-full mb-4">
-              All your archived notes are stored here. You can restore or delete them anytime.
-            </div>
+          {(archiveNotePath && !filteredTag) && (
+            <div className="w-full mb-4 text-gray-700 dark:text-gray-300">All your archived notes are stored here. You can restore or delete them anytime.</div>
           )}
 
           {newNoteI && !filteredTag && (
-            <div className="bg-gray-100 text-lg font-semibold rounded-lg p-2 mb-4">Untitled Note</div>
+            <div
+              className="bg-gray-100 dark:bg-gray-800 text-lg font-semibold rounded-lg p-2 mb-4 
+                          text-gray-900 dark:text-white"
+            >
+              Untitled Note
+            </div>
           )}
 
-          {filteredTag && (
-            <div className="bg-gray-100 rounded-lg p-2 mb-4">
+{filteredTag && (
+            <div className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 rounded-lg p-2 mb-4">
               All notes with the <span className="font-semibold">{`"${filteredTag}"`}</span> tag are shown here.
             </div>
           )}
 
           {searchQuery && searchQueryNotes.length === 0 && (
-            <div className="bg-gray-100 rounded-lg p-2 mb-4">
+            <div className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 rounded-lg p-2 mb-4">
               No notes match your search. Try a different keyword or{' '}
               <button className="underline" onClick={handleInitiateCreateNote}>
                 create a new note.
@@ -196,9 +230,9 @@ function NoteBars() {
             </div>
           )}
 
-          <div className="flex-1 overflow-y-auto scrollbar-hide">
-            {displayNotes.length === 0 && !filteredTag && !searchQuery ? (
-              <div className="bg-gray-100 rounded-lg p-2">
+          <div className="flex-1 flex flex-col gap-2 overflow-y-auto scrollbar-hide">
+            {displayNotes.length === 0 && !filteredTag && !searchQuery ?(
+              <div className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 rounded-lg p-2">
                 {allNotePath ? (
                   'You don’t have any notes yet. Start a new note to capture your thoughts and ideas.'
                 ) : archiveNotePath ? (
@@ -210,26 +244,37 @@ function NoteBars() {
                   </>
                 ) : null}
               </div>
-            ) : (
+            ): (
               displayNotes.map((note, index) => (
                 <button
                   key={index}
                   onClick={() => handleShowNoteDetail(note)}
-                  className={`flex flex-col p-2 text-start w-full ${
-                    noteDetail?.id === note.id ? 'bg-gray-200' : ''
-                  }`}
+                  className={`flex flex-col p-2 text-start w-full rounded-lg transition-colors
+                    ${
+                      noteDetail?.id === note.id
+                        ? 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white'
+                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    }`}
                 >
                   <div className="flex flex-col gap-3">
                     <h1 className="font-semibold text-lg">{note.title}</h1>
                     <div className="flex flex-wrap gap-1">
                       {note.tags.split(',').map((tag, i) => (
-                        <div key={i} className="bg-gray-200 brightness-90 rounded-md px-[6px] py-[2px] text-sm">
+                        <div
+                          key={i}
+                          className={`rounded-md px-[6px] py-[2px] text-sm
+                            ${
+                              noteDetail?.id === note.id
+                                ? 'bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200'
+                                : 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+                            }`}
+                        >
                           <p className="capitalize">{tag}</p>
                         </div>
                       ))}
                     </div>
                     <div>
-                      <p className="text-sm">{format(new Date(note.created_at), 'dd MMM yyyy')}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{format(new Date(note.created_at), 'dd MMM yyyy')}</p>
                     </div>
                   </div>
                 </button>

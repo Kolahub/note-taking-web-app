@@ -28,7 +28,7 @@ function Dashboard() {
     // Define two rows: first is auto-height (for SubNav), second fills remaining space.
     <div className="bg-white dark:bg-black grid grid-cols-10 lg:h-screen grid-rows-[auto,1fr]">
       {/* Sidebar (Logo & Navbar): spans both rows */}
-      <div className="border-r-2 px-4 pt-3 row-span-2 col-start-1 col-span-2">
+      <div className="border-r-2 dark:border-gray-800 px-4 pt-3 row-span-2 col-start-1 col-span-2">
         <div className="mb-4 text-black dark:text-white">
          <Logo />
         </div>
@@ -36,7 +36,7 @@ function Dashboard() {
       </div>
 
       {/* SubNav (first row): auto height */}
-      <div className="border-b-2 col-start-3 col-span-8 row-start-1">
+      <div className="border-b-2 dark:border-gray-800 col-start-3 col-span-8 row-start-1">
         <SubNav />
       </div>
 

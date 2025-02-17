@@ -14,3 +14,12 @@ textarea::-webkit-scrollbar {
     scrollbar-width: none;
   }
   
+  .font-sans {
+    font-family: sans-serif;
+  }
+  .font-serif {
+    font-family: serif;
+  }
+  .font-mono {
+    font-family: monospace;
+  }

@@ -5,6 +5,8 @@ import Dashboard from './pages/Dashboard';
 import ProtectedLayout from './components/ProtectedLayout';
 import supabase from './config/SupabaseConfig';
 import AuthPages from './pages/AuthPages';
+import { ThemeProvider } from './context/theme/ThemeProvider';
+import { FontProvider } from './context/font/FontContext';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -15,8 +17,8 @@ function App() {
     const checkUser = async () => {
       const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
 
-      if (sessionError || !sessionData.session) { 
-        console.error("No active session:", sessionError?.message);
+      if (sessionError || !sessionData.session) {
+        console.error('No active session:', sessionError?.message);
         setUser(null);
         setLoading(false);
         return;
@@ -25,7 +27,7 @@ function App() {
       const { data: userData, error: userError } = await supabase.auth.getUser();
 
       if (userError) {
-        console.error("Error fetching user:", userError);
+        console.error('Error fetching user:', userError);
         setUser(null);
       } else {
         setUser(userData.user);
@@ -59,32 +61,38 @@ function App() {
   const router = createBrowserRouter([
     {
       // Protected routes (only accessible if authenticated)
-      path: "/",
+      path: '/',
       element: <ProtectedLayout user={user} />,
       children: [
         { index: true, element: <Dashboard /> },
-        { path: "all-notes", element: <Dashboard /> },
-        { path: "archive-notes", element: <Dashboard /> },
+        { path: 'all-notes', element: <Dashboard /> },
+        { path: 'archive-notes', element: <Dashboard /> },
       ],
     },
     {
       // Public authentication routes
-      path: "/auth",
+      path: '/auth',
       element: user ? <Navigate to="/" replace /> : <Outlet />,
       children: [
         // Default to login if no mode is provided
         { index: true, element: <Navigate to="/auth/login" replace /> },
-        { path: ":mode", element: <AuthPages /> },
+        { path: ':mode', element: <AuthPages /> },
       ],
     },
     {
       // Redirect any unknown paths to the authentication login page
-      path: "*",
+      path: '*',
       element: <Navigate to="/auth/login" replace />,
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <ThemeProvider>
+      <FontProvider>
+        <RouterProvider router={router} />;
+      </FontProvider>
+    </ThemeProvider>
+  );
 }
 
 export default App;
