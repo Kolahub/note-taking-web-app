@@ -6,7 +6,8 @@ import ProtectedLayout from './components/ProtectedLayout';
 import supabase from './config/SupabaseConfig';
 import AuthPages from './pages/AuthPages';
 import { ThemeProvider } from './context/theme/ThemeProvider';
-import { FontProvider } from './context/font/FontContext';
+import { FontProvider } from './context/font/fontContext';
+// import { FontProvider } from './context/font/fontContext';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -89,7 +90,7 @@ function App() {
   return (
     <ThemeProvider>
       <FontProvider>
-        <RouterProvider router={router} />;
+        <RouterProvider router={router} />
       </FontProvider>
     </ThemeProvider>
   );

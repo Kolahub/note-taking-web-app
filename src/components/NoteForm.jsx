@@ -160,7 +160,7 @@ function NoteForm() {
       <div className="mt-4 flex flex-col flex-1">
         {/* Tags Section */}
         <div className="flex gap-2 py-1 mb-2">
-          <div className="flex items-center gap-1 w-[145px]">
+          <div className="flex items-center gap-1 w-48">
             <div className="text-black dark:text-gray-300">
               <IconTag />
             </div>
@@ -178,7 +178,7 @@ function NoteForm() {
 
         {currentPath === '/archive-notes' && (
           <div className="flex gap-2 py-1 mb-2">
-            <div className="flex items-center gap-1 w-[145px]">
+            <div className="flex items-center gap-1 w-48">
             <div className="text-black dark:text-gray-300">
               <IconStatus />
             </div>
@@ -195,7 +195,7 @@ function NoteForm() {
         )}
 
         <div className="flex gap-2 py-1">
-          <div className="flex items-center gap-1 w-[145px]">
+          <div className="flex items-center gap-1 w-48">
           <div className="text-black dark:text-gray-300">
               <IconClock />
             </div>

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import IconSearch from '../assets/images/icon-search.svg?react';
 import IconSettings from '../assets/images/icon-settings.svg?react';
 import { noteAction } from '../store';
+import { useTheme } from '../context/theme/ThemeContext';
 
 function SubNav() {
   const dispatch = useDispatch();
@@ -10,6 +11,7 @@ function SubNav() {
   const searchQuery = useSelector((state) => state.searchQuery);
   const settingsActive = useSelector((state) => state.settingsActive);
   const [searchText, setSearchText] = useState('');
+  const { isLoading: themeLoading } = useTheme();
 
   // Determine the heading based on filters or search query
   const otherDisplayHeading = filteredTag || searchQuery || settingsActive;
@@ -19,20 +21,33 @@ function SubNav() {
     const query = e.target.value;
     dispatch(noteAction.allSearchQueryNotes(query));
     setSearchText(query);
-    console.log(query);
   };
 
   useEffect(() => {
     if (settingsActive) {
       setSearchText('');
     }
-    console.log(settingsActive, '😍😍');
   }, [settingsActive]);
 
   const toggleOpenSettings = function () {
     dispatch(noteAction.toggleOpenSettings());
     dispatch(noteAction.clearFilters());
   };
+
+  if (themeLoading) {
+    return (
+      <div className="w-full flex gap-4 items-center justify-between px-8 py-[18.5px] animate-pulse">
+        {/* Header skeleton */}
+        <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-48"></div>
+
+        {/* Search and settings skeleton */}
+        <div className="flex gap-8">
+          <div className="flex items-center gap-3 bg-gray-200 dark:bg-gray-700 rounded-lg w-[400px] h-12"></div>
+          <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full flex gap-4 items-center justify-between px-8 py-[18.5px]">

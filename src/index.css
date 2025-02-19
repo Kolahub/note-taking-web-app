@@ -1,6 +1,12 @@
+/* globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:wght@400;700&family=Fira+Code:wght@400;500&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+  @apply font-sans;
+}
 
 textarea::-webkit-scrollbar {
     display: none;
@@ -13,13 +19,7 @@ textarea::-webkit-scrollbar {
   .scrollbar-hide {
     scrollbar-width: none;
   }
-  
-  .font-sans {
-    font-family: sans-serif;
-  }
-  .font-serif {
-    font-family: serif;
-  }
-  .font-mono {
-    font-family: monospace;
-  }
+
+.font-sans { font-family: theme('fontFamily.sans'); }
+.font-serif { font-family: theme('fontFamily.serif'); }
+.font-mono { font-family: theme('fontFamily.mono'); }

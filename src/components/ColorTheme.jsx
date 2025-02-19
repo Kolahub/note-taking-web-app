@@ -80,7 +80,7 @@ function ColorTheme() {
           <div className="flex justify-end font-medium">
             <button 
               type="button" 
-              className="bg-blue-500 text-white capitalize w-36 rounded-lg py-3 px-4 active:scale-95" 
+              className="bg-blue-500 text-white capitalize w-40 rounded-lg py-3 px-4 active:scale-95" 
               onClick={applyChanges}
             >
               Apply Changes
