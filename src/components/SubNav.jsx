@@ -32,6 +32,9 @@ function SubNav() {
   const toggleOpenSettings = function () {
     dispatch(noteAction.toggleOpenSettings());
     dispatch(noteAction.clearFilters());
+    if (settingsActive) {
+    dispatch(noteAction.applyActiveSettings('color theme'));
+    }
   };
 
   if (themeLoading) {

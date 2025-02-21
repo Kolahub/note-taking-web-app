@@ -23,7 +23,7 @@ function Dashboard() {
   const allOrArchiveNotes = allNotePath ? allNotes : archiveNotePath ? allArchiveNotes : [];
 
   return (
-    <div className="bg-white dark:bg-black grid grid-cols-10 lg:h-screen grid-rows-[auto,1fr]">
+    <div className="bg-white dark:bg-black grid grid-cols-10 h-screen grid-rows-[auto,1fr]">
       <div className="border-r-2 dark:border-gray-800 px-4 pt-3 row-span-2 col-start-1 col-span-2">
         <div className="mb-4 text-black dark:text-white">
           <Logo />

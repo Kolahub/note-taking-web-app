@@ -1,4 +1,3 @@
-// src/context/theme/ThemeProvider.jsx
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import supabase from '../../config/SupabaseConfig';

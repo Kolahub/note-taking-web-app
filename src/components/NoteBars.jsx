@@ -32,7 +32,7 @@ const SETTINGS_OPT = [
 ];
 
 function NoteBars() {
-  const { isLoading: themeLoading } = useTheme();
+  const { isLoading: themeLoading} = useTheme();
   const notes = useSelector((state) => state.notes);
   const archiveNotes = useSelector((state) => state.archivedNotes);
   const newNoteI = useSelector((state) => state.newNoteI);
