@@ -3,16 +3,20 @@ import Logo from '../assets/images/logo.svg?react';
 import NoteBars from '../components/NoteBars';
 import CleanSweep from '../components/CleanSweep';
 import NoteForm from '../components/NoteForm';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SubNav from '../components/SubNav';
 import Settings from '../components/Settings';
 import { useLocation } from 'react-router-dom';
+import Toast from '../components/Toast';
+import { toastAction } from '../store';
 
 function Dashboard() {
-  const allNotes = useSelector((state) => state.notes);
-  const allArchiveNotes = useSelector((state) => state.archivedNotes);
-  const newNoteI = useSelector((state) => state.newNoteI);
-  const settingsActive = useSelector((state) => state.settingsActive);
+  const allNotes = useSelector((state) => state.note.notes);
+  const allArchiveNotes = useSelector((state) => state.note.archivedNotes);
+  const newNoteI = useSelector((state) => state.note.newNoteI);
+  const settingsActive = useSelector((state) => state.note.settingsActive);
+  const dispatch = useDispatch();
+  const toastState = useSelector((state) => state.toast);
 
   const location = useLocation();
   const currentPath = location.pathname;
@@ -21,6 +25,7 @@ function Dashboard() {
   const allNotePath = currentPath === '/' || currentPath === '/all-notes';
 
   const allOrArchiveNotes = allNotePath ? allNotes : archiveNotePath ? allArchiveNotes : [];
+  console.log(allNotes, '🤣🤣')
 
   return (
     <div className="bg-white dark:bg-black grid grid-cols-10 h-screen grid-rows-[auto,1fr]">
@@ -43,9 +48,18 @@ function Dashboard() {
         {settingsActive ? <Settings /> : (newNoteI || allOrArchiveNotes.length > 0) && <NoteForm />}
       </div>
 
-      <div className="col-start-9 col-span-2 row-start-2 overflow-auto">
-        {!settingsActive && allOrArchiveNotes.length > 0 && <CleanSweep />}
-      </div>
+      <div className="col-start-9 col-span-2 row-start-2 overflow-auto">{!settingsActive && allOrArchiveNotes.length > 0 && <CleanSweep />}</div>
+
+
+<div className="">
+  {toastState.show && (
+    <Toast
+      message={toastState.message}
+      subText={toastState.subText}
+      onClose={() => dispatch(toastAction.hideToast())}
+    />
+  )}
+</div>
     </div>
   );
 }

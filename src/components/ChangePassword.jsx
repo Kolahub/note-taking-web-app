@@ -4,6 +4,8 @@ import IconShowPassword from '../assets/images/icon-show-password.svg?react';
 import IconHidePassword from '../assets/images/icon-hide-password.svg?react';
 // import IconInfo from '../assets/images/icon-info.svg?react';
 import IconInfo from '../assets/images/icon-info.svg?react'
+import { toastAction } from '../store';
+import { useDispatch } from 'react-redux';
 
 
 const ChangePassword = () => {
@@ -20,6 +22,8 @@ const ChangePassword = () => {
     }));
   };
 
+  const dispatch = useDispatch()
+
   const handleChangePassword = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -31,7 +35,8 @@ const ChangePassword = () => {
       console.error(`Error: ${error.message}`);
       alert(`Error: ${error.message}`);
     } else {
-      alert('Password updated successfully!');
+      dispatch(toastAction.showToast({ message: 'Password changed successfully!', subText: '' }));
+      event.target.reset()
     }
   };
 
@@ -60,7 +65,7 @@ const ChangePassword = () => {
             </div>
           </div>
         ))}
-        <button type="submit" className="bg-blue-500 capitalize text-white w-40 py-3 px-4 rounded-lg mt-4">
+        <button type="submit" className="bg-blue-500 capitalize text-white w-40 py-3 px-4 rounded-lg mt-4 active:scale-95">
           Save Password
         </button>
       </form>

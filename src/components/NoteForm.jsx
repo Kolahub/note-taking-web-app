@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, useLocation } from 'react-router-dom';
 import supabase from '../config/SupabaseConfig';
-import { noteAction } from '../store';
+import { noteAction, toastAction } from '../store';
 import { format } from 'date-fns';
 import IconTag from '../assets/images/icon-tag.svg?react'
 import IconStatus from '../assets/images/icon-status.svg?react'
@@ -11,8 +11,8 @@ import IconClock from '../assets/images/icon-clock.svg?react'
 
 
 function NoteForm() {
-  const newNoteI = useSelector((state) => state.newNoteI);
-  const noteDetail = useSelector((state) => state.noteDetail);
+  const newNoteI = useSelector((state) => state.note.newNoteI);
+  const noteDetail = useSelector((state) => state.note.noteDetail);
   const dispatch = useDispatch();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -98,6 +98,7 @@ function NoteForm() {
         dispatch(noteAction.cancelNote());
         dispatch(noteAction.addNote(data[0]));
         dispatch(noteAction.showNoteDetail(data[0]));
+        dispatch(toastAction.showToast({ message: 'New note added successfully', subText: '' }));
       }
     } else {
       // Update existing note – ensure that only the owner’s note is updated
@@ -118,6 +119,7 @@ function NoteForm() {
         console.log('Updated:', data);
         dispatch(noteAction.updateNote(data[0]));
         dispatch(noteAction.showNoteDetail(data[0]));
+        dispatch(toastAction.showToast({ message: 'New note updated successfully', subText: '' }));
       }
     }
   };

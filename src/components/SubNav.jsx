@@ -7,9 +7,9 @@ import { useTheme } from '../context/theme/ThemeContext';
 
 function SubNav() {
   const dispatch = useDispatch();
-  const filteredTag = useSelector((state) => state.filteredTag);
-  const searchQuery = useSelector((state) => state.searchQuery);
-  const settingsActive = useSelector((state) => state.settingsActive);
+  const filteredTag = useSelector((state) => state.note.filteredTag);
+  const searchQuery = useSelector((state) => state.note.searchQuery);
+  const settingsActive = useSelector((state) => state.note.settingsActive);
   const [searchText, setSearchText] = useState('');
   const { isLoading: themeLoading } = useTheme();
 

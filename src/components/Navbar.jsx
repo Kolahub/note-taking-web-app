@@ -10,7 +10,7 @@ import { useTheme } from '../context/theme/ThemeContext';
 
 function Navbar() {
   const { isLoading } = useTheme();
-  const newNoteI = useSelector((state) => state.newNoteI);
+  const newNoteI = useSelector((state) => state.note.newNoteI);
   const dispatch = useDispatch();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -46,7 +46,7 @@ function Navbar() {
   }
 
   return (
-    <div>
+    <div className=''>
       <div className="lg:mt-4 lg:flex flex-col gap-2">
         <NavLink
           to={'/all-notes'}
@@ -100,8 +100,10 @@ function Navbar() {
       </div>
 
       <div className="">
-        <Tags />
-      </div>
+  <Tags />
+</div>
+
+
     </div>
   );
 }

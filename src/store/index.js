@@ -1,5 +1,5 @@
 // store.js
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { configureStore, createSlice, combineReducers } from "@reduxjs/toolkit";
 
 const noteInitialState = {
   notes: [],
@@ -65,7 +65,7 @@ const noteSlice = createSlice({
       state.filteredTag = action.payload;
     },
     allSearchQueryNotes(state, action) {
-      state.settingsActive = false
+      state.settingsActive = false;
       const allAndArchiveNotes = [...state.notes, ...state.archivedNotes];
       state.filteredTag = null;
       if (!action.payload || typeof action.payload !== 'string') {
@@ -84,25 +84,51 @@ const noteSlice = createSlice({
       });
       state.searchQuery = action.payload;
     },
-
     toggleOpenSettings(state) {
-      state.settingsActive = !state.settingsActive
+      state.settingsActive = !state.settingsActive;
     },
-
     cancelActiveSettings(state) {
-      state.settingsActive = false
+      state.settingsActive = false;
     },
-
-    applyActiveSettings (state, action) {
-      state.activeSettings = action.payload
+    applyActiveSettings(state, action) {
+      state.activeSettings = action.payload;
     }
   },
 });
 
-export const noteAction = noteSlice.actions;
+const toastInitialState = {
+  show: false,
+  message: '',
+  subText: '',
+};
+
+const toastSlice = createSlice({
+  name: "toast",
+  initialState: toastInitialState,
+  reducers: {
+    showToast(state, action) {
+      state.show = true;
+      state.message = action.payload.message;
+      state.subText = action.payload.subText;
+    },
+    hideToast(state) {
+      state.show = false;
+      state.message = '';
+      state.subText = '';
+    },
+  },
+});
+
+const rootReducer = combineReducers({
+  note: noteSlice.reducer,
+  toast: toastSlice.reducer,
+});
 
 const store = configureStore({
-  reducer: noteSlice.reducer,
+  reducer: rootReducer,
 });
+
+export const noteAction = noteSlice.actions;
+export const toastAction = toastSlice.actions;
 
 export default store;

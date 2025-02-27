@@ -3,6 +3,8 @@ import { useFont } from '../context/font/fontContext';
 import IconSans from '../assets/images/icon-font-sans-serif.svg?react';
 import IconSerif from '../assets/images/icon-font-serif.svg?react';
 import IconMono from '../assets/images/icon-font-monospace.svg?react';
+import { toastAction } from '../store';
+import { useDispatch } from 'react-redux';
 
 const fontOptions = [
   { name: 'font-sans', label: 'Sans-serif', description: 'Clean and modern, easy to read.', icon: <IconSans /> },
@@ -18,6 +20,8 @@ function FontTheme() {
     applied: font
   });
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
     if (!isLoading) {
       // If the fetched font is different, update the state
@@ -32,6 +36,8 @@ function FontTheme() {
   const applyChanges = () => {
     setFontState(prev => ({ ...prev, applied: prev.selected }));
     updateFont(fontState.selected);
+    dispatch(toastAction.showToast({ message: 'Settings updated successfully!', subText: '' }));
+    
   };
 
   if (isLoading) return <div>Loading font settings...</div>;

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import supabase from '../config/SupabaseConfig';
-import { noteAction } from '../store';
+import { noteAction, toastAction } from '../store';
 import { useLocation } from 'react-router-dom';
 import IconRestore from '../assets/images/icon-restore.svg?react';
 import IconDelete from '../assets/images/icon-delete.svg?react';
@@ -9,7 +9,7 @@ import IconArchive from '../assets/images/icon-archive.svg?react';
 import ModelMsg from './ModelMsg';
 
 function CleanSweep() {
-  const noteDetail = useSelector((state) => state.noteDetail);
+  const noteDetail = useSelector((state) => state.note.noteDetail);
   const dispatch = useDispatch();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -56,6 +56,10 @@ function CleanSweep() {
     }
 
     closeModal(); // Close modal after success
+    const msg = allNotePath ? 'Note archived. ' : archiveNotePath ? 'Note restored to active notes.' : ''
+    const sub = allNotePath ? 'Archived Notes' : archiveNotePath ? 'All Notes' : '';
+    dispatch(toastAction.showToast({ message: msg, subText: sub }));
+    
   };
 
   const handleDeleteNow = async () => {
@@ -73,6 +77,7 @@ function CleanSweep() {
 
     if (data) {
       dispatch(noteAction.deleteNote(noteDetail.id));
+      dispatch(toastAction.showToast({ message: 'Note permanently deleted.', subText: '' }));
     }
 
     closeModal(); // Close modal after success

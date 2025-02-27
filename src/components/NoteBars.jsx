@@ -1,4 +1,3 @@
-// NoteBars.js
 import { format } from 'date-fns';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +10,6 @@ import IconLock from '../assets/images/icon-lock.svg?react';
 import IconLogout from '../assets/images/icon-logout.svg?react';
 import ArrowLeft from '../assets/images/icon-arrow-left.svg?react';
 import { useTheme } from '../context/theme/ThemeContext';
-
 
 const SETTINGS_OPT = [
   {
@@ -32,17 +30,17 @@ const SETTINGS_OPT = [
 ];
 
 function NoteBars() {
-  const { isLoading: themeLoading} = useTheme();
-  const notes = useSelector((state) => state.notes);
-  const archiveNotes = useSelector((state) => state.archivedNotes);
-  const newNoteI = useSelector((state) => state.newNoteI);
-  const noteDetail = useSelector((state) => state.noteDetail);
-  const filteredNotes = useSelector((state) => state.filteredNotes);
-  const filteredTag = useSelector((state) => state.filteredTag);
-  const searchQueryNotes = useSelector((state) => state.searchQueryNotes);
-  const searchQuery = useSelector((state) => state.searchQuery);
-  const settingsActive = useSelector((state) => state.settingsActive);
-  const activeSettings = useSelector((state) => state.activeSettings);
+  const { isLoading: themeLoading } = useTheme();
+  const notes = useSelector((state) => state.note.notes);
+  const archiveNotes = useSelector((state) => state.note.archivedNotes);
+  const newNoteI = useSelector((state) => state.note.newNoteI);
+  const noteDetail = useSelector((state) => state.note.noteDetail);
+  const filteredNotes = useSelector((state) => state.note.filteredNotes);
+  const filteredTag = useSelector((state) => state.note.filteredTag);
+  const searchQueryNotes = useSelector((state) => state.note.searchQueryNotes);
+  const searchQuery = useSelector((state) => state.note.searchQuery);
+  const settingsActive = useSelector((state) => state.note.settingsActive);
+  const activeSettings = useSelector((state) => state.note.activeSettings);
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -113,7 +111,6 @@ function NoteBars() {
       navigate('/auth/login');
     }
   };
-  
 
   if (themeLoading) {
     return (
@@ -126,20 +123,20 @@ function NoteBars() {
         {/* Notes list skeleton */}
         <div className="space-y-3 px-2">
           {[1, 2, 3].map((item) => (
-            <div 
-              key={item} 
+            <div
+              key={item}
               className="p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
             >
               <div className="space-y-3">
                 {/* Title */}
                 <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
-                
+
                 {/* Tags */}
                 <div className="flex gap-2">
                   <div className="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
                   <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
                 </div>
-                
+
                 {/* Date */}
                 <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
               </div>
@@ -186,7 +183,7 @@ function NoteBars() {
           </button>
         </div>
       ) : (
-        <div>
+        <div className="flex flex-col h-full">
           <button
             className="flex justify-center w-full py-3 rounded-lg bg-blue-500 hover:bg-blue-600 
                        dark:bg-blue-600 dark:hover:bg-blue-700 active:scale-95 text-white mb-4 
@@ -202,84 +199,88 @@ function NoteBars() {
             <p className="capitalize">create new note</p>
           </button>
 
-          {(archiveNotePath && !filteredTag) && (
-            <div className="w-full mb-4 text-gray-700 dark:text-gray-300">All your archived notes are stored here. You can restore or delete them anytime.</div>
-          )}
-
-          {newNoteI && !filteredTag && (
-            <div
-              className="bg-gray-100 dark:bg-gray-800 text-lg font-semibold rounded-lg p-2 mb-4 
-                          text-gray-900 dark:text-white"
-            >
-              Untitled Note
-            </div>
-          )}
-
-{filteredTag && (
-            <div className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 rounded-lg p-2 mb-4">
-              All notes with the <span className="font-semibold">{`"${filteredTag}"`}</span> tag are shown here.
-            </div>
-          )}
-
-          {searchQuery && searchQueryNotes.length === 0 && (
-            <div className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 rounded-lg p-2 mb-4">
-              No notes match your search. Try a different keyword or{' '}
-              <button className="underline" onClick={handleInitiateCreateNote}>
-                create a new note.
-              </button>
-            </div>
-          )}
-
-          <div className="flex-1 flex flex-col gap-2 overflow-y-auto scrollbar-hide">
-            {displayNotes.length === 0 && !filteredTag && !searchQuery ?(
-              <div className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 rounded-lg p-2">
-                {allNotePath ? (
-                  'You don’t have any notes yet. Start a new note to capture your thoughts and ideas.'
-                ) : archiveNotePath ? (
-                  <>
-                    No notes have been archived yet. Move notes here for safekeeping, or{' '}
-                    <button className="underline" onClick={handleInitiateCreateNote}>
-                      create a new note.
-                    </button>
-                  </>
-                ) : null}
-              </div>
-            ): (
-              displayNotes.map((note, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleShowNoteDetail(note)}
-                  className={`flex flex-col p-2 text-start w-full rounded-lg transition-colors
-                    ${
-                      noteDetail?.id === note.id
-                        ? 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                    }`}
-                >
-                  <div className="flex flex-col gap-3">
-                    <h1 className="font-semibold text-lg">{note.title}</h1>
-                    <div className="flex flex-wrap gap-1">
-                      {note.tags.split(',').map((tag, i) => (
-                        <div
-                          key={i}
-                          className={`rounded-md px-[6px] py-[2px] text-sm
-                            ${
-                              noteDetail?.id === note.id
-                                ? 'bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200'
-                                : 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-                            }`}
-                        >
-                          <p className="capitalize">{tag}</p>
-                        </div>
-                      ))}
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{format(new Date(note.created_at), 'dd MMM yyyy')}</p>
-                    </div>
-                  </div>
-                </button>
-              ))
+          <div className="flex-1 overflow-y-auto scrollbar-hide">
+            {(archiveNotePath && !filteredTag) && (
+              <div className="w-full mb-4 text-gray-700 dark:text-gray-300">All your archived notes are stored here. You can restore or delete them anytime.</div>
             )}
+
+            {newNoteI && !filteredTag && (
+              <div
+                className="bg-gray-100 dark:bg-gray-800 text-lg font-semibold rounded-lg p-2 mb-4 
+                            text-gray-900 dark:text-white"
+              >
+                Untitled Note
+              </div>
+            )}
+
+            {filteredTag && (
+              <div className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 rounded-lg p-2 mb-4">
+                All notes with the <span className="font-semibold">{`"${filteredTag}"`}</span> tag are shown here.
+              </div>
+            )}
+
+            {searchQuery && searchQueryNotes.length === 0 && (
+              <div className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 rounded-lg p-2 mb-4">
+                No notes match your search. Try a different keyword or{' '}
+                <button className="underline" onClick={handleInitiateCreateNote}>
+                  create a new note.
+                </button>
+              </div>
+            )}
+
+            <div className="flex-1 flex flex-col gap-2">
+              {displayNotes.length === 0 && !filteredTag && !searchQuery ? (
+                <div className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 rounded-lg p-2">
+                  {allNotePath ? (
+                    'You don’t have any notes yet. Start a new note to capture your thoughts and ideas.'
+                  ) : archiveNotePath ? (
+                    <>
+                      No notes have been archived yet. Move notes here for safekeeping, or{' '}
+                      <button className="underline" onClick={handleInitiateCreateNote}>
+                        create a new note.
+                      </button>
+                    </>
+                  ) : null}
+                </div>
+              ) : (
+                <div className="flex flex-col gap-3">
+                  {displayNotes.map((note, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleShowNoteDetail(note)}
+                      className={`flex flex-col p-2 text-start w-full rounded-lg transition-colors
+                        ${
+                          noteDetail?.id === note.id
+                            ? 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white'
+                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                        }`}
+                    >
+                      <div className="flex flex-col gap-3">
+                        <h1 className="font-semibold text-lg">{note.title}</h1>
+                        <div className="flex flex-wrap gap-1">
+                          {note.tags.split(',').map((tag, i) => (
+                            <div
+                              key={i}
+                              className={`rounded-md px-[6px] py-[2px] text-sm
+                                ${
+                                  noteDetail?.id === note.id
+                                    ? 'bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200'
+                                    : 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+                                }`}
+                            >
+                              <p className="capitalize">{tag}</p>
+                            </div>
+                          ))}
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{format(new Date(note.created_at), 'dd MMM yyyy')}</p>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

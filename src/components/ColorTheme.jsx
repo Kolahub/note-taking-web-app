@@ -3,6 +3,8 @@ import { useTheme } from '../context/theme/ThemeContext';
 import IconLight from '../assets/images/icon-sun.svg?react';
 import IconDark from '../assets/images/icon-moon.svg?react';
 import IconSystem from '../assets/images/icon-system-theme.svg?react';
+import { toastAction } from '../store';
+import { useDispatch } from 'react-redux';
 
 function ColorTheme() {
   const { theme, updateTheme } = useTheme();
@@ -10,6 +12,8 @@ function ColorTheme() {
     selected: theme,
     applied: theme
   });
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     setThemeState({ selected: theme, applied: theme });
@@ -22,6 +26,7 @@ function ColorTheme() {
   const applyChanges = () => {
     setThemeState(prev => ({ ...prev, applied: prev.selected }));
     updateTheme(themeState.selected);
+    dispatch(toastAction.showToast({ message: 'Settings updated successfully!', subText: '' }));
   };
 
   return (

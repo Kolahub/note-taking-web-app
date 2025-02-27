@@ -6,7 +6,7 @@ import FontTheme from './FontTheme';
 import ChangePassword from './ChangePassword';
 
 function Settings() {
-  const activeSettings = useSelector((state) => state.activeSettings);
+  const activeSettings = useSelector((state) => state.note.activeSettings);
 
   return (
     <div>

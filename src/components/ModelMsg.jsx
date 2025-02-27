@@ -48,20 +48,20 @@ const ModelMsg = ({ type, onCancel, onConfirm }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white border rounded-lg w-[440px]">
-        <div className="border-b-2 flex gap-4 p-5">
-          <div className="p-2 bg-gray-100 w-10 h-10 rounded-lg">{icon}</div>
+      <div className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg w-[440px]">
+        <div className="border-b-2 dark:border-gray-700 flex gap-4 p-5">
+          <div className="p-2 bg-gray-100 dark:bg-gray-700 dark:text-white w-10 h-10 rounded-lg">{icon}</div>
           <div>
-            <h2 className="text-xl font-semibold">{title}</h2>
-            <p className="mt-2">{details}</p>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{title}</h2>
+            <p className="mt-2 text-gray-700 dark:text-gray-300">{details}</p>
           </div>
         </div>
 
         <div className="flex justify-end space-x-4 py-4 px-5">
-          <button className="px-4 py-2 border rounded bg-gray-200 text-gray-600" onClick={onCancel} disabled={loading}>
+          <button className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 active:scale-95" onClick={onCancel} disabled={loading}>
             Cancel
           </button>
-          <button className={`px-4 py-2 border rounded text-white ${btnBg} flex items-center justify-center`} onClick={handleConfirm} disabled={loading}>
+          <button className={`px-4 py-2 rounded text-white ${btnBg} flex items-center justify-center active:scale-95`} onClick={handleConfirm} disabled={loading}>
             {loading ? <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span> : buttonText}
           </button>
         </div>

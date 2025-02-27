@@ -20,6 +20,21 @@ textarea::-webkit-scrollbar {
     scrollbar-width: none;
   }
 
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  .toast-slide-in {
+    animation: slideIn 0.5s ease-out forwards;
+  }
+
 .font-sans { font-family: theme('fontFamily.sans'); }
 .font-serif { font-family: theme('fontFamily.serif'); }
 .font-mono { font-family: theme('fontFamily.mono'); }
