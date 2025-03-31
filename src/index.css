@@ -20,6 +20,24 @@ textarea::-webkit-scrollbar {
     scrollbar-width: none;
   }
 
+  
+/* Center the cancel button */
+.Toastify__toast-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Toastify__toast {
+  background-color: #333; /* Dark background */
+  color: #fff; /* Light text color */
+}
+
+.Toastify__close-button {
+  margin: 0 auto; /* Center the close button */
+  color: #fff; /* Light color for the close button */
+}
+
   @keyframes slideIn {
     from {
       transform: translateX(100%);

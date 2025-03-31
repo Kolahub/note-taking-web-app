@@ -1,4 +1,3 @@
-// store.js
 import { configureStore, createSlice, combineReducers } from "@reduxjs/toolkit";
 
 const noteInitialState = {

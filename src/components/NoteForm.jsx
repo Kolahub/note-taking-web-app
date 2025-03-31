@@ -1,4 +1,3 @@
-// NoteForm.js
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, useLocation } from 'react-router-dom';
@@ -119,7 +118,7 @@ function NoteForm() {
         console.log('Updated:', data);
         dispatch(noteAction.updateNote(data[0]));
         dispatch(noteAction.showNoteDetail(data[0]));
-        dispatch(toastAction.showToast({ message: 'New note updated successfully', subText: '' }));
+        dispatch(toastAction.showToast({ message: 'Note updated successfully', subText: '' }));
       }
     }
   };
