@@ -1,4 +1,4 @@
-import { configureStore, createSlice, combineReducers } from "@reduxjs/toolkit";
+import { configureStore, createSlice, combineReducers } from '@reduxjs/toolkit';
 
 const noteInitialState = {
   notes: [],
@@ -14,7 +14,7 @@ const noteInitialState = {
 };
 
 const noteSlice = createSlice({
-  name: "note",
+  name: 'note',
   initialState: noteInitialState,
   reducers: {
     allNotes(state, action) {
@@ -60,7 +60,7 @@ const noteSlice = createSlice({
     },
     filterBasedTags(state, action) {
       const allAndArchiveNotes = [...state.notes, ...state.archivedNotes];
-      state.filteredNotes = allAndArchiveNotes.filter(note => note.tags.includes(action.payload));
+      state.filteredNotes = allAndArchiveNotes.filter((note) => note.tags.includes(action.payload));
       state.filteredTag = action.payload;
     },
     allSearchQueryNotes(state, action) {
@@ -73,12 +73,19 @@ const noteSlice = createSlice({
         return;
       }
       const query = action.payload.trim().toLowerCase();
-      state.searchQueryNotes = allAndArchiveNotes.filter(note => {
-        const tagsArray = [...new Set(allAndArchiveNotes.map((note) => note.tags).join(',').split(','))];
+      state.searchQueryNotes = allAndArchiveNotes.filter((note) => {
+        const tagsArray = [
+          ...new Set(
+            allAndArchiveNotes
+              .map((note) => note.tags)
+              .join(',')
+              .split(',')
+          ),
+        ];
         return (
-          tagsArray.some(tag => String(tag).toLowerCase().includes(query)) || 
-          (note.title?.toLowerCase().includes(query)) ||
-          (note.note_details?.toLowerCase().includes(query))
+          tagsArray.some((tag) => String(tag).toLowerCase().includes(query)) ||
+          note.title?.toLowerCase().includes(query) ||
+          note.note_details?.toLowerCase().includes(query)
         );
       });
       state.searchQuery = action.payload;
@@ -91,7 +98,7 @@ const noteSlice = createSlice({
     },
     applyActiveSettings(state, action) {
       state.activeSettings = action.payload;
-    }
+    },
   },
 });
 
@@ -102,7 +109,7 @@ const toastInitialState = {
 };
 
 const toastSlice = createSlice({
-  name: "toast",
+  name: 'toast',
   initialState: toastInitialState,
   reducers: {
     showToast(state, action) {
@@ -118,9 +125,36 @@ const toastSlice = createSlice({
   },
 });
 
+const mobileInitialState = {
+  showNote: false,
+  showSearch: false,
+};
+
+const mobileSlice = createSlice({
+  name: 'mobile',
+  initialState: mobileInitialState,
+  reducers: {
+    callShowNote(state) {
+      state.showNote = true;
+      state.showSearch = false;
+    },
+    callHideNote(state) {
+      state.showNote = false;
+    },
+    callShowSearch(state) {
+      state.showSearch = true;
+      state.showNote = false;
+    },
+    callHideSearch(state) {
+      state.showSearch = false;
+    },
+  },
+});
+
 const rootReducer = combineReducers({
   note: noteSlice.reducer,
   toast: toastSlice.reducer,
+  mobile: mobileSlice.reducer,
 });
 
 const store = configureStore({
@@ -129,5 +163,6 @@ const store = configureStore({
 
 export const noteAction = noteSlice.actions;
 export const toastAction = toastSlice.actions;
+export const mobileAction = mobileSlice.actions;
 
 export default store;

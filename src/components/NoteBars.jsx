@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import supabase from '../config/SupabaseConfig';
-import { noteAction } from '../store';
+import { mobileAction, noteAction } from '../store';
 import { useLocation, useNavigate } from 'react-router-dom';
 import IconSun from '../assets/images/icon-sun.svg?react';
 import IconFont from '../assets/images/icon-font.svg?react';
@@ -57,11 +57,18 @@ function NoteBars() {
     if (!allNotePath) {
       navigate('/all-notes');
     }
+    if (window.innerWidth < 1024) {
+      dispatch(mobileAction.callShowNote());
+    }
     dispatch(noteAction.InitiateCreateNote());
   };
 
   const handleShowNoteDetail = (note) => {
     dispatch(noteAction.showNoteDetail(note));
+
+    if (window.innerWidth < 1024) {
+      dispatch(mobileAction.callShowNote());
+    }
   };
 
   useEffect(() => {
@@ -123,10 +130,7 @@ function NoteBars() {
         {/* Notes list skeleton */}
         <div className="space-y-3 px-2">
           {[1, 2, 3].map((item) => (
-            <div
-              key={item}
-              className="p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
-            >
+            <div key={item} className="p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
               <div className="space-y-3">
                 {/* Title */}
                 <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
@@ -148,7 +152,7 @@ function NoteBars() {
   }
 
   return (
-    <div className="px-4 py-5 border-r-2 dark:border-gray-800 flex flex-col w-full" style={{ height: 'calc(100vh - 85px)' }}>
+    <div className="p-4 sm:px-8 sm:py-4 lg:px-4 lg:py-5 border-r-2 dark:border-gray-800 flex flex-col w-full" style={{ height: 'calc(100vh - 85px)' }}>
       {settingsActive ? (
         <div>
           <div className="flex flex-col gap-4 border-b-2 dark:border-gray-800 pb-3">
@@ -185,8 +189,9 @@ function NoteBars() {
       ) : (
         <div className="flex flex-col h-full">
           <button
-            className="flex justify-center w-full py-3 rounded-lg bg-blue-500 hover:bg-blue-600 
-                       dark:bg-blue-600 dark:hover:bg-blue-700 active:scale-95 text-white mb-4 
+            className="flex justify-center items-center lg:w-full py-3 rounded-full lg:rounded-lg absolute lg:static right-9 bottom-24
+            h-16 w-16 lg:h-auto bg-blue-500 hover:bg-blue-600 
+                       dark:bg-blue-600 dark:hover:bg-blue-700 active:scale-95 text-white lg:mb-4 
                        transition-colors"
             onClick={handleInitiateCreateNote}
           >
@@ -196,12 +201,14 @@ function NoteBars() {
                 d="M12 5a.75.75 0 0 1 .75.75V11H18a.75.75 0 0 1 0 1.5h-5.25v5.25a.75.75 0 0 1-1.5 0V12.5H6A.75.75 0 0 1 6 11h5.25V5.75A.75.75 0 0 1 12 5Z"
               />
             </svg>
-            <p className="capitalize">create new note</p>
+            <p className="capitalize hidden lg:block">create new note</p>
           </button>
 
           <div className="flex-1 overflow-y-auto scrollbar-hide">
-            {(archiveNotePath && !filteredTag) && (
-              <div className="w-full mb-4 text-gray-700 dark:text-gray-300">All your archived notes are stored here. You can restore or delete them anytime.</div>
+            {archiveNotePath && !filteredTag && (
+              <div className="w-full mb-4 text-gray-700 dark:text-gray-300">
+                All your archived notes are stored here. You can restore or delete them anytime.
+              </div>
             )}
 
             {newNoteI && !filteredTag && (
@@ -248,12 +255,12 @@ function NoteBars() {
                     <button
                       key={index}
                       onClick={() => handleShowNoteDetail(note)}
-                      className={`flex flex-col p-2 text-start w-full rounded-lg transition-colors
+                      className={`flex flex-col p-2 text-start w-full rounded-lg border-b-2 border-gray-300 dark:border-gray-800 transition-colors
                         ${
                           noteDetail?.id === note.id
-                            ? 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white'
-                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                        }`}
+                            ? 'lg:bg-gray-200 lg:dark:bg-gray-800 lg:text-gray-900 lg:dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+                            : 'lg:text-gray-700 lg:dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                        } last:border-b-0`}
                     >
                       <div className="flex flex-col gap-3">
                         <h1 className="font-semibold text-lg">{note.title}</h1>
@@ -264,7 +271,7 @@ function NoteBars() {
                               className={`rounded-md px-[6px] py-[2px] text-sm
                                 ${
                                   noteDetail?.id === note.id
-                                    ? 'bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200'
+                                    ? 'lg:bg-gray-300 lg:dark:bg-gray-600 lg:text-gray-800 lg:dark:text-gray-200 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
                                     : 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
                                 }`}
                             >

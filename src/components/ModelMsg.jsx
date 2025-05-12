@@ -47,7 +47,7 @@ const ModelMsg = ({ type, onCancel, onConfirm }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-30">
       <div className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg w-[440px]">
         <div className="border-b-2 dark:border-gray-700 flex gap-4 p-5">
           <div className="p-2 bg-gray-100 dark:bg-gray-700 dark:text-white w-10 h-10 rounded-lg">{icon}</div>

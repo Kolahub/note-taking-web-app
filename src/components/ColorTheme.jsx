@@ -10,88 +10,116 @@ function ColorTheme() {
   const { theme, updateTheme } = useTheme();
   const [themeState, setThemeState] = useState({
     selected: theme,
-    applied: theme
+    applied: theme,
   });
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setThemeState({ selected: theme, applied: theme });
   }, [theme]);
 
   const handleSelection = (newTheme) => {
-    setThemeState(prev => ({ ...prev, selected: newTheme }));
+    setThemeState((prev) => ({ ...prev, selected: newTheme }));
   };
 
   const applyChanges = () => {
-    setThemeState(prev => ({ ...prev, applied: prev.selected }));
+    setThemeState((prev) => ({ ...prev, applied: prev.selected }));
     updateTheme(themeState.selected);
     dispatch(toastAction.showToast({ message: 'Settings updated successfully!', subText: '' }));
   };
 
+  const isMobile = window.innerWidth < 1024;
+
   return (
-    <div className="pl-8 pt-10">
-      <h1 className="capitalize text-2xl font-semibold text-gray-950 dark:text-gray-50">
-        Color Theme
-      </h1>
-      <p className="text-lg text-gray-950 dark:text-gray-50">
-        Choose your color theme:
-      </p>
+    <div className={isMobile ? '' : 'pl-8 pt-10'}>
+      {!isMobile && (
+        <>
+          <h1 className="capitalize text-2xl font-semibold text-gray-950 dark:text-gray-50">Color Theme</h1>
+          <p className="text-lg text-gray-950 dark:text-gray-50">Choose your color theme:</p>
+        </>
+      )}
 
-      <div className="mt-6">
-        <form className="flex flex-col gap-4">
-          {[
-            { name: 'light', icon: <IconLight />, description: 'Pick a clean and classic light theme' },
-            { name: 'dark', icon: <IconDark />, description: 'Select a sleek and modern dark theme' },
-            { name: 'system', icon: <IconSystem />, description: 'Adapts to your device’s theme' },
-          ].map(({ name, icon, description }) => (
-            <label
-              key={name}
-              className={`flex items-center gap-4 cursor-pointer p-4 rounded-lg border dark:border-gray-700 transition ${
-                themeState.selected === name 
-                  ? 'bg-gray-100 border-gray-300 dark:bg-gray-800 dark:border-gray-600' 
-                  : 'hover:bg-gray-100 dark:hover:bg-gray-800'
-              }`}
-            >
-              <input 
-                type="radio" 
-                name="theme" 
-                value={name} 
-                className="hidden" 
-                onChange={() => handleSelection(name)} 
-                checked={themeState.selected === name} 
-              />
-              <div className="bg-white dark:bg-black border-2 dark:border-gray-800 dark:text-gray-100 p-2 rounded-lg w-12 h-12 flex items-center justify-center">
-                {icon}
-              </div>
-              <div className="flex-1">
-                <h1 className="capitalize font-semibold text-lg text-gray-950 dark:text-gray-50">
-                  {name} mode
-                </h1>
-                <p className="text-gray-950 dark:text-gray-50">{description}</p>
-              </div>
-              <div
-                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  themeState.selected === name 
-                    ? 'bg-blue-500 border-none' 
-                    : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800'
-                }`}
-              >
-                <div className="w-2 h-2 bg-white dark:bg-gray-800 rounded-full"></div>
-              </div>
-            </label>
-          ))}
+      {isMobile && <p className="text-gray-700 dark:text-gray-300 mb-4">Choose your color theme:</p>}
 
-          <div className="flex justify-end font-medium">
-            <button 
-              type="button" 
-              className="bg-blue-500 text-white capitalize w-40 rounded-lg py-3 px-4 active:scale-95" 
-              onClick={applyChanges}
-            >
-              Apply Changes
-            </button>
+      <div className="flex flex-col gap-4">
+        <label
+          className={`flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer 
+            ${themeState.selected === 'light' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'}`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="bg-gray-100 p-2 rounded-full dark:bg-gray-700">
+              <IconLight />
+            </div>
+            <div>
+              <h3 className="font-medium text-gray-900 dark:text-gray-100">Light Mode</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Pick a clean and classic light theme</p>
+            </div>
           </div>
-        </form>
+          <input
+            type="radio"
+            name="theme"
+            checked={themeState.selected === 'light'}
+            onChange={() => handleSelection('light')}
+            className="h-5 w-5 accent-blue-500"
+          />
+        </label>
+
+        <label
+          className={`flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer 
+            ${themeState.selected === 'dark' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'}`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="bg-gray-100 p-2 rounded-full dark:bg-gray-700">
+              <IconDark />
+            </div>
+            <div>
+              <h3 className="font-medium text-gray-900 dark:text-gray-100">Dark Mode</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Select a sleek and modern dark theme</p>
+            </div>
+          </div>
+          <input
+            type="radio"
+            name="theme"
+            checked={themeState.selected === 'dark'}
+            onChange={() => handleSelection('dark')}
+            className="h-5 w-5 accent-blue-500"
+          />
+        </label>
+
+        <label
+          className={`flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer 
+            ${themeState.selected === 'system' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'}`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="bg-gray-100 p-2 rounded-full dark:bg-gray-700">
+              <IconSystem />
+            </div>
+            <div>
+              <h3 className="font-medium text-gray-900 dark:text-gray-100">System</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Adapts to your device&apos;s theme</p>
+            </div>
+          </div>
+          <input
+            type="radio"
+            name="theme"
+            checked={themeState.selected === 'system'}
+            onChange={() => handleSelection('system')}
+            className="h-5 w-5 accent-blue-500"
+          />
+        </label>
+      </div>
+
+      <div className="flex justify-end mt-6">
+        <button
+          onClick={applyChanges}
+          disabled={themeState.selected === themeState.applied}
+          className={`px-4 py-2 rounded-lg text-white ${
+            themeState.selected === themeState.applied ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 active:scale-95'
+          }`}
+        >
+          Apply Changes
+        </button>
       </div>
     </div>
   );
