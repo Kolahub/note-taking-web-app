@@ -38,15 +38,15 @@ function Navbar() {
 
   if (isLoading) {
     return (
-      <div className="lg:mt-4 lg:flex flex-col gap-3 animate-pulse">
-        <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-        <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+      <div className="lg:mt-4 lg:flex flex-col gap-2 sm:gap-3 animate-pulse">
+        <div className="h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+        <div className="h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
       </div>
     );
   }
 
   return (
-    <div className=''>
+    <div className="">
       <div className="lg:mt-4 lg:flex flex-col gap-2">
         <NavLink
           to={'/all-notes'}
@@ -54,19 +54,21 @@ function Navbar() {
           onClick={handleOnclickNav}
           className={({ isActive }) =>
             `flex justify-between w-full px-3 py-[10px] rounded-lg group hover:bg-gray-200 dark:hover:bg-gray-800 ${
-              (isActive || currentPath === '/') ? 'bg-gray-200 dark:bg-gray-800' : ''
+              isActive || currentPath === '/' ? 'bg-gray-200 dark:bg-gray-800' : ''
             }`
           }
         >
           <div className="flex gap-2">
-            <div className={`${(allNotePath || currentPath === '/') ? 'text-blue-500' : 'text-gray-950 dark:text-gray-50 group-hover:text-blue-500'}`}>
+            <div className={`${allNotePath || currentPath === '/' ? 'text-blue-500' : 'text-gray-950 dark:text-gray-50 group-hover:text-blue-500'}`}>
               <IconHome />
             </div>
             <span className="text-gray-950 dark:text-gray-100">All Notes</span>
           </div>
 
           <div
-            className={`rotate-180 ${(allNotePath || currentPath === '/') ? 'text-gray-950 dark:text-gray-50' : 'opacity-0 group-hover:opacity-100 text-gray-950 dark:text-gray-50'}`}
+            className={`rotate-180 ${
+              allNotePath || currentPath === '/' ? 'text-gray-950 dark:text-gray-50' : 'opacity-0 group-hover:opacity-100 text-gray-950 dark:text-gray-50'
+            }`}
           >
             <ArrowLeft />
           </div>
@@ -100,10 +102,8 @@ function Navbar() {
       </div>
 
       <div className="">
-  <Tags />
-</div>
-
-
+        <Tags />
+      </div>
     </div>
   );
 }

@@ -12,6 +12,8 @@ import { toastAction } from '../store';
 import MobileNav from '../components/MobileNav';
 import MobileNoteAction from '../components/MobileNoteAction';
 import MobileSearch from '../components/MobileSearch';
+import MobileTag from '../components/MobileTag';
+import MobileTaggedNotes from '../components/MobileTaggedNotes';
 import { mobileAction } from '../store';
 
 function Dashboard() {
@@ -21,6 +23,8 @@ function Dashboard() {
   const settingsActive = useSelector((state) => state.note.settingsActive);
   const showNote = useSelector((state) => state.mobile.showNote);
   const showSearch = useSelector((state) => state.mobile.showSearch);
+  const showTag = useSelector((state) => state.mobile.showTag);
+  const showTaggedNotes = useSelector((state) => state.mobile.showTaggedNotes);
   const dispatch = useDispatch();
   const toastState = useSelector((state) => state.toast);
 
@@ -46,7 +50,7 @@ function Dashboard() {
 
       <div
         className={`border-b-2 dark:border-gray-800 lg:col-start-3 lg:col-span-8 lg:row-start-1 ${
-          showNote || showSearch ? 'hidden lg:block' : settingsActive ? 'hidden' : 'block'
+          showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden' : 'block'
         }`}
       >
         <SubNav />
@@ -63,10 +67,18 @@ function Dashboard() {
         <MobileSearch onClose={() => dispatch(mobileAction.callHideSearch())} />
       </div>
 
+      <div className={`${showTag ? 'block' : 'hidden'} fixed top-[43px] sm:top-[57px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>
+        <MobileTag />
+      </div>
+
+      <div className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[43px] sm:top-[57px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>
+        <MobileTaggedNotes />
+      </div>
+
       <div
         className={`lg:col-start-3 lg:col-span-2 lg:row-start-2 overflow-auto scrollbar-hide ${
-          showNote || showSearch ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'
-        }`}
+          showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'
+        } pb-[60px]`}
       >
         <NoteBars />
       </div>

@@ -166,7 +166,7 @@ function NoteForm() {
     <Form
       id="note-form"
       onSubmit={handleSaveNote}
-      className="px-4 pt-0 pb-16 sm:px-6 flex flex-col border-r-2 border-gray-200 dark:border-gray-800 h-full lg:py-3 lg:h-[calc(100vh-85px)]"
+      className="px-4 pt-0 pb-16 sm:px-6 flex flex-col border-r-2 border-gray-200 dark:border-gray-800 h-full lg:py-3 lg:h-[calc(100vh-85px)] text-sm sm:text-base"
     >
       {/* Title Input */}
       <input

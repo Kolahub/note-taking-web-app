@@ -38,6 +38,8 @@ function MobileNoteAction() {
       // Reset form to original note values
       dispatch(noteAction.showNoteDetail(noteDetail));
     }
+
+    // Just call hideNote - the mobile slice will handle returning to the correct previous view
     dispatch(mobileAction.callHideNote());
   };
 
@@ -190,32 +192,28 @@ function MobileNoteAction() {
 
   return (
     <div className="px-4 py-3 sm:px-8 sm:py-4 flex items-center justify-between border-b dark:border-gray-800 bg-white dark:bg-black mt-0">
-      <button className="flex items-center gap-2 text-gray-700 dark:text-gray-300 active:scale-95" onClick={handleGoBack}>
+      <button className="flex items-center gap-1 sm:gap-2 text-gray-700 dark:text-gray-300 active:scale-95" onClick={handleGoBack}>
         <ArrowLeft />
         <p className="capitalize">go back</p>
       </button>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         {!newNoteI && noteDetail.id && (
           <>
-            <button onClick={() => openModal('delete')} className="text-gray-700 dark:text-gray-300 active:scale-95 p-1">
+            <button onClick={() => openModal('delete')} className="text-gray-700 dark:text-gray-300 active:scale-95">
               <IconDelete />
             </button>
-            <button onClick={() => openModal('archive')} className="text-gray-700 dark:text-gray-300 active:scale-95 p-1">
+            <button onClick={() => openModal('archive')} className="text-gray-700 dark:text-gray-300 active:scale-95">
               {archiveNotePath ? <IconRestore /> : allNotePath ? <IconArchive /> : null}
             </button>
           </>
         )}
 
-        <button
-          type="button"
-          onClick={handleCancel}
-          className="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 active:scale-95 text-sm"
-        >
+        <button type="button" onClick={handleCancel} className="active:scale-95 text-sm">
           Cancel
         </button>
 
-        <button type="button" onClick={handleSaveNote} className="px-3 py-1 rounded-lg bg-blue-500 text-white active:scale-95 text-sm">
+        <button type="button" onClick={handleSaveNote} className="active:scale-95 text-sm text-blue-500">
           {newNoteI ? 'Save Note' : 'Update Note'}
         </button>
       </div>

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import supabase from '../config/SupabaseConfig';
@@ -15,22 +14,21 @@ function Tags() {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
         if (userError) throw userError;
         if (!user) throw new Error('No user logged in');
-        
-        const { data, error } = await supabase
-          .from('notes')
-          .select()
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false });
+
+        const { data, error } = await supabase.from('notes').select().eq('user_id', user.id).order('created_at', { ascending: false });
 
         if (error) throw error;
-        
+
         if (data) {
           const getTags = data.map((note) => note.tags);
           const getTagsEach = getTags.join(',').split(',');
-          const getTagsSet = [...new Set(getTagsEach)].filter(tag => tag.trim() !== '');
+          const getTagsSet = [...new Set(getTagsEach)].filter((tag) => tag.trim() !== '');
           setTags(getTagsSet);
         }
       } catch (error) {
@@ -51,11 +49,11 @@ function Tags() {
   if (isThemeLoading || isLoadingTags) {
     return (
       <div className="border-t-2 dark:border-gray-800 mt-4 py-2 animate-pulse">
-        <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+        <div className="h-5 sm:h-6 w-16 sm:w-20 bg-gray-200 dark:bg-gray-700 rounded mb-3 sm:mb-4"></div>
         <div className="space-y-2">
-          <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-          <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-          <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div className="h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div className="h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div className="h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
         </div>
       </div>
     );
@@ -102,20 +100,8 @@ function Tags() {
               <p className="text-gray-950 dark:text-gray-100">{tag}</p>
             </div>
             <div className={`${activeTag === tag ? 'block' : 'hidden group-hover:block'} text-gray-950 dark:text-gray-50`}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                className="rotate-180"
-              >
-                <path
-                  fill="currentColor"
-                  fillRule="evenodd"
-                  d="M15.75 20.414 7.336 12l8.414-8.414L17.164 5l-7 7 7 7-1.414 1.414Z"
-                  clipRule="evenodd"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" className="rotate-180">
+                <path fill="currentColor" fillRule="evenodd" d="M15.75 20.414 7.336 12l8.414-8.414L17.164 5l-7 7 7 7-1.414 1.414Z" clipRule="evenodd" />
               </svg>
             </div>
           </button>

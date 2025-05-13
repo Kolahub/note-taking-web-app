@@ -128,6 +128,9 @@ const toastSlice = createSlice({
 const mobileInitialState = {
   showNote: false,
   showSearch: false,
+  showTag: false,
+  showTaggedNotes: false,
+  previousView: null,
 };
 
 const mobileSlice = createSlice({
@@ -135,18 +138,63 @@ const mobileSlice = createSlice({
   initialState: mobileInitialState,
   reducers: {
     callShowNote(state) {
+      if (state.showTaggedNotes) {
+        state.previousView = 'taggedNotes';
+      } else if (state.showTag) {
+        state.previousView = 'tag';
+      } else if (state.showSearch) {
+        state.previousView = 'search';
+      } else {
+        state.previousView = 'home';
+      }
+
       state.showNote = true;
       state.showSearch = false;
+      state.showTag = false;
+      state.showTaggedNotes = false;
     },
     callHideNote(state) {
       state.showNote = false;
+
+      if (state.previousView === 'taggedNotes') {
+        state.showTaggedNotes = true;
+      } else if (state.previousView === 'tag') {
+        state.showTag = true;
+      } else if (state.previousView === 'search') {
+        state.showSearch = true;
+      }
+
+      state.previousView = null;
     },
     callShowSearch(state) {
+      state.previousView = null;
       state.showSearch = true;
       state.showNote = false;
+      state.showTag = false;
+      state.showTaggedNotes = false;
     },
     callHideSearch(state) {
       state.showSearch = false;
+    },
+    callShowTag(state) {
+      state.previousView = null;
+      state.showTag = true;
+      state.showNote = false;
+      state.showSearch = false;
+      state.showTaggedNotes = false;
+    },
+    callHideTag(state) {
+      state.showTag = false;
+    },
+    callShowTaggedNotes(state) {
+      state.previousView = 'tag';
+      state.showTaggedNotes = true;
+      state.showTag = false;
+      state.showNote = false;
+      state.showSearch = false;
+    },
+    callHideTaggedNotes(state) {
+      state.showTaggedNotes = false;
     },
   },
 });

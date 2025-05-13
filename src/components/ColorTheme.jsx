@@ -34,17 +34,17 @@ function ColorTheme() {
   return (
     <div className={isMobile ? '' : 'pl-8 pt-10'}>
       {!isMobile && (
-        <>
+        <div className='mb-6'>
           <h1 className="capitalize text-2xl font-semibold text-gray-950 dark:text-gray-50">Color Theme</h1>
           <p className="text-lg text-gray-950 dark:text-gray-50">Choose your color theme:</p>
-        </>
+        </div>
       )}
 
       {isMobile && <p className="text-gray-700 dark:text-gray-300 mb-4">Choose your color theme:</p>}
 
       <div className="flex flex-col gap-4">
         <label
-          className={`flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer 
+          className={`flex items-center justify-between gap-1 p-4 rounded-lg border-2 cursor-pointer 
             ${themeState.selected === 'light' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'}`}
         >
           <div className="flex items-center gap-3">
@@ -65,8 +65,8 @@ function ColorTheme() {
           />
         </label>
 
-        <label
-          className={`flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer 
+        <label 
+          className={`flex items-center gap-1 justify-between p-4 rounded-lg border-2 cursor-pointer 
             ${themeState.selected === 'dark' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'}`}
         >
           <div className="flex items-center gap-3">
@@ -88,7 +88,7 @@ function ColorTheme() {
         </label>
 
         <label
-          className={`flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer 
+          className={`flex items-center justify-between gap-2 p-4 rounded-lg border-2 cursor-pointer 
             ${themeState.selected === 'system' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'}`}
         >
           <div className="flex items-center gap-3">

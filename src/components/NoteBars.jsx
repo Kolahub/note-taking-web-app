@@ -121,28 +121,28 @@ function NoteBars() {
 
   if (themeLoading) {
     return (
-      <div className="flex-1 space-y-4 animate-pulse">
+      <div className="flex-1 space-y-4 animate-pulse px-2 sm:px-4">
         {/* Search bar skeleton */}
-        <div className="flex gap-2 items-center px-2">
+        <div className="flex gap-2 items-center">
           <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded-lg flex-1"></div>
         </div>
 
         {/* Notes list skeleton */}
-        <div className="space-y-3 px-2">
+        <div className="space-y-3">
           {[1, 2, 3].map((item) => (
-            <div key={item} className="p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-              <div className="space-y-3">
+            <div key={item} className="p-3 sm:p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+              <div className="space-y-2 sm:space-y-3">
                 {/* Title */}
-                <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+                <div className="h-4 sm:h-5 bg-gray-200 dark:bg-gray-700 rounded w-1/2 sm:w-1/3"></div>
 
                 {/* Tags */}
-                <div className="flex gap-2">
-                  <div className="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                  <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                <div className="flex flex-wrap gap-2">
+                  <div className="h-5 sm:h-6 w-14 sm:w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                  <div className="h-5 sm:h-6 w-16 sm:w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
                 </div>
 
                 {/* Date */}
-                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+                <div className="h-3 sm:h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 sm:w-24"></div>
               </div>
             </div>
           ))}
@@ -239,7 +239,7 @@ function NoteBars() {
               {displayNotes.length === 0 && !filteredTag && !searchQuery ? (
                 <div className="bg-gray-100 dark:bg-gray-800 dark:text-gray-100 rounded-lg p-2">
                   {allNotePath ? (
-                    'You don’t have any notes yet. Start a new note to capture your thoughts and ideas.'
+                    "You don't have any notes yet. Start a new note to capture your thoughts and ideas."
                   ) : archiveNotePath ? (
                     <>
                       No notes have been archived yet. Move notes here for safekeeping, or{' '}

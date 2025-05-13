@@ -46,10 +46,10 @@ function FontTheme() {
   return (
     <div className={isMobile ? '' : 'pl-8 pt-10'}>
       {!isMobile && (
-        <>
+        <div className='mb-6'>
           <h1 className="text-2xl font-semibold text-gray-950 dark:text-gray-50">Font Theme</h1>
           <p className="text-lg text-gray-950 dark:text-gray-50">Choose your preferred font:</p>
-        </>
+        </div>
       )}
 
       {isMobile && <p className="text-gray-700 dark:text-gray-300 mb-4">Choose your preferred font:</p>}

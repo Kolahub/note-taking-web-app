@@ -11,6 +11,7 @@ import { mobileAction, noteAction } from '../store';
 function MobileNav() {
   const showNote = useSelector((state) => state.mobile.showNote);
   const showSearch = useSelector((state) => state.mobile.showSearch);
+  const showTag = useSelector((state) => state.mobile.showTag);
   const settingsActive = useSelector((state) => state.note.settingsActive);
   const location = useLocation();
   const dispatch = useDispatch();
@@ -25,10 +26,17 @@ function MobileNav() {
     if (showSearch) {
       dispatch(mobileAction.callHideSearch());
     }
+    if (showTag) {
+      dispatch(mobileAction.callHideTag());
+    }
   };
 
   const handleShowSearch = function () {
     dispatch(mobileAction.callShowSearch());
+  };
+
+  const handleShowTag = function () {
+    dispatch(mobileAction.callShowTag());
   };
 
   const handleToggleSettings = function () {
@@ -39,16 +47,20 @@ function MobileNav() {
     if (showSearch) {
       dispatch(mobileAction.callHideSearch());
     }
+    if (showTag) {
+      dispatch(mobileAction.callHideTag());
+    }
   };
 
   // Determine which icon should be active
-  const isHomeActive = (currentPath === '/' || currentPath === '/all-notes') && !showSearch && !settingsActive;
-  const isArchiveActive = currentPath === '/archive-notes' && !showSearch && !settingsActive;
+  const isHomeActive = (currentPath === '/' || currentPath === '/all-notes') && !showSearch && !settingsActive && !showTag;
+  const isArchiveActive = currentPath === '/archive-notes' && !showSearch && !settingsActive && !showTag;
   const isSearchActive = showSearch;
+  const isTagActive = showTag;
   const isSettingsActive = settingsActive;
 
   return (
-    <div className="px-4 py-3 sm:px-8 fixed bottom-0 left-0 right-0 bg-white dark:bg-black border-t-2 dark:border-gray-800 flex justify-between items-center z-10">
+    <div className="px-4 py-3 sm:px-8 fixed bottom-0 left-0 right-0 bg-white dark:bg-black border-t-2 dark:border-gray-800 flex justify-between items-center z-50">
       <NavLink
         to="/all-notes"
         end
@@ -83,7 +95,12 @@ function MobileNav() {
         <p className="text-xs mt-1 sm:hidden">Archive</p>
       </NavLink>
 
-      <button className="flex flex-col items-center text-gray-500 dark:text-gray-400 hover:bg-blue-50 hover:text-blue-500 rounded-lg w-20 py-1">
+      <button
+        onClick={handleShowTag}
+        className={`flex flex-col items-center rounded-lg w-20 py-1 ${
+          isTagActive ? 'text-blue-500' : 'text-gray-500 dark:text-gray-400 hover:bg-blue-50 hover:text-blue-500'
+        }`}
+      >
         <TagIcon />
         <p className="text-xs mt-1 sm:hidden">Tags</p>
       </button>

@@ -57,14 +57,14 @@ function SubNav() {
 
   if (themeLoading) {
     return (
-      <div className="w-full flex gap-4 items-center justify-between px-8 py-[18.5px] animate-pulse">
+      <div className="w-full flex gap-2 sm:gap-4 items-center justify-between px-3 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-[18.5px] animate-pulse">
         {/* Header skeleton */}
-        <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-48"></div>
+        <div className="h-8 sm:h-10 bg-gray-200 dark:bg-gray-700 rounded w-24 sm:w-48"></div>
 
         {/* Search and settings skeleton */}
-        <div className="flex gap-8">
-          <div className="flex items-center gap-3 bg-gray-200 dark:bg-gray-700 rounded-lg w-[400px] h-12"></div>
-          <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+        <div className="flex gap-3 sm:gap-6 lg:gap-8">
+          <div className="hidden sm:flex items-center gap-3 bg-gray-200 dark:bg-gray-700 rounded-lg w-40 sm:w-60 lg:w-[400px] h-8 sm:h-10 lg:h-12"></div>
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
         </div>
       </div>
     );
