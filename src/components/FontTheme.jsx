@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useFont } from '../context/font';
+import { useFont } from '../context/font/FontContext';
 import IconSans from '../assets/images/icon-font-sans-serif.svg?react';
 import IconSerif from '../assets/images/icon-font-serif.svg?react';
 import IconMono from '../assets/images/icon-font-monospace.svg?react';

@@ -4,8 +4,8 @@ import Dashboard from './pages/Dashboard';
 import ProtectedLayout from './pages/ProtectedLayout';
 // import supabase from './config/SupabaseConfig';
 import AuthPages from './pages/AuthPages';
-import { ThemeProvider } from './context/theme/ThemeProvider';
-import { FontProvider } from './context/font';
+import { ThemeProvider } from './context/theme/ThemeProvider.jsx';
+import { FontProvider } from './context/font/FontContext.jsx';
 
 function App() {
   // useEffect(() => {

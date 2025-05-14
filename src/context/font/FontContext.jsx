@@ -15,9 +15,7 @@ export function FontProvider({ children }) {
     // Get the current classes on the <html> element.
     const currentClasses = document.documentElement.className.split(' ');
     // Filter out any classes that are in our fontClasses list.
-    const preservedClasses = currentClasses.filter(
-      (cls) => !fontClasses.includes(cls)
-    );
+    const preservedClasses = currentClasses.filter((cls) => !fontClasses.includes(cls));
     // Update the className with preserved classes plus the new font.
     document.documentElement.className = [...preservedClasses, fontClass].join(' ');
   };
@@ -29,11 +27,7 @@ export function FontProvider({ children }) {
         data: { user },
       } = await supabase.auth.getUser();
       if (user) {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('fontTheme')
-          .eq('id', user.id)
-          .single();
+        const { data, error } = await supabase.from('profiles').select('fontTheme').eq('id', user.id).single();
 
         if (!error && data.fontTheme) {
           setCurrentFont(data.fontTheme);
@@ -63,11 +57,7 @@ export function FontProvider({ children }) {
     applyFont(currentFont);
   }, [currentFont]);
 
-  return (
-    <FontContext.Provider value={{ font: currentFont, updateFont, isLoading }}>
-      {children}
-    </FontContext.Provider>
-  );
+  return <FontContext.Provider value={{ font: currentFont, updateFont, isLoading }}>{children}</FontContext.Provider>;
 }
 
 FontProvider.propTypes = {
