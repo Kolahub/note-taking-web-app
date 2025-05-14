@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useFont } from '../context/font/fontContext';
+import { useFont } from '../context/font';
 import IconSans from '../assets/images/icon-font-sans-serif.svg?react';
 import IconSerif from '../assets/images/icon-font-serif.svg?react';
 import IconMono from '../assets/images/icon-font-monospace.svg?react';
@@ -46,7 +46,7 @@ function FontTheme() {
   return (
     <div className={isMobile ? '' : 'pl-8 pt-10'}>
       {!isMobile && (
-        <div className='mb-6'>
+        <div className="mb-6">
           <h1 className="text-2xl font-semibold text-gray-950 dark:text-gray-50">Font Theme</h1>
           <p className="text-lg text-gray-950 dark:text-gray-50">Choose your preferred font:</p>
         </div>

@@ -5,7 +5,7 @@ import ProtectedLayout from './pages/ProtectedLayout';
 // import supabase from './config/SupabaseConfig';
 import AuthPages from './pages/AuthPages';
 import { ThemeProvider } from './context/theme/ThemeProvider';
-import { FontProvider } from './context/font/fontContext';
+import { FontProvider } from './context/font';
 
 function App() {
   // useEffect(() => {
