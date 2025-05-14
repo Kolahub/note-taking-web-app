@@ -9,10 +9,9 @@ import Settings from '../components/Settings';
 import { useLocation } from 'react-router-dom';
 import Toast from '../components/Toast';
 import { toastAction } from '../store';
-import MobileNav from '../components/MobileNav';
 import MobileNoteAction from '../components/MobileNoteAction';
 import MobileSearch from '../components/MobileSearch';
-import MobileTag from '../components/MobileTag';
+import Tags from '../components/Tags';
 import MobileTaggedNotes from '../components/MobileTaggedNotes';
 import { mobileAction } from '../store';
 
@@ -43,9 +42,7 @@ function Dashboard() {
         <div className="text-black dark:text-white px-4 py-2 sm:px-8 sm:py-3 bg-gray-100 dark:bg-black lg:bg-transparent h-[43px] sm:h-[57px]">
           <Logo />
         </div>
-        <div className="hidden lg:block">
-          <Navbar />
-        </div>
+        <Navbar />
       </div>
 
       <div
@@ -68,7 +65,7 @@ function Dashboard() {
       </div>
 
       <div className={`${showTag ? 'block' : 'hidden'} fixed top-[43px] sm:top-[57px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>
-        <MobileTag />
+        <Tags />
       </div>
 
       <div className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[43px] sm:top-[57px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>
@@ -93,10 +90,6 @@ function Dashboard() {
 
       <div className="lg:col-start-9 lg:col-span-2 lg:row-start-2 overflow-auto hidden lg:block">
         {!settingsActive && allOrArchiveNotes.length > 0 && <CleanSweep />}
-      </div>
-
-      <div className="lg:hidden">
-        <MobileNav />
       </div>
 
       <div className="">

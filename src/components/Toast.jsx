@@ -24,7 +24,7 @@ function Toast({ message, subText, onClose }) {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-[58px] right-6 toast-slide-in flex gap-3 items-center w-[400px] border-2 p-2 rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 shadow-lg">
+    <div className="fixed bottom-[58px] right-4 sm:right-6 toast-slide-in flex gap-3 items-center w-[360px]  sm:w-[400px] border-2 p-2 rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 shadow-lg z-50 text-sm sm:text-base">
       <div className="text-green-500 dark:text-green-400">
         <IconSuccess />
       </div>
