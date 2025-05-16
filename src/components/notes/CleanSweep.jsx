@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import supabase from '../config/SupabaseConfig';
-import { noteAction, toastAction } from '../store';
+import supabase from '../../config/SupabaseConfig';
+import { noteAction, toastAction } from '../../store';
 import { useLocation } from 'react-router-dom';
-import IconRestore from '../assets/images/icon-restore.svg?react';
-import IconDelete from '../assets/images/icon-delete.svg?react';
-import IconArchive from '../assets/images/icon-archive.svg?react';
-import ModelMsg from './ModelMsg';
+import IconRestore from '../../assets/images/icon-restore.svg?react';
+import IconDelete from '../../assets/images/icon-delete.svg?react';
+import IconArchive from '../../assets/images/icon-archive.svg?react';
+import ModelMsg from '../ui/ModelMsg';
 
 function CleanSweep() {
   const noteDetail = useSelector((state) => state.note.noteDetail);

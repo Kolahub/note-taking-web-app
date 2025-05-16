@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import IconSearch from '../assets/images/icon-search.svg?react';
-import IconSettings from '../assets/images/icon-settings.svg?react';
-import { mobileAction, noteAction } from '../store';
-import { useTheme } from '../context/theme/ThemeContext';
+import IconSearch from '../../assets/images/icon-search.svg?react';
+import IconSettings from '../../assets/images/icon-settings.svg?react';
+import { mobileAction, noteAction } from '../../store';
+import { useTheme } from '../../context/theme/ThemeContext';
 import { useLocation } from 'react-router-dom';
 
 function SubNav() {
@@ -45,12 +45,13 @@ function SubNav() {
     if (searchQuery !== searchText) {
       setSearchText(searchQuery);
     }
-  }, [searchQuery]);
+  }, [searchQuery, searchText]);
 
   const toggleOpenSettings = function () {
+    const isOpening = !settingsActive;
     dispatch(noteAction.toggleOpenSettings());
     dispatch(noteAction.clearFilters());
-    if (settingsActive) {
+    if (isOpening) {
       dispatch(noteAction.applyActiveSettings('color theme'));
     }
   };
@@ -140,7 +141,7 @@ function SubNav() {
 
         <button
           type="button"
-          className="active:scale-110 transition-all w-10 h-10 flex items-center justify-center hidden lg:flex"
+          className="active:scale-110 transition-all w-10 h-10 items-center justify-center hidden lg:flex"
           onClick={toggleOpenSettings}
         >
           <div className="text-gray-500 dark:text-gray-400">

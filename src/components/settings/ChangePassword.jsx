@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import supabase from '../config/SupabaseConfig';
-import IconShowPassword from '../assets/images/icon-show-password.svg?react';
-import IconHidePassword from '../assets/images/icon-hide-password.svg?react';
-import IconInfo from '../assets/images/icon-info.svg?react';
+import supabase from '../../config/SupabaseConfig';
+import IconShowPassword from '../../assets/images/icon-show-password.svg?react';
+import IconHidePassword from '../../assets/images/icon-hide-password.svg?react';
+import IconInfo from '../../assets/images/icon-info.svg?react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

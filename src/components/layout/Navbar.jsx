@@ -1,15 +1,15 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import ArrowLeft from '../assets/images/icon-arrow-left.svg?react';
-import IconArchive from '../assets/images/icon-archive.svg?react';
-import IconHome from '../assets/images/icon-home.svg?react';
-import SearchIcon from '../assets/images/icon-search.svg?react';
-import SettingsIcon from '../assets/images/icon-settings.svg?react';
-import TagIcon from '../assets/images/icon-tag.svg?react';
+import ArrowLeft from '../../assets/images/icon-arrow-left.svg?react';
+import IconArchive from '../../assets/images/icon-archive.svg?react';
+import IconHome from '../../assets/images/icon-home.svg?react';
+import SearchIcon from '../../assets/images/icon-search.svg?react';
+import SettingsIcon from '../../assets/images/icon-settings.svg?react';
+import TagIcon from '../../assets/images/icon-tag.svg?react';
 import { useDispatch, useSelector } from 'react-redux';
-import { mobileAction, noteAction } from '../store';
-import Tags from './Tags';
+import { mobileAction, noteAction } from '../../store';
+import Tags from '../notes/Tags';
 import { useEffect } from 'react';
-import { useTheme } from '../context/theme/ThemeContext';
+import { useTheme } from '../../context/theme/ThemeContext';
 
 /**
  * Responsive Navbar component that handles both desktop sidebar navigation and mobile bottom navigation.
@@ -98,8 +98,8 @@ function Navbar() {
   // Desktop navigation
   return (
     <>
-      {/* Desktop navigation - hidden on smaller screens */}
-      <div className="hidden sm:block">
+      {/* Desktop navigation - hidden on mobile and tablet screens */}
+      <div className="hidden lg:block">
         <div className="lg:mt-4 lg:flex flex-col gap-2">
           <NavLink
             to={'/all-notes'}
@@ -159,8 +159,8 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Mobile navigation - visible only on smaller screens */}
-      <div className="sm:hidden px-4 py-3 fixed bottom-0 left-0 right-0 bg-white dark:bg-black border-t-2 dark:border-gray-800 flex justify-between items-center z-50">
+      {/* Mobile/Tablet navigation - visible on mobile and tablet screens but hidden on desktop */}
+      <div className="lg:hidden px-4 py-3 fixed bottom-0 left-0 right-0 bg-white dark:bg-black border-t-2 dark:border-gray-800 flex justify-between items-center z-50">
         <NavLink
           to="/all-notes"
           end
@@ -170,7 +170,7 @@ function Navbar() {
           }`}
         >
           <IconHome />
-          <p className="text-xs mt-1 hidden sm:block">Home</p>
+          <p className="hidden text-xs mt-1 md:block">Home</p>
         </NavLink>
 
         <button
@@ -180,7 +180,7 @@ function Navbar() {
           onClick={handleShowSearch}
         >
           <SearchIcon />
-          <p className="text-xs mt-1 hidden sm:block">Search</p>
+          <p className="hidden text-xs mt-1 md:block">Search</p>
         </button>
 
         <NavLink
@@ -192,7 +192,7 @@ function Navbar() {
           }`}
         >
           <IconArchive />
-          <p className="text-xs mt-1 hidden sm:block">Archive</p>
+          <p className="hidden text-xs mt-1 md:block">Archive</p>
         </NavLink>
 
         <button
@@ -202,7 +202,7 @@ function Navbar() {
           }`}
         >
           <TagIcon />
-          <p className="text-xs mt-1 hidden sm:block">Tags</p>
+          <p className="hidden text-xs mt-1 md:block">Tags</p>
         </button>
 
         <button
@@ -212,7 +212,7 @@ function Navbar() {
           onClick={handleToggleSettings}
         >
           <SettingsIcon />
-          <p className="text-xs mt-1 hidden sm:block">Settings</p>
+          <p className="hidden text-xs mt-1 md:block">Settings</p>
         </button>
       </div>
     </>

@@ -1,15 +1,15 @@
 import { format } from 'date-fns';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import supabase from '../config/SupabaseConfig';
-import { mobileAction, noteAction } from '../store';
+import supabase from '../../config/SupabaseConfig';
+import { mobileAction, noteAction } from '../../store';
 import { useLocation, useNavigate } from 'react-router-dom';
-import IconSun from '../assets/images/icon-sun.svg?react';
-import IconFont from '../assets/images/icon-font.svg?react';
-import IconLock from '../assets/images/icon-lock.svg?react';
-import IconLogout from '../assets/images/icon-logout.svg?react';
-import ArrowLeft from '../assets/images/icon-arrow-left.svg?react';
-import { useTheme } from '../context/theme/ThemeContext';
+import IconSun from '../../assets/images/icon-sun.svg?react';
+import IconFont from '../../assets/images/icon-font.svg?react';
+import IconLock from '../../assets/images/icon-lock.svg?react';
+import IconLogout from '../../assets/images/icon-logout.svg?react';
+import ArrowLeft from '../../assets/images/icon-arrow-left.svg?react';
+import { useTheme } from '../../context/theme/ThemeContext';
 
 const SETTINGS_OPT = [
   {
@@ -152,7 +152,13 @@ function NoteBars() {
   }
 
   return (
-    <div className="p-4 sm:px-8 sm:py-4 lg:px-4 lg:py-5 border-r-2 dark:border-gray-800 flex flex-col w-full" style={{ height: 'calc(100vh - 85px)' }}>
+    <div
+      className="p-4 sm:px-8 sm:py-4 lg:px-4 lg:py-5 border-r-2 dark:border-gray-800 flex flex-col w-full"
+      style={{
+        height: settingsActive ? '100vh' : 'calc(100vh - 85px)',
+        overflow: settingsActive ? 'auto' : 'hidden',
+      }}
+    >
       {settingsActive ? (
         <div>
           <div className="flex flex-col gap-4 border-b-2 dark:border-gray-800 pb-3">
@@ -263,7 +269,7 @@ function NoteBars() {
                         } last:border-b-0`}
                     >
                       <div className="flex flex-col gap-3">
-                        <h1 className="font-semibold text-lg">{note.title}</h1>
+                        <h1 className="font-semibold text-lg dark:text-white">{note.title}</h1>
                         <div className="flex flex-wrap gap-1">
                           {note.tags.split(',').map((tag, i) => (
                             <div

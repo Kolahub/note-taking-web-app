@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import IconArchive from '../assets/images/icon-archive.svg?react';
-import IconDelete from '../assets/images/icon-delete.svg?react';
-import IconRestore from '../assets/images/icon-restore.svg?react';
+import IconArchive from '../../assets/images/icon-archive.svg?react';
+import IconDelete from '../../assets/images/icon-delete.svg?react';
+import IconRestore from '../../assets/images/icon-restore.svg?react';
 
 const ModelMsg = ({ type, onCancel, onConfirm }) => {
   const [loading, setLoading] = useState(false);

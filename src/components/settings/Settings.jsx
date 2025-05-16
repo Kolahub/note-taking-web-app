@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import ColorTheme from './ColorTheme';
 import FontTheme from './FontTheme';
 import ChangePassword from './ChangePassword';
-import MobileSettings from './MobileSettings';
+import MobileSettings from '../mobile/MobileSettings';
 
 function Settings() {
   const activeSettings = useSelector((state) => state.note.activeSettings);

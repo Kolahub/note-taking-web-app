@@ -92,6 +92,10 @@ const noteSlice = createSlice({
     },
     toggleOpenSettings(state) {
       state.settingsActive = !state.settingsActive;
+      // Reset active settings when opening settings to show all options first
+      if (state.settingsActive) {
+        state.activeSettings = null;
+      }
     },
     cancelActiveSettings(state) {
       state.settingsActive = false;
@@ -208,6 +212,39 @@ const rootReducer = combineReducers({
 const store = configureStore({
   reducer: rootReducer,
 });
+
+export const {
+  allNotes,
+  allArchivedNotes,
+  InitiateCreateNote,
+  clearFilters,
+  showNoteDetail,
+  cancelNote,
+  addNote,
+  updateNote,
+  deleteNote,
+  filterBasedTags,
+  allSearchQueryNotes,
+  toggleOpenSettings,
+  cancelActiveSettings,
+  applyActiveSettings,
+} = noteSlice.actions;
+
+export const {
+  showToast,
+  hideToast,
+} = toastSlice.actions;
+
+export const {
+  callShowNote,
+  callHideNote,
+  callShowSearch,
+  callHideSearch,
+  callShowTag,
+  callHideTag,
+  callShowTaggedNotes,
+  callHideTaggedNotes,
+} = mobileSlice.actions;
 
 export const noteAction = noteSlice.actions;
 export const toastAction = toastSlice.actions;

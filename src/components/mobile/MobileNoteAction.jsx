@@ -1,13 +1,13 @@
 // import React from 'react'
-import ArrowLeft from '../assets/images/icon-arrow-left.svg?react';
-import IconDelete from '../assets/images/icon-delete.svg?react';
-import IconArchive from '../assets/images/icon-archive.svg?react';
-import IconRestore from '../assets/images/icon-restore.svg?react';
+import ArrowLeft from '../../assets/images/icon-arrow-left.svg?react';
+import IconDelete from '../../assets/images/icon-delete.svg?react';
+import IconArchive from '../../assets/images/icon-archive.svg?react';
+import IconRestore from '../../assets/images/icon-restore.svg?react';
 import { useDispatch, useSelector } from 'react-redux';
-import { mobileAction, noteAction, toastAction } from '../store';
-import supabase from '../config/SupabaseConfig';
+import { mobileAction, noteAction, toastAction } from '../../store';
+import supabase from '../../config/SupabaseConfig';
 import { useState } from 'react';
-import ModelMsg from './ModelMsg';
+import ModelMsg from '../ui/ModelMsg';
 import { useLocation } from 'react-router-dom';
 
 function MobileNoteAction() {
@@ -34,13 +34,17 @@ function MobileNoteAction() {
     if (newNoteI) {
       dispatch(noteAction.cancelNote());
       dispatch(noteAction.showNoteDetail(noteDetail));
-    } else if (noteDetail.id) {
+    } else if (noteDetail?.id) {
       // Reset form to original note values
       dispatch(noteAction.showNoteDetail(noteDetail));
     }
 
-    // Just call hideNote - the mobile slice will handle returning to the correct previous view
-    dispatch(mobileAction.callHideNote());
+    // Ensure we have a previous view to return to
+    if (noteDetail?.id) {
+      dispatch(mobileAction.callHideNote());
+    } else {
+      dispatch(mobileAction.callShowNote());
+    }
   };
 
   const handleDelete = async function () {
@@ -191,13 +195,13 @@ function MobileNoteAction() {
   };
 
   return (
-    <div className="px-4 py-3 sm:px-8 sm:py-4 flex items-center justify-between border-b dark:border-gray-800 bg-white dark:bg-black mt-0">
-      <button className="flex items-center gap-1 sm:gap-2 text-gray-700 dark:text-gray-300 active:scale-95" onClick={handleGoBack}>
+    <div className="px-4 py-3 sm:px-6 md:px-8 sm:py-3 md:py-4 flex items-center justify-between border-b dark:border-gray-800 bg-white dark:bg-black mt-0">
+      <button className="flex items-center gap-1 sm:gap-1.5 md:gap-2 text-gray-700 dark:text-gray-300 active:scale-95" onClick={handleGoBack}>
         <ArrowLeft />
         <p className="capitalize">go back</p>
       </button>
 
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-3">
         {!newNoteI && noteDetail.id && (
           <>
             <button onClick={() => openModal('delete')} className="text-gray-700 dark:text-gray-300 active:scale-95">
@@ -209,7 +213,7 @@ function MobileNoteAction() {
           </>
         )}
 
-        <button type="button" onClick={handleCancel} className="active:scale-95 text-sm">
+        <button type="button" onClick={handleCancel} className="active:scale-95 text-sm dark:text-gray-300">
           Cancel
         </button>
 

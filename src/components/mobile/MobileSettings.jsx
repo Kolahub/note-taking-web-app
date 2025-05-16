@@ -1,14 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
-import ArrowLeft from '../assets/images/icon-arrow-left.svg?react';
-import IconSun from '../assets/images/icon-sun.svg?react';
-import IconFont from '../assets/images/icon-font.svg?react';
-import IconLock from '../assets/images/icon-lock.svg?react';
-import IconLogout from '../assets/images/icon-logout.svg?react';
-import { noteAction } from '../store';
-import supabase from '../config/SupabaseConfig';
-import ColorTheme from './ColorTheme';
-import FontTheme from './FontTheme';
-import ChangePassword from './ChangePassword';
+import ArrowLeft from '../../assets/images/icon-arrow-left.svg?react';
+import IconSun from '../../assets/images/icon-sun.svg?react';
+import IconFont from '../../assets/images/icon-font.svg?react';
+import IconLock from '../../assets/images/icon-lock.svg?react';
+import IconLogout from '../../assets/images/icon-logout.svg?react';
+import { noteAction } from '../../store';
+import supabase from '../../config/SupabaseConfig';
+import ColorTheme from '../settings/ColorTheme';
+import FontTheme from '../settings/FontTheme';
+import ChangePassword from '../settings/ChangePassword';
 
 const SETTINGS_OPTIONS = [
   {
@@ -53,7 +53,7 @@ function MobileSettings() {
   if (activeSettings) {
     return (
       <div className="h-full flex flex-col bg-white dark:bg-black">
-        <div className="px-4 py-4 sm:px-8 sm:py-6 flex items-center border-b dark:border-gray-800 shrink-0">
+        <div className="px-4 sm:px-6 md:px-8 flex items-center border-b dark:border-gray-800 shrink-0 h-[57px] md:h-[72px]">
           <button className="flex items-center gap-2 text-gray-700 dark:text-gray-300 active:scale-95" onClick={handleGoBack}>
             <ArrowLeft />
             <span className="capitalize">Go Back</span>
@@ -78,7 +78,7 @@ function MobileSettings() {
   // Main settings list view
   return (
     <div className="h-full flex flex-col bg-white dark:bg-black">
-      <div className="px-4 py-4 sm:px-8 shrink-0 border-b dark:border-gray-800">
+      <div className="px-4 sm:px-6 md:px-8 shrink-0 border-b dark:border-gray-800 h-[57px] md:h-[72px] flex items-center">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
       </div>
 

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, useLocation } from 'react-router-dom';
-import supabase from '../config/SupabaseConfig';
-import { noteAction, toastAction, mobileAction } from '../store';
+import supabase from '../../config/SupabaseConfig';
+import { noteAction, toastAction, mobileAction } from '../../store';
 import { format } from 'date-fns';
-import IconTag from '../assets/images/icon-tag.svg?react';
-import IconStatus from '../assets/images/icon-status.svg?react';
-import IconClock from '../assets/images/icon-clock.svg?react';
+import IconTag from '../../assets/images/icon-tag.svg?react';
+import IconStatus from '../../assets/images/icon-status.svg?react';
+import IconClock from '../../assets/images/icon-clock.svg?react';
 
 function NoteForm() {
   const newNoteI = useSelector((state) => state.note.newNoteI);
@@ -45,17 +45,20 @@ function NoteForm() {
 
   // Initialize formData based on noteDetail when updating
   useEffect(() => {
-    if (!newNoteI && noteDetail.id) {
+    // Reset form when newNoteI is true
+    if (newNoteI) {
+      setFormData({ title: '', tags: '', last_edited: '', noteDetails: '' });
+      return;
+    }
+
+    // Only update form data if we have a noteDetail
+    if (noteDetail?.id) {
       setFormData({
         title: noteDetail.title || '',
         tags: noteDetail.tags || '',
         last_edited: noteDetail.created_at || '',
         noteDetails: noteDetail.note_details || '',
       });
-    }
-
-    if (newNoteI) {
-      setFormData({ title: '', tags: '', last_edited: '', noteDetails: '' });
     }
   }, [newNoteI, noteDetail]);
 
@@ -239,7 +242,7 @@ function NoteForm() {
             resize: 'none',
             WebkitOverflowScrolling: 'touch',
           }}
-          className="w-full flex-1 focus:outline-none hide-scrollbar bg-transparent dark:text-white h-full"
+          className="w-full flex-1 focus:outline-none hide-scrollbar bg-transparent dark:text-white leading-7 h-full"
         />
 
         <div className="w-full border-t-2 border-gray-200 dark:border-gray-800 my-4 hidden lg:block"></div>

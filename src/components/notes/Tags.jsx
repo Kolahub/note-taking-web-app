@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import supabase from '../config/SupabaseConfig';
-import { noteAction, mobileAction } from '../store';
-import { useTheme } from '../context/theme/ThemeContext';
+import supabase from "../../config/SupabaseConfig";
+import { noteAction, mobileAction } from '../../store';
+import { useTheme } from '../../context/theme/ThemeContext';
 
 /**
  * Responsive Tags component that handles both desktop sidebar tags and mobile tag screen.
@@ -91,8 +91,10 @@ function Tags() {
   if (isMobileView) {
     return (
       <div className="bg-white dark:bg-black h-full overflow-y-auto">
-        <div className="p-4">
-          <h1 className="text-2xl font-semibold text-gray-950 dark:text-gray-100 mb-4">Tags</h1>
+        <div className="px-4 sm:px-6 md:px-8 border-b dark:border-gray-800 h-[64px] md:h-[64px] flex items-center">
+          <h1 className="text-2xl font-semibold text-gray-950 dark:text-gray-100">Tags</h1>
+        </div>
+        <div className="p-4 sm:px-6 md:px-8">
 
           {tags.length === 0 ? (
             <div className="text-center py-10">

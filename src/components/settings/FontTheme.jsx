@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useFont } from '../context/font/FontContext';
-import IconSans from '../assets/images/icon-font-sans-serif.svg?react';
-import IconSerif from '../assets/images/icon-font-serif.svg?react';
-import IconMono from '../assets/images/icon-font-monospace.svg?react';
-import { toastAction } from '../store';
+import { useFont } from '../../context/font/FontContext';
+import IconSans from '../../assets/images/icon-font-sans-serif.svg?react';
+import IconSerif from '../../assets/images/icon-font-serif.svg?react';
+import IconMono from '../../assets/images/icon-font-monospace.svg?react';
+import { toastAction } from '../../store';
 import { useDispatch } from 'react-redux';
 
 const fontOptions = [

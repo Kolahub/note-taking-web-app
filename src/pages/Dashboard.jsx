@@ -1,18 +1,18 @@
-import Navbar from '../components/Navbar';
+import Navbar from '../components/layout/Navbar';
 import Logo from '../assets/images/logo.svg?react';
-import NoteBars from '../components/NoteBars';
-import CleanSweep from '../components/CleanSweep';
-import NoteForm from '../components/NoteForm';
+import NoteBars from '../components/notes/NoteBars';
+import CleanSweep from '../components/notes/CleanSweep';
+import NoteForm from '../components/forms/NoteForm';
 import { useDispatch, useSelector } from 'react-redux';
-import SubNav from '../components/SubNav';
-import Settings from '../components/Settings';
+import SubNav from '../components/layout/SubNav';
+import Settings from '../components/settings/Settings';
 import { useLocation } from 'react-router-dom';
-import Toast from '../components/Toast';
+import Toast from '../components/ui/Toast';
 import { toastAction } from '../store';
-import MobileNoteAction from '../components/MobileNoteAction';
-import MobileSearch from '../components/MobileSearch';
-import Tags from '../components/Tags';
-import MobileTaggedNotes from '../components/MobileTaggedNotes';
+import MobileNoteAction from '../components/mobile/MobileNoteAction';
+import MobileSearch from '../components/forms/MobileSearch';
+import Tags from '../components/notes/Tags';
+import MobileTaggedNotes from '../components/mobile/MobileTaggedNotes';
 import { mobileAction } from '../store';
 
 function Dashboard() {
@@ -39,7 +39,7 @@ function Dashboard() {
   return (
     <div className="bg-white dark:bg-black grid lg:grid-cols-10 h-screen lg:grid-rows-[auto,1fr] relative">
       <div className="border-r-2 dark:border-gray-800 lg:px-4 lg:pt-3 lg:row-span-2 lg:col-start-1 lg:col-span-2">
-        <div className="text-black dark:text-white px-4 py-2 sm:px-8 sm:py-3 bg-gray-100 dark:bg-black lg:bg-transparent h-[43px] sm:h-[57px]">
+        <div className="text-black dark:text-white px-4 py-2 sm:px-6 md:px-8 sm:py-3 bg-gray-100 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent h-[64px] md:h-[74px] lg:h-[64px] flex items-center">
           <Logo />
         </div>
         <Navbar />
@@ -54,7 +54,7 @@ function Dashboard() {
       </div>
 
       {showNote && (
-        <div className="fixed top-[43px] sm:top-[57px] left-0 right-0 bottom-0 flex flex-col bg-white dark:bg-black z-10 lg:static lg:col-start-5 lg:col-span-4 lg:row-start-2 lg:z-auto mb-[60px]">
+        <div className="fixed top-[64px] sm:top-[74px] lg:top-[64px] left-0 right-0 bottom-0 flex flex-col bg-white dark:bg-black z-10 lg:static lg:col-start-5 lg:col-span-4 lg:row-start-2 lg:z-auto mb-[60px]">
           <MobileNoteAction />
           <div className="flex-1 overflow-auto">{(newNoteI || allOrArchiveNotes.length > 0) && <NoteForm />}</div>
         </div>
@@ -64,7 +64,7 @@ function Dashboard() {
         <MobileSearch onClose={() => dispatch(mobileAction.callHideSearch())} />
       </div>
 
-      <div className={`${showTag ? 'block' : 'hidden'} fixed top-[43px] sm:top-[57px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>
+      <div className={`${showTag ? 'block' : 'hidden'} fixed top-[64px] md:top-[74px] lg:[64px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>
         <Tags />
       </div>
 
@@ -75,14 +75,14 @@ function Dashboard() {
       <div
         className={`lg:col-start-3 lg:col-span-2 lg:row-start-2 overflow-auto scrollbar-hide ${
           showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'
-        } pb-[60px]`}
+        } pb-[60px] md:pb-[70px]`}
       >
         <NoteBars />
       </div>
 
       <div
         className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-auto scrollbar-hide ${
-          showNote ? 'hidden' : settingsActive ? 'block absolute top-[57px] left-0 right-0 bottom-0' : 'hidden lg:block'
+          showNote ? 'hidden' : settingsActive ? 'block absolute top-[64px] md:top-[74px] lg:top-[64px] left-0 right-0 bottom-0' : 'hidden lg:block'
         }`}
       >
         {settingsActive ? <Settings /> : (newNoteI || allOrArchiveNotes.length > 0) && <NoteForm />}

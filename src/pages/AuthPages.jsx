@@ -1,12 +1,12 @@
 // import React from 'react'
 import PropTypes from 'prop-types';
 
-import AuthForm from "../components/AuthForm"
+import AuthForm from "../components/auth/AuthForm"
 
 function AuthPages({ mode }) {
   return (
-    <div className="relative bg-slate-100 w-screen h-screen p-4 sm:p-8">
-        <div className="flex flex-col justify-center items-center h-full w-full">
+    <div className="relative bg-blue-100 dark:bg-gray-800 w-full min-h-screen p-4 sm:px-8 sm:py-16 overflow-x-hidden">
+        <div className="flex flex-col justify-center items-center h-full w-full max-w-4xl mx-auto">
         <AuthForm mode={mode} />
 
         </div>

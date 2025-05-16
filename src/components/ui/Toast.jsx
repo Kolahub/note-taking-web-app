@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import IconSuccess from '../assets/images/icon-checkmark.svg?react';
-import IconCross from '../assets/images/icon-cross.svg?react';
+import IconSuccess from '../../assets/images/icon-checkmark.svg?react';
+import IconCross from '../../assets/images/icon-cross.svg?react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 function Toast({ message, subText, onClose }) {

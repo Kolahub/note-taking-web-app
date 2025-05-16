@@ -2,12 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Logo from '../assets/images/logo.svg?react';
-import IconGoogle from '../assets/images/icon-google.svg?react';
-import supabase from '../config/SupabaseConfig';
-import IconShowPassword from '../assets/images/icon-show-password.svg?react';
-import IconHidePassword from '../assets/images/icon-hide-password.svg?react';
-import IconInfo from '../assets/images/icon-info.svg?react';
+import Logo from '../../assets/images/logo.svg?react';
+import IconGoogle from '../../assets/images/icon-google.svg?react';
+import supabase from '../../config/SupabaseConfig';
+import IconShowPassword from '../../assets/images/icon-show-password.svg?react';
+import IconHidePassword from '../../assets/images/icon-hide-password.svg?react';
+import IconInfo from '../../assets/images/icon-info.svg?react';
 import isEmail from 'validator/lib/isEmail';
 import PropTypes from 'prop-types';
 
@@ -204,10 +204,10 @@ function AuthForm({ mode: modeProp }) {
   const handlePasswordChange = () => setError((prev) => ({ ...prev, password: '' }));
 
   if (formSubmitted && mode === 'forgot') {
-    return (
-      <div className="bg-white w-full md:w-[522px] lg:w-[540px] p-6 sm:p-12">
+    return ( 
+      <div className="bg-white dark:bg-gray-950 w-full md:w-[522px] lg:w-[540px] p-6 sm:p-12">
         <ToastContainer />
-        <div className="flex justify-center">
+        <div className="flex justify-center dark:text-white">
           <Logo />
         </div>
         <div className="text-center my-8">
@@ -222,35 +222,35 @@ function AuthForm({ mode: modeProp }) {
   }
 
   return (
-    <div className="bg-white w-full md:w-[522px] lg:w-[540px] p-6 sm:p-12">
+    <div className="bg-white dark:bg-gray-950 w-full md:w-[522px] lg:w-[540px] p-6 sm:p-12">
       <ToastContainer />
-      <div className="flex justify-center">
+      <div className="flex justify-center dark:text-white">
         <Logo />
       </div>
 
       <div className="text-center my-4">
         {mode === 'login' && (
           <>
-            <h1 className="capitalize text-2xl font-bold">Welcome to Note</h1>
-            <p className="capitalize text-gray-600">Please log in to continue</p>
+            <h1 className="capitalize text-2xl font-bold dark:text-white">Welcome to Note</h1>
+            <p className="capitalize text-gray-600 dark:text-gray-300">Please log in to continue</p>
           </>
         )}
         {mode === 'signup' && (
           <>
-            <h1 className="capitalize text-2xl font-bold">Sign Up for Note</h1>
-            <p className="capitalize text-gray-600">Create an account to get started</p>
+            <h1 className="capitalize text-2xl font-bold dark:text-white">Sign Up for Note</h1>
+            <p className="capitalize text-gray-600 dark:text-gray-300">Create an account to get started</p>
           </>
         )}
         {mode === 'forgot' && (
           <>
-            <h1 className="capitalize text-2xl font-bold">Reset Your Password</h1>
-            <p className="capitalize text-gray-600">Enter your email to receive a reset link</p>
+            <h1 className="capitalize text-2xl font-bold dark:text-white">Reset Your Password</h1>
+            <p className="capitalize text-gray-600 dark:text-gray-300">Enter your email to receive a reset link</p>
           </>
         )}
         {mode === 'reset' && (
           <>
-            <h1 className="capitalize text-2xl font-bold">Set New Password</h1>
-            <p className="capitalize text-gray-600">Enter your new password</p>
+            <h1 className="capitalize text-2xl font-bold dark:text-white">Set New Password</h1>
+            <p className="capitalize text-gray-600 dark:text-gray-300">Enter your new password</p>
           </>
         )}
       </div>
@@ -258,7 +258,7 @@ function AuthForm({ mode: modeProp }) {
       <form ref={formRef} className="flex flex-col gap-4" onSubmit={handleSubmit}>
         {(mode === 'login' || mode === 'signup' || mode === 'forgot') && (
           <div className="flex flex-col gap-2">
-            <label htmlFor="email" className="capitalize font-medium text-lg">
+            <label htmlFor="email" className="capitalize font-medium text-lg dark:text-white">
               Email Address
             </label>
             <input
@@ -266,7 +266,7 @@ function AuthForm({ mode: modeProp }) {
               name="email"
               id="email"
               placeholder="email@example.com"
-              className={`focus:outline-none placeholder-gray-500 border-2 rounded-lg px-4 py-3 ${error.email ? 'border-red-500' : 'border-gray-300'}`}
+              className={`focus:outline-none placeholder-gray-500 border-2 rounded-lg px-4 py-3 ${error.email ? 'border-red-500' : 'border-gray-300'} dark:bg-transparent dark:border-gray-600 dark:text-white`}
               onChange={handleEmailChange}
               required
             />
@@ -282,11 +282,11 @@ function AuthForm({ mode: modeProp }) {
         {(mode === 'login' || mode === 'signup' || mode === 'reset') && (
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <label htmlFor="password" className="capitalize font-medium text-lg">
+              <label htmlFor="password" className="capitalize font-medium text-lg dark:text-white">
                 Password
               </label>
               {mode === 'login' && (
-                <NavLink to="/auth/forgot" className="capitalize underline text-blue-500">
+                <NavLink to="/auth/forgot" className="capitalize underline text-gray-600 dark:text-gray-400">
                   Forgot?
                 </NavLink>
               )}
@@ -299,7 +299,7 @@ function AuthForm({ mode: modeProp }) {
                 placeholder=""
                 className={`focus:outline-none placeholder-gray-500 border-2 rounded-lg px-4 py-3 w-full ${
                   error.password ? 'border-red-500' : 'border-gray-300'
-                }`}
+                } dark:bg-transparent dark:border-gray-600 dark:text-white`}
                 onChange={handlePasswordChange}
                 required
                 minLength={8}
@@ -330,7 +330,7 @@ function AuthForm({ mode: modeProp }) {
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-500 text-white font-medium capitalize text-lg py-3 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-70"
+          className="bg-blue-500 text-white font-medium capitalize text-lg py-3 rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 transition-colors disabled:opacity-70"
         >
           {loading
             ? mode === 'login'
@@ -351,15 +351,17 @@ function AuthForm({ mode: modeProp }) {
       </form>
 
       {(mode === 'login' || mode === 'signup') && (
-        <div className="my-4 border-t-2 border-b-2 border-gray-200 pt-6 pb-4">
-          <p className="text-center text-gray-600 mb-4">Or log in with:</p>
+        <div className="my-4 border-t-2 border-b-2 border-gray-200 dark:border-gray-800 pt-6 pb-4">
+          <p className="text-center text-gray-600 mb-4 dark:text-gray-300">Or log in with:</p>
           <button
             onClick={handleGoogleSignIn}
             type="button"
-            className="border-2 border-gray-300 flex items-center justify-center rounded-lg w-full hover:bg-gray-50 transition-colors"
+            className="border-2 border-gray-300 flex items-center justify-center rounded-lg w-full transition-all hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-800 dark:text-white"
           >
-            <IconGoogle />
-            <p className="capitalize w-[90px] text-center py-4 font-medium text-lg">Google</p>
+            <div className='dark:text-white dark:fill-white'>
+              <IconGoogle className="dark:fill-white" />
+            </div>
+            <p className="capitalize w-[90px] text-center py-4 font-medium text-lg dark:text-white">Google</p>
           </button>
         </div>
       )}
@@ -367,24 +369,24 @@ function AuthForm({ mode: modeProp }) {
       <div className="w-full text-center mt-6">
         {mode === 'login' && (
           <>
-            <span>No account yet? </span>
-            <NavLink to="/auth/signup" className="underline text-blue-500">
+            <span className='text-gray-600 dark:text-gray-300'>No account yet? </span>
+            <NavLink to="/auth/signup" className=" text-gray-950 dark:text-gray-100">
               Sign Up
             </NavLink>
           </>
         )}
         {mode === 'signup' && (
           <>
-            <span>Already have an account? </span>
-            <NavLink to="/auth/login" className="underline text-blue-500">
+            <span className='dark:text-gray-300'>Already have an account? </span>
+            <NavLink to="/auth/login" className="text-gray-950 dark:text-gray-100">
               Login
             </NavLink>
           </>
         )}
         {(mode === 'forgot' || mode === 'reset') && (
           <>
-            <span>Remember your password? </span>
-            <NavLink to="/auth/login" className="underline text-blue-500">
+            <span className='dark:text-gray-300'>Remember your password? </span>
+            <NavLink to="/auth/login" className="text-gray-950 dark:text-gray-100">
               Login
             </NavLink>
           </>

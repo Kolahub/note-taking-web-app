@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { mobileAction, noteAction } from '../store';
+import { mobileAction, noteAction } from '../../store';
 import { format } from 'date-fns';
 
 function MobileTaggedNotes() {

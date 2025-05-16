@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useTheme } from '../context/theme/ThemeContext';
-import IconLight from '../assets/images/icon-sun.svg?react';
-import IconDark from '../assets/images/icon-moon.svg?react';
-import IconSystem from '../assets/images/icon-system-theme.svg?react';
-import { toastAction } from '../store';
+import { useTheme } from '../../context/theme/ThemeContext';
+import IconLight from '../../assets/images/icon-sun.svg?react';
+import IconDark from '../../assets/images/icon-moon.svg?react';
+import IconSystem from '../../assets/images/icon-system-theme.svg?react';
+import { toastAction } from '../../store';
 import { useDispatch } from 'react-redux';
 
 function ColorTheme() {
@@ -48,7 +48,7 @@ function ColorTheme() {
             ${themeState.selected === 'light' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'}`}
         >
           <div className="flex items-center gap-3">
-            <div className="bg-gray-100 p-2 rounded-full dark:bg-gray-700">
+            <div className="bg-gray-100 p-2 rounded-full dark:bg-gray-700 dark:text-gray-300">
               <IconLight />
             </div>
             <div>
@@ -70,7 +70,7 @@ function ColorTheme() {
             ${themeState.selected === 'dark' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'}`}
         >
           <div className="flex items-center gap-3">
-            <div className="bg-gray-100 p-2 rounded-full dark:bg-gray-700">
+            <div className="bg-gray-100 p-2 rounded-full dark:bg-gray-700 dark:text-gray-300">
               <IconDark />
             </div>
             <div>
@@ -92,7 +92,7 @@ function ColorTheme() {
             ${themeState.selected === 'system' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'}`}
         >
           <div className="flex items-center gap-3">
-            <div className="bg-gray-100 p-2 rounded-full dark:bg-gray-700">
+            <div className="bg-gray-100 p-2 rounded-full dark:bg-gray-700 dark:text-gray-300">
               <IconSystem />
             </div>
             <div>

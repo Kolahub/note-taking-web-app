@@ -35,24 +35,37 @@ export function ThemeProvider({ children }) {
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         
         if (userError || !user) {
+          // If not authenticated, default to system theme
+          document.documentElement.classList.remove('light', 'dark', 'system');
+          document.documentElement.classList.add('system');
+          const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.classList.add(isDark ? 'dark' : 'light');
           setThemeState(prev => ({ ...prev, isLoading: false }));
           return;
         }
 
+        // First check if we have a theme preference in Supabase
         const { data, error } = await supabase
           .from('profiles')
           .select('theme')
           .eq('id', user.id)
           .single();
 
-        if (error) throw error;
+        if (error) {
+          console.error('Error fetching theme:', error);
+          // If error, default to system theme
+          document.documentElement.classList.remove('light', 'dark', 'system');
+          document.documentElement.classList.add('system');
+          const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.classList.add(isDark ? 'dark' : 'light');
+          setThemeState(prev => ({ ...prev, isLoading: false }));
+          return;
+        }
 
         const userTheme = data?.theme || 'system';
         
-        // Remove all theme classes first
+        // Apply the theme
         document.documentElement.classList.remove('light', 'dark', 'system');
-        
-        // Add the user's theme preference
         document.documentElement.classList.add(userTheme);
         
         // If system theme, apply the actual light/dark class
@@ -66,17 +79,25 @@ export function ThemeProvider({ children }) {
           isLoading: false
         });
       } catch (error) {
-        console.error('Error fetching theme:', error);
+        console.error('Error in theme initialization:', error);
+        // Fallback to system theme if any error occurs
+        document.documentElement.classList.remove('light', 'dark', 'system');
+        document.documentElement.classList.add('system');
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.add(isDark ? 'dark' : 'light');
         setThemeState(prev => ({ ...prev, isLoading: false }));
       }
     };
 
+    // Initialize theme immediately
     initializeTheme();
 
+    // Listen for auth state changes
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event) => {
       if (event === 'SIGNED_IN') {
         initializeTheme();
       } else if (event === 'SIGNED_OUT') {
+        // When signed out, default to system theme
         document.documentElement.classList.remove('light', 'dark', 'system');
         document.documentElement.classList.add('system');
         const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -107,15 +128,40 @@ export function ThemeProvider({ children }) {
         document.documentElement.classList.add(isDark ? 'dark' : 'light');
       }
 
-      const { error } = await supabase
+      // First check if profile exists
+      const { data: profile, error: getError } = await supabase
         .from('profiles')
-        .upsert({ id: user.id, theme: newTheme });
+        .select('*')
+        .eq('id', user.id)
+        .single();
 
-      if (error) throw error;
+      if (getError) {
+        // If profile doesn't exist, create it
+        const { error: insertError } = await supabase
+          .from('profiles')
+          .insert([{ id: user.id, theme: newTheme }]);
+
+        if (insertError) throw insertError;
+      } else {
+        // If profile exists, update it
+        const { error: updateError } = await supabase
+          .from('profiles')
+          .update({ theme: newTheme })
+          .eq('id', user.id);
+
+        if (updateError) throw updateError;
+      }
 
       setThemeState(prev => ({ ...prev, theme: newTheme }));
     } catch (error) {
       console.error('Error updating theme:', error);
+      // If update fails, revert the DOM changes
+      document.documentElement.classList.remove(newTheme);
+      document.documentElement.classList.add(themeState.theme);
+      if (themeState.theme === 'system') {
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.add(isDark ? 'dark' : 'light');
+      }
     }
   };
 

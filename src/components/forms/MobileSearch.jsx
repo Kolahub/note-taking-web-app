@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { mobileAction, noteAction } from '../store';
-import IconSearch from '../assets/images/icon-search.svg?react';
-import ArrowLeft from '../assets/images/icon-arrow-left.svg?react';
+import { mobileAction, noteAction } from '../../store';
+import IconSearch from '../../assets/images/icon-search.svg?react';
+import ArrowLeft from '../../assets/images/icon-arrow-left.svg?react';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
