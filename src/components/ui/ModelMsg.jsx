@@ -62,7 +62,7 @@ const ModelMsg = ({ type, onCancel, onConfirm }) => {
             Cancel
           </button>
           <button className={`px-4 py-2 rounded text-white ${btnBg} flex items-center justify-center active:scale-95`} onClick={handleConfirm} disabled={loading}>
-            {loading ? <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span> : buttonText}
+            {loading ? <span className="animate-spin h-4 w-4 border-2 border-white dark:border-white border-t-transparent dark:border-t-transparent rounded-full"></span> : buttonText}
           </button>
         </div>
       </div>

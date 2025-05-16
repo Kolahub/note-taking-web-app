@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { mobileAction, noteAction } from '../../store';
 import { format } from 'date-fns';
+import supabase from '../../config/SupabaseConfig';
 
 function MobileTaggedNotes() {
   const dispatch = useDispatch();
@@ -18,11 +19,28 @@ function MobileTaggedNotes() {
     dispatch(mobileAction.callShowTag());
   };
 
-  const handleNoteClick = (note) => {
-    // First show the note details, then call show note view
-    // The mobile slice is now set up to remember we came from taggedNotes
-    dispatch(noteAction.showNoteDetail(note));
-    dispatch(mobileAction.callShowNote());
+  const handleNoteClick = async (note) => {
+    try {
+      // First, ensure we have the latest note data
+      const { data: latestNote, error } = await supabase
+        .from('notes')
+        .select('*')
+        .eq('id', note.id)
+        .single();
+
+      if (error) throw error;
+
+      // Update the note detail in the store with the latest data
+      dispatch(noteAction.showNoteDetail(latestNote || note));
+      
+      // Then show the note view
+      dispatch(mobileAction.callShowNote());
+    } catch (error) {
+      console.error('Error loading note:', error);
+      // Fallback to the existing note data if there's an error
+      dispatch(noteAction.showNoteDetail(note));
+      dispatch(mobileAction.callShowNote());
+    }
   };
 
   const renderTagPills = (noteTags) => {

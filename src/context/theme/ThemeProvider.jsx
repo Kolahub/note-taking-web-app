@@ -11,35 +11,51 @@ export function ThemeProvider({ children }) {
 
   // Handle system theme changes
   useEffect(() => {
+    const applySystemTheme = () => {
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.classList.remove('light', 'dark');
+      document.documentElement.classList.add(isDark ? 'dark' : 'light');
+    };
+
     if (themeState.theme === 'system') {
+      // Apply immediately
+      applySystemTheme();
+      
+      // Set up listener for system theme changes
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      mediaQuery.addEventListener('change', applySystemTheme);
       
-      const handleChange = (e) => {
-        document.documentElement.classList.remove('light', 'dark');
-        document.documentElement.classList.add(e.matches ? 'dark' : 'light');
-      };
-
-      // Set initial system theme
-      handleChange(mediaQuery);
+      // Also check for Samsung browser's dark mode
+      const isSamsungDark = window.navigator.userAgent.match(/samsungbrowser/i) && 
+                          window.matchMedia('(prefers-color-scheme: dark)').matches;
       
-      // Listen for system theme changes
-      mediaQuery.addEventListener('change', handleChange);
+      if (isSamsungDark) {
+        document.documentElement.classList.remove('light');
+        document.documentElement.classList.add('dark');
+      }
 
-      return () => mediaQuery.removeEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', applySystemTheme);
     }
   }, [themeState.theme]);
 
   useEffect(() => {
+    const applyTheme = (theme) => {
+      document.documentElement.classList.remove('light', 'dark', 'system');
+      document.documentElement.classList.add(theme);
+      
+      if (theme === 'system') {
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.add(isDark ? 'dark' : 'light');
+      }
+    };
+
     const initializeTheme = async () => {
       try {
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         
         if (userError || !user) {
           // If not authenticated, default to system theme
-          document.documentElement.classList.remove('light', 'dark', 'system');
-          document.documentElement.classList.add('system');
-          const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          document.documentElement.classList.add(isDark ? 'dark' : 'light');
+          applyTheme('system');
           setThemeState(prev => ({ ...prev, isLoading: false }));
           return;
         }
@@ -51,28 +67,16 @@ export function ThemeProvider({ children }) {
           .eq('id', user.id)
           .single();
 
+        let userTheme = 'system';
+        
         if (error) {
-          console.error('Error fetching theme:', error);
-          // If error, default to system theme
-          document.documentElement.classList.remove('light', 'dark', 'system');
-          document.documentElement.classList.add('system');
-          const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          document.documentElement.classList.add(isDark ? 'dark' : 'light');
-          setThemeState(prev => ({ ...prev, isLoading: false }));
-          return;
+          console.error('Error fetching theme, using system theme:', error);
+        } else {
+          userTheme = data?.theme || 'system';
         }
-
-        const userTheme = data?.theme || 'system';
         
         // Apply the theme
-        document.documentElement.classList.remove('light', 'dark', 'system');
-        document.documentElement.classList.add(userTheme);
-        
-        // If system theme, apply the actual light/dark class
-        if (userTheme === 'system') {
-          const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          document.documentElement.classList.add(isDark ? 'dark' : 'light');
-        }
+        applyTheme(userTheme);
 
         setThemeState({
           theme: userTheme,
@@ -98,10 +102,7 @@ export function ThemeProvider({ children }) {
         initializeTheme();
       } else if (event === 'SIGNED_OUT') {
         // When signed out, default to system theme
-        document.documentElement.classList.remove('light', 'dark', 'system');
-        document.documentElement.classList.add('system');
-        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.classList.add(isDark ? 'dark' : 'light');
+        applyTheme('system');
         setThemeState({ theme: 'system', isLoading: false });
       }
     });
@@ -129,7 +130,7 @@ export function ThemeProvider({ children }) {
       }
 
       // First check if profile exists
-      const { data: profile, error: getError } = await supabase
+      const { error: getError } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user.id)

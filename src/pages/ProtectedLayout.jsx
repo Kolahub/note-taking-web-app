@@ -21,7 +21,7 @@ const ProtectedLayout = () => {
   if (loading) {
     return (
       <div className="h-screen w-full flex flex-col items-center justify-center bg-white dark:bg-gray-900">
-        <div className="w-16 h-16 border-t-4 border-b-4 border-blue-500 rounded-full animate-spin"></div>
+        <div className="w-16 h-16 border-t-4 border-b-4 border-blue-500 dark:border-blue-400 rounded-full animate-spin"></div>
         <p className="mt-4 text-lg font-medium text-gray-600 dark:text-gray-300">Loading your notes...</p>
       </div>
     );

@@ -19,6 +19,7 @@ function Dashboard() {
   const allNotes = useSelector((state) => state.note.notes);
   const allArchiveNotes = useSelector((state) => state.note.archivedNotes);
   const newNoteI = useSelector((state) => state.note.newNoteI);
+  const noteDetail = useSelector((state) => state.note.noteDetail);
   const settingsActive = useSelector((state) => state.note.settingsActive);
   const showNote = useSelector((state) => state.mobile.showNote);
   const showSearch = useSelector((state) => state.mobile.showSearch);
@@ -56,7 +57,7 @@ function Dashboard() {
       {showNote && (
         <div className="fixed top-[64px] sm:top-[74px] lg:top-[64px] left-0 right-0 bottom-0 flex flex-col bg-white dark:bg-black z-10 lg:static lg:col-start-5 lg:col-span-4 lg:row-start-2 lg:z-auto mb-[60px]">
           <MobileNoteAction />
-          <div className="flex-1 overflow-auto">{(newNoteI || allOrArchiveNotes.length > 0) && <NoteForm />}</div>
+          <div className="flex-1 overflow-auto">{(newNoteI || noteDetail?.id || allOrArchiveNotes.length > 0) && <NoteForm />}</div>
         </div>
       )}
 
@@ -68,12 +69,10 @@ function Dashboard() {
         <Tags />
       </div>
 
-      <div className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[43px] sm:top-[57px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>
-        <MobileTaggedNotes />
-      </div>
+      <div className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[64px] md:top-[57px] lg:top-[64px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>        <MobileTaggedNotes />      </div>
 
       <div
-        className={`lg:col-start-3 lg:col-span-2 lg:row-start-2 overflow-auto scrollbar-hide ${
+        className={`lg:col-start-3 lg:col-span-2 lg:row-start-2 overflow-hidden ${
           showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'
         } pb-[60px] md:pb-[70px]`}
       >

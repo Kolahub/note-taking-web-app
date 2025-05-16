@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import supabase from "../../config/SupabaseConfig";
 import { noteAction, mobileAction } from '../../store';
+import supabase from '../../config/SupabaseConfig';
 import { useTheme } from '../../context/theme/ThemeContext';
+import { createSelector } from '@reduxjs/toolkit';
 
 /**
  * Responsive Tags component that handles both desktop sidebar tags and mobile tag screen.
@@ -17,6 +18,11 @@ function Tags() {
   const activeTag = useSelector((state) => state.note.filteredTag);
   const isMobileView = useSelector((state) => state.mobile.showTag);
   const { isLoading: isThemeLoading } = useTheme();
+
+  // Select active and archived notes from store
+  const notes = useSelector((state) => state.note.notes);
+  const archivedNotes = useSelector((state) => state.note.archivedNotes);
+  const allNotes = [...notes, ...archivedNotes];
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -34,9 +40,11 @@ function Tags() {
 
         if (data) {
           const getTags = data.map((note) => note.tags);
-          const getTagsEach = getTags.join(',').split(',');
+          const getTagsEach = getTags.flatMap((tags) => tags.split(/[,\s]/).filter((tag) => tag !== ''));
           const getTagsSet = [...new Set(getTagsEach)].filter((tag) => tag.trim() !== '');
           setTags(getTagsSet);
+          // console.log(getTags, getTagsEach, getTagsSet, '❤️❤️💪💪');
+          
         }
       } catch (error) {
         console.error('Error fetching tags:', error);
@@ -45,7 +53,17 @@ function Tags() {
       }
     };
     fetchNotes();
-  }, []);
+  }, []); // No need for notes dependency since we're using allNotes
+
+  // Listen for note changes in the store
+  useEffect(() => {
+    if (allNotes.length > 0) {
+      const getTags = allNotes.map((note) => note.tags);
+      const getTagsEach = getTags.flatMap((tags) => tags.split(/[,\s]/).filter((tag) => tag !== ''));
+      const getTagsSet = [...new Set(getTagsEach)].filter((tag) => tag.trim() !== '');
+      setTags(getTagsSet);
+    }
+  }, [allNotes]); // Add allNotes as a dependency to refresh when notes change
 
   const handleFilterBasedTags = (tag) => {
     dispatch(noteAction.filterBasedTags(tag.trim()));
@@ -150,7 +168,7 @@ function Tags() {
   return (
     <div className="border-t-2 dark:border-gray-800 mt-4 py-2">
       <h2 className="text-gray-500 dark:text-gray-400 text-xl">Tags</h2>
-      <div className="mt-2 max-h-[calc(100vh-235px)] overflow-y-auto scrollbar-hide">
+      <div className="mt-2 max-h-[calc(100vh-260px)] overflow-y-auto scrollbar-hide">
         {tags.map((tag, i) => (
           <button
             key={`${tag}${i}`}
