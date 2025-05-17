@@ -4,6 +4,7 @@ import NoteBars from '../components/notes/NoteBars';
 import CleanSweep from '../components/notes/CleanSweep';
 import NoteForm from '../components/forms/NoteForm';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import SubNav from '../components/layout/SubNav';
 import Settings from '../components/settings/Settings';
 import { useLocation } from 'react-router-dom';
@@ -13,7 +14,8 @@ import MobileNoteAction from '../components/mobile/MobileNoteAction';
 import MobileSearch from '../components/forms/MobileSearch';
 import Tags from '../components/notes/Tags';
 import MobileTaggedNotes from '../components/mobile/MobileTaggedNotes';
-import { mobileAction } from '../store';
+import { mobileAction, noteAction } from '../store';
+import supabase from '../config/SupabaseConfig';
 
 function Dashboard() {
   const allNotes = useSelector((state) => state.note.notes);
@@ -34,13 +36,44 @@ function Dashboard() {
   const archiveNotePath = currentPath === '/archive-notes';
   const allNotePath = currentPath === '/' || currentPath === '/all-notes';
 
+  useEffect(() => {
+    // When route changes, fetch the appropriate notes
+    const fetchNotes = async () => {
+      try {
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
+        if (userError) throw userError;
+        if (!user) throw new Error('No user logged in');
+
+        const { data, error } = await supabase
+          .from('notes')
+          .select()
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (data) {
+          dispatch(noteAction.allNotes(data.filter(note => !note.archived)));
+          dispatch(noteAction.allArchivedNotes(data.filter(note => note.archived)));
+        }
+      } catch (error) {
+        console.error('Error fetching notes:', error);
+      }
+    };
+
+    fetchNotes();
+  }, [location.pathname, dispatch]); // Re-run when route changes or dispatch changes
+
   const allOrArchiveNotes = allNotePath ? allNotes : archiveNotePath ? allArchiveNotes : [];
   // console.log(showNote, '🤣🤣')
 
   return (
-    <div className="bg-white dark:bg-black grid lg:grid-cols-10 h-screen lg:grid-rows-[auto,1fr] relative">
+    <div className="bg-white dark:bg-black grid lg:grid-cols-10 h-screen lg:grid-rows-[auto,1fr] relative overflow-hidden">
       <div className="border-r-2 dark:border-gray-800 lg:px-4 lg:pt-3 lg:row-span-2 lg:col-start-1 lg:col-span-2">
-        <div className="text-black dark:text-white px-4 py-2 sm:px-6 md:px-8 sm:py-3 bg-gray-100 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent h-[64px] md:h-[74px] lg:h-[64px] flex items-center">
+        <div className="text-black dark:text-white px-4 py-2 sm:px-6 md:px-8 sm:py-3 bg-gray-100 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent h-[64px] md:h-[74px] lg:h-[64px] flex items-center sticky top-0 z-50">
           <Logo />
         </div>
         <Navbar />

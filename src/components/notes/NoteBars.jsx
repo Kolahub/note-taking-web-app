@@ -50,6 +50,39 @@ function NoteBars() {
   const archiveNotePath = currentPath === '/archive-notes';
   const allNotePath = currentPath === '/' || currentPath === '/all-notes';
 
+  // Reset filters and fetch new data when route changes
+  useEffect(() => {
+    dispatch(noteAction.clearFilters());
+    dispatch(noteAction.cancelActiveSettings());
+    
+    // Fetch notes when route changes
+    const fetchNotes = async () => {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+      if (userError) {
+        console.error('Error fetching user:', userError);
+        return;
+      }
+      if (!user) return;
+
+      const { data, error } = await supabase.from('notes').select().eq('user_id', user.id).order('created_at', { ascending: false });
+      if (error) {
+        console.log(error);
+        return;
+      }
+      if (data) {
+        const unarchivedData = data.filter((note) => !note.archived);
+        const archivedData = data.filter((note) => note.archived);
+        dispatch(noteAction.allNotes(unarchivedData));
+        dispatch(noteAction.allArchivedNotes(archivedData));
+      }
+    };
+
+    fetchNotes();
+  }, [archiveNotePath, allNotePath, dispatch]);
+
   const allOrArchiveNotes = allNotePath ? notes : archiveNotePath ? archiveNotes : [];
   const displayNotes = filteredTag ? filteredNotes : searchQuery ? searchQueryNotes : allOrArchiveNotes;
 

@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { noteAction, mobileAction } from '../../store';
 import supabase from '../../config/SupabaseConfig';
 import { useTheme } from '../../context/theme/ThemeContext';
-import { createSelector } from '@reduxjs/toolkit';
 
 /**
  * Responsive Tags component that handles both desktop sidebar tags and mobile tag screen.
@@ -22,7 +21,7 @@ function Tags() {
   // Select active and archived notes from store
   const notes = useSelector((state) => state.note.notes);
   const archivedNotes = useSelector((state) => state.note.archivedNotes);
-  const allNotes = [...notes, ...archivedNotes];
+  const allNotes = useMemo(() => [...notes, ...archivedNotes], [notes, archivedNotes]);
 
   useEffect(() => {
     const fetchNotes = async () => {
