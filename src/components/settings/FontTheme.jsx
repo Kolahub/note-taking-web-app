@@ -62,7 +62,7 @@ function FontTheme() {
               ${fontState.selected === name ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'}`}
           >
             <div className="flex items-center gap-3">
-              <div className={`${name} bg-gray-100 p-2 rounded-full dark:bg-gray-700`}>{icon}</div>
+              <div className={`${name} bg-gray-100 p-2 rounded-full dark:bg-gray-700 dark:text-white`}>{icon}</div>
               <div>
                 <h3 className="font-medium text-gray-900 dark:text-gray-100">{label}</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">{description}</p>

@@ -188,7 +188,11 @@ function NoteBars() {
     <div
       className="p-4 sm:px-8 sm:py-4 lg:px-4 lg:py-5 border-r-2 dark:border-gray-800 flex flex-col w-full"
       style={{
-        height: settingsActive ? '100vh' : 'calc(100vh - 85px)',
+        height: settingsActive
+          ? '100vh'
+          : window.innerWidth < 768
+          ? 'calc(100vh - 185px)'
+          : 'calc(100vh - 85px)',
         overflow: settingsActive ? 'auto' : 'hidden',
       }}
     >

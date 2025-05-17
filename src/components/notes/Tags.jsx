@@ -107,7 +107,7 @@ function Tags() {
   // Mobile view
   if (isMobileView) {
     return (
-      <div className="bg-white dark:bg-black h-full overflow-y-auto">
+      <div className="bg-white dark:bg-black h-full">
         <div className="px-4 sm:px-6 md:px-8 border-b dark:border-gray-800 h-[64px] md:h-[64px] flex items-center">
           <h1 className="text-2xl font-semibold text-gray-950 dark:text-gray-100">Tags</h1>
         </div>
@@ -118,7 +118,7 @@ function Tags() {
               <p className="text-gray-500 dark:text-gray-400">No tags found</p>
             </div>
           ) : (
-            <div>
+            <div className='h-[calc(100vh-14rem)] overflow-y-auto'>
               {tags.map((tag, i) => (
                 <div key={`${tag}${i}`} className="border-b border-gray-200 dark:border-gray-800">
                   <button
