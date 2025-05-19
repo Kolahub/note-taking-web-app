@@ -63,7 +63,7 @@ function MobileSearch({ onClose }) {
           </div>
           <input
             type="text"
-            className="focus:outline-none w-full text-black dark:text-white bg-transparent placeholder-gray-800 dark:placeholder-gray-400"
+            className="focus:outline-none w-full text-black dark:text-white bg-transparent placeholder-gray-800 dark:placeholder-gray-400 text-base"
             value={searchText}
             placeholder="Search by title, content, or tags…"
             onChange={handleSearchQueryNotes}

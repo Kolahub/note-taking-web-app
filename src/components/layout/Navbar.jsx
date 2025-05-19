@@ -9,8 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { mobileAction, noteAction } from '../../store';
 import Tags from '../notes/Tags';
 import { useEffect } from 'react';
-import { useTheme } from '../../context/theme/ThemeContext';
-
 /**
  * Responsive Navbar component that handles both desktop sidebar navigation and mobile bottom navigation.
  * This component consolidates what was previously separate MobileNav and Navbar components.
@@ -18,12 +16,12 @@ import { useTheme } from '../../context/theme/ThemeContext';
  * - For mobile: Displays as a fixed bottom navigation bar with icon buttons
  */
 function Navbar() {
-  const { isLoading } = useTheme();
   const newNoteI = useSelector((state) => state.note.newNoteI);
   const showNote = useSelector((state) => state.mobile.showNote);
   const showSearch = useSelector((state) => state.mobile.showSearch);
   const showTag = useSelector((state) => state.mobile.showTag);
   const settingsActive = useSelector((state) => state.note.settingsActive);
+  const notesLoading = useSelector((state) => state.note.loading);
   const dispatch = useDispatch();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -86,7 +84,7 @@ function Navbar() {
   const isTagActive = showTag;
   const isSettingsActive = settingsActive;
 
-  if (isLoading) {
+  if (notesLoading) {
     return (
       <div className="lg:mt-4 lg:flex flex-col gap-2 sm:gap-3 animate-pulse">
         <div className="h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>

@@ -11,14 +11,19 @@ const noteInitialState = {
   newNoteI: false,
   settingsActive: false,
   activeSettings: null,
+  loading: false,
 };
 
 const noteSlice = createSlice({
   name: 'note',
   initialState: noteInitialState,
   reducers: {
+    setNotesLoading(state, action) {
+      state.loading = action.payload;
+    },
     allNotes(state, action) {
       state.notes = action.payload;
+      state.loading = false;
     },
     allArchivedNotes(state, action) {
       state.archivedNotes = action.payload;

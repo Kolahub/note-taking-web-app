@@ -196,7 +196,7 @@ function NoteForm() {
             placeholder="Add tags separated by commas (e.g. Work, Planning)"
             value={formData.tags}
             onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-            className="focus:outline-none w-full bg-transparent dark:text-white"
+            className="focus:outline-none w-full bg-transparent dark:text-white text-base"
           />
         </div>
 
@@ -225,7 +225,7 @@ function NoteForm() {
             placeholder="Not yet saved"
             value={formData.last_edited ? format(new Date(formData.last_edited), 'dd MMM yyyy') : ''}
             disabled
-            className="focus:outline-none w-full bg-inherit dark:text-white"
+            className="focus:outline-none w-full bg-inherit dark:text-white text-base"
           />
         </div>
 

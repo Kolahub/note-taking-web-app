@@ -9,7 +9,7 @@ import IconFont from '../../assets/images/icon-font.svg?react';
 import IconLock from '../../assets/images/icon-lock.svg?react';
 import IconLogout from '../../assets/images/icon-logout.svg?react';
 import ArrowLeft from '../../assets/images/icon-arrow-left.svg?react';
-import { useTheme } from '../../context/theme/ThemeContext';
+
 
 const SETTINGS_OPT = [
   {
@@ -30,13 +30,13 @@ const SETTINGS_OPT = [
 ];
 
 function NoteBars() {
-  const { isLoading: themeLoading } = useTheme();
   const notes = useSelector((state) => state.note.notes);
   const archiveNotes = useSelector((state) => state.note.archivedNotes);
   const newNoteI = useSelector((state) => state.note.newNoteI);
   const noteDetail = useSelector((state) => state.note.noteDetail);
   const filteredNotes = useSelector((state) => state.note.filteredNotes);
   const filteredTag = useSelector((state) => state.note.filteredTag);
+  const notesLoading = useSelector((state) => state.note.loading);
   const searchQueryNotes = useSelector((state) => state.note.searchQueryNotes);
   const searchQuery = useSelector((state) => state.note.searchQuery);
   const settingsActive = useSelector((state) => state.note.settingsActive);
@@ -152,7 +152,7 @@ function NoteBars() {
     }
   };
 
-  if (themeLoading) {
+  if (notesLoading) {
     return (
       <div className="flex-1 space-y-4 animate-pulse px-2 sm:px-4">
         {/* Search bar skeleton */}
@@ -186,7 +186,7 @@ function NoteBars() {
 
   return (
     <div
-      className="p-4 sm:px-8 sm:py-4 lg:px-4 lg:py-5 border-r-2 dark:border-gray-800 flex flex-col w-full"
+      className="p-4 sm:px-8 sm:py-4 lg:px-4 lg:py-5 border-r-2 dark:border-gray-800 flex flex-col w-full relative"
       style={{
         height: settingsActive
           ? '100vh'
@@ -232,7 +232,7 @@ function NoteBars() {
       ) : (
         <div className="flex flex-col h-full">
           <button
-            className="flex justify-center items-center lg:w-full py-3 rounded-full lg:rounded-lg absolute lg:static right-9 bottom-24
+            className="flex justify-center items-center lg:w-full py-3 rounded-full lg:rounded-lg absolute lg:static right-9 bottom-12
             h-16 w-16 lg:h-auto bg-blue-500 hover:bg-blue-600 
                        dark:bg-blue-600 dark:hover:bg-blue-700 active:scale-95 text-white lg:mb-4 
                        transition-colors"

@@ -2,8 +2,6 @@ import { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { noteAction, mobileAction } from '../../store';
 import supabase from '../../config/SupabaseConfig';
-import { useTheme } from '../../context/theme/ThemeContext';
-
 /**
  * Responsive Tags component that handles both desktop sidebar tags and mobile tag screen.
  * This component consolidates what was previously separate Tags and MobileTag components.
@@ -16,7 +14,6 @@ function Tags() {
   const dispatch = useDispatch();
   const activeTag = useSelector((state) => state.note.filteredTag);
   const isMobileView = useSelector((state) => state.mobile.showTag);
-  const { isLoading: isThemeLoading } = useTheme();
 
   // Select active and archived notes from store
   const notes = useSelector((state) => state.note.notes);
@@ -74,23 +71,9 @@ function Tags() {
     }
   };
 
-  // Loading state - Desktop
-  if ((isThemeLoading || isLoadingTags) && !isMobileView) {
-    return (
-      <div className="border-t-2 dark:border-gray-800 mt-4 py-2 animate-pulse">
-        <div className="h-5 sm:h-6 w-16 sm:w-20 bg-gray-200 dark:bg-gray-700 rounded mb-3 sm:mb-4"></div>
-        <div className="space-y-2">
-          <div className="h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-          <div className="h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-          <div className="h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-        </div>
-      </div>
-    );
-  }
-
-  // Loading state - Mobile
-  if ((isThemeLoading || isLoadingTags) && isMobileView) {
-    return (
+  // Loading state
+  if (isLoadingTags) {
+    return isMobileView ? (
       <div className="bg-white dark:bg-black h-full overflow-y-auto">
         <div className="p-3 sm:p-4 bg-white dark:bg-black">
           <h1 className="text-xl sm:text-2xl font-semibold text-gray-950 dark:text-gray-100 mb-3 sm:mb-4">Tags</h1>
@@ -99,6 +82,15 @@ function Tags() {
             <div className="h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
             <div className="h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
           </div>
+        </div>
+      </div>
+    ) : (
+      <div className="border-t-2 dark:border-gray-800 mt-4 py-2 animate-pulse">
+        <div className="h-5 sm:h-6 w-16 sm:w-20 bg-gray-200 dark:bg-gray-700 rounded mb-3 sm:mb-4"></div>
+        <div className="space-y-2">
+          <div className="h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div className="h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div className="h-10 sm:h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
         </div>
       </div>
     );
@@ -118,7 +110,7 @@ function Tags() {
               <p className="text-gray-500 dark:text-gray-400">No tags found</p>
             </div>
           ) : (
-            <div className='h-[calc(100vh-14rem)] overflow-y-auto'>
+            <div className='h-[calc(100vh-14rem)] overflow-y-auto scrollbar-hide'>
               {tags.map((tag, i) => (
                 <div key={`${tag}${i}`} className="border-b border-gray-200 dark:border-gray-800">
                   <button

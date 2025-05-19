@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import IconSearch from '../../assets/images/icon-search.svg?react';
 import IconSettings from '../../assets/images/icon-settings.svg?react';
 import { mobileAction, noteAction } from '../../store';
-import { useTheme } from '../../context/theme/ThemeContext';
 import { useLocation } from 'react-router-dom';
 
 function SubNav() {
@@ -12,7 +11,7 @@ function SubNav() {
   const searchQuery = useSelector((state) => state.note.searchQuery);
   const settingsActive = useSelector((state) => state.note.settingsActive);
   const [searchText, setSearchText] = useState('');
-  const { isLoading: themeLoading } = useTheme();
+  const notesLoading = useSelector((state) => state.note.loading);
 
   const location = useLocation();
   const currentPath = location.pathname;
@@ -56,7 +55,7 @@ function SubNav() {
     }
   };
 
-  if (themeLoading) {
+  if (notesLoading) {
     return (
       <div className="w-full flex gap-2 sm:gap-4 items-center justify-between px-3 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-[18.5px] animate-pulse">
         {/* Header skeleton */}
