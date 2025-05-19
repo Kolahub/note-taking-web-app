@@ -191,7 +191,7 @@ function NoteBars() {
         height: settingsActive
           ? '100vh'
           : window.innerWidth < 1024
-          ? 'calc(100vh - 250px)'
+          ? 'calc(100vh - 350px)'
           : 'calc(100vh - 85px)',
         overflow: settingsActive ? 'auto' : 'hidden',
       }}
