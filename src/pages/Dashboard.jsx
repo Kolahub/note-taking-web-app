@@ -101,7 +101,7 @@ function Dashboard() {
         <MobileSearch onClose={() => dispatch(mobileAction.callHideSearch())} />
       </div>
 
-      <div className={`${showTag ? 'block' : 'hidden'} fixed top-[64px] md:top-[74px] lg:[64px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>
+      <div className={`${showTag ? 'block' : 'hidden'} bg-white dark:bg-black z-20`}>
         <Tags />
       </div>
 
