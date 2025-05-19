@@ -190,8 +190,8 @@ function NoteBars() {
       style={{
         height: settingsActive
           ? '100vh'
-          : window.innerWidth < 768
-          ? 'calc(100vh - 185px)'
+          : window.innerWidth < 1024
+          ? 'calc(100vh - 200px)'
           : 'calc(100vh - 85px)',
         overflow: settingsActive ? 'auto' : 'hidden',
       }}

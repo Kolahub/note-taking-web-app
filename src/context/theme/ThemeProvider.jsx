@@ -12,18 +12,20 @@ export function ThemeProvider({ children }) {
   // Handle system theme changes
   useEffect(() => {
     const applySystemTheme = () => {
+      // Check for Samsung browser dark mode
+      const isSamsungBrowser = window.navigator.userAgent.match(/samsungbrowser/i);
       const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       
-      // Remove all theme classes
-      document.documentElement.classList.remove('light', 'dark');
+      // For Samsung browser, force dark mode if system prefers dark
+      const shouldUseDark = isSamsungBrowser ? true : isDark;
       
-      // Apply the appropriate theme based on system preference
-      document.documentElement.classList.add(isDark ? 'dark' : 'light');
+      document.documentElement.classList.remove('light', 'dark');
+      document.documentElement.classList.add(shouldUseDark ? 'dark' : 'light');
 
-      // Update color scheme meta tag
+      // Force color scheme meta tag
       const metaThemeColor = document.querySelector('meta[name="theme-color"]');
       if (metaThemeColor) {
-        metaThemeColor.content = isDark ? '#1f2937' : '#ffffff';
+        metaThemeColor.content = shouldUseDark ? '#1f2937' : '#ffffff';
       }
     };
 
@@ -44,14 +46,18 @@ export function ThemeProvider({ children }) {
       document.documentElement.classList.remove('light', 'dark', 'system');
       document.documentElement.classList.add(theme);
       
-      // When switching to light/dark mode, ensure the theme is applied correctly
-      if (theme === 'light' || theme === 'dark') {
-        document.documentElement.classList.add(theme);
+      if (theme === 'system') {
+        const isSamsungBrowser = window.navigator.userAgent.match(/samsungbrowser/i);
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         
-        // Update color scheme meta tag
+        // For Samsung browser, force dark mode if system prefers dark
+        const shouldUseDark = isSamsungBrowser ? true : isDark;
+        document.documentElement.classList.add(shouldUseDark ? 'dark' : 'light');
+
+        // Force color scheme meta tag
         const metaThemeColor = document.querySelector('meta[name="theme-color"]');
         if (metaThemeColor) {
-          metaThemeColor.content = theme === 'dark' ? '#1f2937' : '#ffffff';
+          metaThemeColor.content = shouldUseDark ? '#1f2937' : '#ffffff';
         }
       }
     };
