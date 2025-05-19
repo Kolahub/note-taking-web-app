@@ -154,14 +154,14 @@ function NoteBars() {
 
   if (notesLoading) {
     return (
-      <div className="flex-1 space-y-4 animate-pulse px-2 sm:px-4 overflow-y-auto">
+      <div className="flex-1 space-y-4 animate-pulse px-2 sm:px-4">
         {/* Search bar skeleton */}
         <div className="flex gap-2 items-center">
           <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded-lg flex-1"></div>
         </div>
 
         {/* Notes list skeleton */}
-        <div className="space-y-3 overflow-y-auto">
+        <div className="space-y-3">
           {[1, 2, 3].map((item) => (
             <div key={item} className="p-3 sm:p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
               <div className="space-y-2 sm:space-y-3">
@@ -186,14 +186,14 @@ function NoteBars() {
 
   return (
     <div
-      className="p-4 sm:px-8 sm:py-4 lg:px-4 lg:py-5 border-r-2 dark:border-gray-800 flex flex-col w-full relative flex-1"
+      className="p-4 sm:px-8 sm:py-4 lg:px-4 lg:py-5 border-r-2 dark:border-gray-800 flex flex-col w-full relative"
       style={{
         height: settingsActive
           ? '100vh'
           : window.innerWidth < 1024
           ? 'calc(100vh - 200px)'
           : 'calc(100vh - 85px)',
-        overflow: 'hidden',
+        overflow: settingsActive ? 'auto' : 'hidden',
       }}
     >
       {settingsActive ? (
