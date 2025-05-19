@@ -113,7 +113,7 @@ function Tags() {
               <p className="text-gray-500 dark:text-gray-400">No tags found</p>
             </div>
           ) : (
-            <div className='h-[calc(100vh-224px)] overflow-y-auto scrollbar-hide -mx-4 px-4' style={{
+            <div className='h-[calc(100vh-12rem)] overflow-y-auto scrollbar-hide -mx-4 px-4' style={{
               overscrollBehavior: 'contain',
               touchAction: 'pan-y'
             }}>

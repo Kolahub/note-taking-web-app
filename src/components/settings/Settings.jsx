@@ -16,7 +16,7 @@ function Settings() {
 
   // Desktop settings
   return (
-    <div>
+    <div className='w-[540px]'>
       {activeSettings?.toLowerCase() === 'color theme' && <ColorTheme />}
 
       {activeSettings?.toLowerCase() === 'font theme' && <FontTheme />}

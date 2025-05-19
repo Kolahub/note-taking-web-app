@@ -89,7 +89,7 @@ const ChangePassword = () => {
   const isMobile = window.innerWidth < 1024;
 
   return (
-    <div className={isMobile ? '' : 'pl-8 pt-8'}>
+    <div className={isMobile ? 'h-[420px] overflow-auto scrollbar-hide pb-5' : 'pl-8 pt-8'}>
       <ToastContainer />
       {!isMobile && <h1 className="capitalize text-2xl font-semibold text-gray-950 dark:text-gray-50">Change Password</h1>}
 

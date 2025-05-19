@@ -65,7 +65,7 @@ function MobileSettings() {
             <h1 className="capitalize text-2xl font-bold text-gray-900 dark:text-gray-100">{activeSettings}</h1>
           </div>
 
-          <div className="px-4 sm:px-8 flex-1 overflow-y-auto pb-20">
+          <div className="px-4 sm:px-8 flex-1">
             {activeSettings.toLowerCase() === 'color theme' && <ColorTheme />}
             {activeSettings.toLowerCase() === 'font theme' && <FontTheme />}
             {activeSettings.toLowerCase() === 'change password' && <ChangePassword />}

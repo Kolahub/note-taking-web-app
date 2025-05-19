@@ -77,13 +77,16 @@ function Navbar() {
     if (showTag) {
       dispatch(mobileAction.callHideTag());
     }
+    if (showTaggedNotes) {
+      dispatch(mobileAction.callHideTaggedNotes());
+    }
   };
 
   // Determine which icon should be active for mobile
   const isHomeActive = (currentPath === '/' || currentPath === '/all-notes') && !showSearch && !settingsActive && !showTag && !showTaggedNotes;
   const isArchiveActive = currentPath === '/archive-notes' && !showSearch && !settingsActive && !showTag && !showTaggedNotes;
   const isSearchActive = showSearch;
-  const isTagActive = showTag || showTaggedNotes;
+  const isTagActive = !settingsActive && (showTag || showTaggedNotes);
   const isSettingsActive = settingsActive;
 
   if (notesLoading) {

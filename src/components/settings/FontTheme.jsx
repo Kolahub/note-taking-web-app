@@ -44,7 +44,7 @@ function FontTheme() {
   const isMobile = window.innerWidth < 1024;
 
   return (
-    <div className={isMobile ? '' : 'pl-8 pt-10'}>
+    <div className={isMobile ? 'h-[420px] overflow-auto scrollbar-hide pb-5' : 'pl-8 pt-10'}>
       {!isMobile && (
         <div className="mb-6">
           <h1 className="text-2xl font-semibold text-gray-950 dark:text-gray-50">Font Theme</h1>

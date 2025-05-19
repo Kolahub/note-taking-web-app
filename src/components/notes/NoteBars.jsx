@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import supabase from '../../config/SupabaseConfig';
 import { mobileAction, noteAction } from '../../store';
@@ -83,8 +83,8 @@ function NoteBars() {
     fetchNotes();
   }, [archiveNotePath, allNotePath, dispatch]);
 
-  const allOrArchiveNotes = allNotePath ? notes : archiveNotePath ? archiveNotes : [];
-  const displayNotes = filteredTag ? filteredNotes : searchQuery ? searchQueryNotes : allOrArchiveNotes;
+  const allOrArchiveNotes = useMemo(() => allNotePath ? notes : archiveNotePath ? archiveNotes : [], [allNotePath, archiveNotePath, notes, archiveNotes]);
+  const displayNotes = useMemo(() => filteredTag ? filteredNotes : searchQuery ? (searchQueryNotes || []) : allOrArchiveNotes, [filteredTag, searchQuery, filteredNotes, searchQueryNotes, allOrArchiveNotes]);
 
   const handleInitiateCreateNote = () => {
     if (!allNotePath) {
@@ -98,6 +98,11 @@ function NoteBars() {
 
   const handleShowNoteDetail = (note) => {
     dispatch(noteAction.showNoteDetail(note));
+
+    // Navigate to archive-notes page if note is archived
+    if (note.archived && !archiveNotePath) {
+      navigate('/archive-notes');
+    }
 
     if (window.innerWidth < 1024) {
       dispatch(mobileAction.callShowNote());

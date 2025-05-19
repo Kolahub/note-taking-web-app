@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, useLocation } from 'react-router-dom';
+import { Form } from 'react-router-dom';
 import supabase from '../../config/SupabaseConfig';
 import { noteAction, toastAction, mobileAction } from '../../store';
 import { format } from 'date-fns';
@@ -12,8 +12,6 @@ function NoteForm() {
   const newNoteI = useSelector((state) => state.note.newNoteI);
   const noteDetail = useSelector((state) => state.note.noteDetail);
   const dispatch = useDispatch();
-  const location = useLocation();
-  const currentPath = location.pathname;
 
   // Controlled inputs for form data
   const [formData, setFormData] = useState({
@@ -200,7 +198,7 @@ function NoteForm() {
           />
         </div>
 
-        {currentPath === '/archive-notes' && (
+        {noteDetail.archived && (
           <div className="flex gap-2 py-1 mb-2">
             <div className="flex items-center gap-1 w-48">
               <div className="text-black dark:text-gray-300">
