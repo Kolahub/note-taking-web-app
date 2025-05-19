@@ -242,7 +242,7 @@ function NoteForm() {
             resize: 'none',
             WebkitOverflowScrolling: 'touch',
           }}
-          className="w-full flex-1 focus:outline-none hide-scrollbar bg-transparent dark:text-white leading-7 h-full"
+          className="w-full flex-1 focus:outline-none hide-scrollbar bg-transparent dark:text-white leading-7 h-full text-base"
         />
 
         <div className="w-full border-t-2 border-gray-200 dark:border-gray-800 my-4 hidden lg:block"></div>

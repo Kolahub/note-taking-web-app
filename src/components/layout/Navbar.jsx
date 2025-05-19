@@ -20,6 +20,7 @@ function Navbar() {
   const showNote = useSelector((state) => state.mobile.showNote);
   const showSearch = useSelector((state) => state.mobile.showSearch);
   const showTag = useSelector((state) => state.mobile.showTag);
+  const showTaggedNotes = useSelector((state) => state.mobile.showTaggedNotes);
   const settingsActive = useSelector((state) => state.note.settingsActive);
   const notesLoading = useSelector((state) => state.note.loading);
   const dispatch = useDispatch();
@@ -62,6 +63,7 @@ function Navbar() {
 
   const handleShowTag = function () {
     dispatch(mobileAction.callShowTag());
+    dispatch(noteAction.cancelActiveSettings());
   };
 
   const handleToggleSettings = function () {
@@ -78,10 +80,10 @@ function Navbar() {
   };
 
   // Determine which icon should be active for mobile
-  const isHomeActive = (currentPath === '/' || currentPath === '/all-notes') && !showSearch && !settingsActive && !showTag;
-  const isArchiveActive = currentPath === '/archive-notes' && !showSearch && !settingsActive && !showTag;
+  const isHomeActive = (currentPath === '/' || currentPath === '/all-notes') && !showSearch && !settingsActive && !showTag && !showTaggedNotes;
+  const isArchiveActive = currentPath === '/archive-notes' && !showSearch && !settingsActive && !showTag && !showTaggedNotes;
   const isSearchActive = showSearch;
-  const isTagActive = showTag;
+  const isTagActive = showTag || showTaggedNotes;
   const isSettingsActive = settingsActive;
 
   if (notesLoading) {

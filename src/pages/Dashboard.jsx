@@ -116,11 +116,19 @@ function Dashboard() {
       </div>
 
       <div
-        className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-auto scrollbar-hide ${
-          showNote ? 'hidden' : settingsActive ? 'block absolute top-[64px] md:top-[74px] lg:top-[64px] left-0 right-0 bottom-0' : 'hidden lg:block'
+        className={`fixed top-[64px] md:top-[74px] lg:top-[64px] left-0 right-0 bottom-0 bg-white dark:bg-black z-20 overflow-auto scrollbar-hide ${
+          settingsActive ? 'block' : 'hidden'
         }`}
       >
-        {settingsActive ? <Settings /> : (newNoteI || allOrArchiveNotes.length > 0) && <NoteForm />}
+        <Settings />
+      </div>
+
+      <div
+        className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-auto scrollbar-hide ${
+          showNote ? 'hidden' : settingsActive ? 'hidden lg:block' : 'hidden lg:block'
+        }`}
+      >
+        {(newNoteI || allOrArchiveNotes.length > 0) && <NoteForm />}
       </div>
 
       <div className="lg:col-start-9 lg:col-span-2 lg:row-start-2 overflow-auto hidden lg:block">
