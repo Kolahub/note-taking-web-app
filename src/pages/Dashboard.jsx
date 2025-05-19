@@ -74,7 +74,7 @@ function Dashboard() {
   // console.log(showNote, '🤣🤣')
 
   return (
-    <div className="bg-white dark:bg-black grid lg:grid-cols-10 h-screen lg:grid-rows-[auto,1fr] overflow-y-hidden max-h-screen">
+    <div className="bg-white dark:bg-black grid lg:grid-cols-10 h-screen lg:grid-rows-[auto,1fr] overflow-y-hidden">
       <div className="border-r-2 dark:border-gray-800 lg:px-4 lg:pt-3 lg:row-span-2 lg:col-start-1 lg:col-span-2">
         <div className="text-black dark:text-white px-4 py-2 sm:px-6 md:px-8 sm:py-3 bg-gray-100 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent h-[64px] md:h-[74px] lg:h-[64px] flex items-center overflow-hidden">
           <Logo />
