@@ -74,7 +74,7 @@ function Dashboard() {
   // console.log(showNote, '🤣🤣')
 
   return (
-    <div className="bg-white dark:bg-black grid lg:grid-cols-10 h-screen lg:grid-rows-[auto,1fr] overflow-y-hidden">
+    <div className="bg-white dark:bg-black min-h-screen flex flex-col lg:grid lg:grid-cols-10 lg:grid-rows-[auto,1fr] overflow-hidden">
       <div className="border-r-2 dark:border-gray-800 lg:px-4 lg:pt-3 lg:row-span-2 lg:col-start-1 lg:col-span-2">
         <div className="text-black dark:text-white px-4 py-2 sm:px-6 md:px-8 sm:py-3 bg-gray-100 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent h-[64px] md:h-[74px] lg:h-[64px] flex items-center overflow-hidden">
           <Logo />
@@ -85,7 +85,7 @@ function Dashboard() {
       <div
         className={`border-b-2 dark:border-gray-800 lg:col-start-3 lg:col-span-8 lg:row-start-1 ${
           showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden' : 'block'
-        }`}
+        } flex-shrink-0`}
       >
         <SubNav />
       </div>
@@ -97,7 +97,7 @@ function Dashboard() {
         </div>
       )}
 
-      <div className={`${showSearch ? 'block' : 'hidden'}`}>
+      <div className={`${showSearch ? 'block' : 'hidden'} fixed inset-0 bg-white dark:bg-black z-50`}>
         <MobileSearch onClose={() => dispatch(mobileAction.callHideSearch())} />
       </div>
 
@@ -105,6 +105,9 @@ function Dashboard() {
         <Tags />
       </div>
 
+      <div className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[64px] md:top-[57px] lg:top-[64px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>
+        <MobileTaggedNotes />
+      </div>
       <div className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[64px] md:top-[57px] lg:top-[64px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>        <MobileTaggedNotes />      </div>
 
       <div
