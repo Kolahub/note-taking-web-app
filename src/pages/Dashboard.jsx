@@ -114,16 +114,13 @@ function Dashboard() {
         <NoteBars />
       </div>
 
-              <div
-              className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-auto scrollbar-hide ${
-                (showNote || settingsActive) ? 'block' : 'hidden lg:block'
-
-              }`}
-            >
+      <div
+        className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-auto scrollbar-hide ${
+          (showNote || settingsActive) ? 'block' : 'hidden lg:block'
+        }`}
+      >
               {newNoteI || (allOrArchiveNotes.length > 0 && !settingsActive) ? <NoteForm /> : settingsActive && <Settings />}
             </div>
-
-
 
       <div className="lg:col-start-9 lg:col-span-2 lg:row-start-2 overflow-auto hidden lg:block">
         {!settingsActive && allOrArchiveNotes.length > 0 && <CleanSweep />}
