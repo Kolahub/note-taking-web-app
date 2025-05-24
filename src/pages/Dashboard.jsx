@@ -74,7 +74,7 @@ function Dashboard() {
   // console.log(showNote, '🤣🤣')
 
   return (
-    <div className="bg-white dark:bg-black lg:grid lg:grid-cols-10 h-screen lg:grid-rows-[auto,1fr]">
+    <div className="bg-white dark:bg-black lg:grid lg:grid-cols-10 min-h-screen lg:grid-rows-[auto,1fr] pb-20 lg:pb-0">
       <div className="border-r-2 dark:border-gray-800 lg:px-4 lg:pt-3 lg:row-span-2 lg:col-start-1 lg:col-span-2">
         <div className="text-black dark:text-white px-4 py-2 sm:px-6 md:px-8 sm:py-3 bg-gray-100 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent h-[64px] md:h-[74px] lg:h-[64px] flex items-center overflow-hidden">
           <Logo />
@@ -96,7 +96,7 @@ function Dashboard() {
         </div>
       )}
 
-      <div className={`${showSearch ? 'block' : 'hidden'}`}>
+      <div className={`${showSearch ? 'block' : 'hidden'} pb-20 lg:pb-0`}>
         <MobileSearch onClose={() => dispatch(mobileAction.callHideSearch())} />
       </div>
 
@@ -107,6 +107,12 @@ function Dashboard() {
       <div className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[64px] md:top-[57px] lg:top-[64px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>        <MobileTaggedNotes />      </div>
 
       <div
+        className={`lg:col-start-3 lg:col-span-8 lg:row-start-2 lg:row-span-1 lg:flex lg:gap-4 lg:overflow-y-auto lg:max-h-[calc(100vh-64px)] pb-20 lg:pb-0 ${showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'}`}
+      >
+        <NoteBars />
+      </div>
+
+      <div
         className={`lg:col-start-3 lg:col-span-2 lg:row-start-2 overflow-hidden ${
           showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'
         } pb-[60px] md:pb-[70px]`}
@@ -114,14 +120,13 @@ function Dashboard() {
         <NoteBars />
       </div>
 
-              <div
-              className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-auto scrollbar-hide ${
-                (showNote || settingsActive) ? 'block' : 'hidden lg:block'
-
-              }`}
-            >
-              {newNoteI || (allOrArchiveNotes.length > 0 && !settingsActive) ? <NoteForm /> : settingsActive && <Settings />}
-            </div>
+      <div
+        className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-auto scrollbar-hide ${
+          (showNote || settingsActive) ? 'block' : 'hidden lg:block'
+        }`}
+      >
+        {newNoteI || (allOrArchiveNotes.length > 0 && !settingsActive) ? <NoteForm /> : settingsActive && <Settings />}
+      </div>
 
 
 
