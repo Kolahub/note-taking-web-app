@@ -21,7 +21,7 @@ function Dashboard() {
   const allNotes = useSelector((state) => state.note.notes);
   const allArchiveNotes = useSelector((state) => state.note.archivedNotes);
   const newNoteI = useSelector((state) => state.note.newNoteI);
-  const noteDetail = useSelector((state) => state.note.noteDetail);
+  // const noteDetail = useSelector((state) => state.note.noteDetail);
   const settingsActive = useSelector((state) => state.note.settingsActive);
   const showNote = useSelector((state) => state.mobile.showNote);
   const showSearch = useSelector((state) => state.mobile.showSearch);
@@ -91,9 +91,8 @@ function Dashboard() {
       </div>
 
       {showNote && (
-        <div className="fixed top-[64px] sm:top-[74px] lg:top-[64px] left-0 right-0 bottom-0 flex flex-col bg-white dark:bg-black z-10 lg:static lg:col-start-5 lg:col-span-4 lg:row-start-2 lg:z-auto mb-[60px]">
+        <div className="bg-white dark:bg-black">
           <MobileNoteAction />
-          <div className="flex-1 overflow-auto">{(newNoteI || noteDetail?.id || allOrArchiveNotes.length > 0) && <NoteForm />}</div>
         </div>
       )}
 
