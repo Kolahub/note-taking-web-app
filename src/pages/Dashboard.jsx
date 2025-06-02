@@ -73,33 +73,20 @@ function Dashboard() {
   const allOrArchiveNotes = allNotePath ? allNotes : archiveNotePath ? allArchiveNotes : [];
   // console.log(showNote, '🤣🤣')
 
-  // Add fixed positioning and proper height for mobile view
   return (
-    <div className="bg-white dark:bg-black flex flex-col h-screen overflow-hidden">
-      {/* Mobile header */}
-      <div className="lg:hidden">
-        <div className="text-black dark:text-white px-4 py-2 bg-gray-100 dark:bg-gray-800 h-[64px] flex items-center">
-          <Logo />
-        </div>
-        <div className="border-b-2 dark:border-gray-800">
-          <SubNav />
-        </div>
-      </div>
-
-      {/* Main content area - with padding bottom to account for mobile navbar */}
-      <div className="flex-1 flex flex-col lg:grid lg:grid-cols-10 lg:grid-rows-[auto,1fr] overflow-hidden pb-[72px] lg:pb-0">
-      {/* Desktop sidebar */}
-      <div className="hidden lg:block border-r-2 dark:border-gray-800 lg:px-4 lg:pt-3 lg:row-span-2 lg:col-start-1 lg:col-span-2">
-        <div className="text-black dark:text-white px-4 py-2 h-[64px] flex items-center">
+    <div className="bg-white dark:bg-black lg:grid lg:grid-cols-10 h-screen lg:grid-rows-[auto,1fr]">
+      <div className="border-r-2 dark:border-gray-800 lg:px-4 lg:pt-3 lg:row-span-2 lg:col-start-1 lg:col-span-2">
+        <div className="text-black dark:text-white px-4 py-2 sm:px-6 md:px-8 sm:py-3 bg-gray-100 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent h-[64px] md:h-[74px] lg:h-[64px] flex items-center overflow-hidden">
           <Logo />
         </div>
         <Navbar />
       </div>
 
-      {/* Desktop subnav */}
-      <div className={`hidden lg:block border-b-2 dark:border-gray-800 lg:col-start-3 lg:col-span-8 lg:row-start-1 ${
-          showNote || showSearch || showTag || showTaggedNotes ? 'lg:hidden' : settingsActive ? 'lg:hidden' : ''
-        }`}>
+      <div
+        className={`border-b-2 dark:border-gray-800 lg:col-start-3 lg:col-span-8 lg:row-start-1 ${
+          showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'
+        }`}
+      >
         <SubNav />
       </div>
 
@@ -117,48 +104,30 @@ function Dashboard() {
         <Tags />
       </div>
 
-      <div 
-        className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[64px] md:top-[57px] lg:top-[64px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20 overflow-y-auto`}
-        style={{
-          height: 'calc(100vh - 124px)',
-          maxHeight: 'calc(100vh - 124px)',
-          overflowAnchor: 'none',
-          overscrollBehaviorY: 'contain'
-        }}
+      <div className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[64px] md:top-[57px] lg:top-[64px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>        <MobileTaggedNotes />      </div>
+
+      <div
+        className={`lg:col-start-3 lg:col-span-2 lg:row-start-2 overflow-hidden ${
+          showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'
+        } pb-[60px] md:pb-[70px]`}
       >
-        <MobileTaggedNotes />
+        <NoteBars />
       </div>
 
-      {/* Notes list */}
-      <div className={`flex-1 overflow-hidden ${
-          showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'flex flex-col'
-        }`}>
-        <div className="flex-1 overflow-y-auto">
-          <NoteBars />
-        </div>
-      </div>
-
-      {/* Note form / settings */}
-      <div className={`flex-1 overflow-auto ${
+      <div
+        className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-auto scrollbar-hide ${
           (showNote || settingsActive) ? 'block' : 'hidden lg:block'
-        }`}>
-        {newNoteI || (allOrArchiveNotes.length > 0 && !settingsActive) ? <NoteForm /> : settingsActive && <Settings />}
-      </div>
+        }`}
+      >
+              {newNoteI || (allOrArchiveNotes.length > 0 && !settingsActive) ? <NoteForm /> : settingsActive && <Settings />}
+            </div>
 
-      {/* Clean sweep */}
-      <div className="hidden lg:block lg:col-start-9 lg:col-span-2 lg:row-start-2 overflow-y-auto">
+      <div className="lg:col-start-9 lg:col-span-2 lg:row-start-2 overflow-auto hidden lg:block">
         {!settingsActive && allOrArchiveNotes.length > 0 && <CleanSweep />}
       </div>
 
-      {/* Toast */}
-      <div className="fixed bottom-4 right-4 z-50">
+      <div className="">
         {toastState.show && <Toast message={toastState.message} subText={toastState.subText} onClose={() => dispatch(toastAction.hideToast())} />}
-      </div>
-      </div> {/* End main content area */}
-      
-      {/* Mobile navbar - positioned at the bottom of the viewport */}
-      <div className="lg:hidden">
-        <Navbar />
       </div>
     </div>
   );
