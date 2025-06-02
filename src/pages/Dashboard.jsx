@@ -105,18 +105,31 @@ function Dashboard() {
         <Tags />
       </div>
 
-      <div className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[64px] md:top-[57px] lg:top-[64px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20 overflow-y-auto`}>
+      <div 
+        className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[64px] md:top-[57px] lg:top-[64px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20 overflow-y-auto`}
+        style={{
+          height: 'calc(100vh - 124px)',
+          maxHeight: 'calc(100vh - 124px)',
+          overflowAnchor: 'none',
+          overscrollBehaviorY: 'contain'
+        }}
+      >
         <MobileTaggedNotes />
       </div>
 
       <div
         className={`lg:col-start-3 lg:col-span-2 lg:row-start-2 overflow-y-auto overscroll-contain ${
           showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'
-        } pb-[60px] md:pb-[70px] h-[calc(100vh-124px)] md:h-[calc(100vh-134px)] lg:h-auto lg:pb-0`}
+        } lg:pb-0`}
         style={{
+          height: 'calc(100vh - 124px)',
+          maxHeight: 'calc(100vh - 124px)',
           WebkitOverflowScrolling: 'touch',
           scrollbarWidth: 'none',
-          msOverflowStyle: 'none'
+          msOverflowStyle: 'none',
+          paddingBottom: 'env(safe-area-inset-bottom, 60px)',
+          overflowAnchor: 'none',
+          overscrollBehaviorY: 'contain'
         }}
       >
         <NoteBars />
