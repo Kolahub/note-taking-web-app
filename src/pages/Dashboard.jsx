@@ -73,8 +73,9 @@ function Dashboard() {
   const allOrArchiveNotes = allNotePath ? allNotes : archiveNotePath ? allArchiveNotes : [];
   // console.log(showNote, '🤣🤣')
 
+  // Add fixed positioning and proper height for mobile view
   return (
-    <div className="bg-white dark:bg-black lg:grid lg:grid-cols-10 h-screen lg:grid-rows-[auto,1fr]">
+    <div className="bg-white dark:bg-black lg:grid lg:grid-cols-10 h-full min-h-screen lg:h-screen lg:grid-rows-[auto,1fr] overflow-hidden">
       <div className="border-r-2 dark:border-gray-800 lg:px-4 lg:pt-3 lg:row-span-2 lg:col-start-1 lg:col-span-2">
         <div className="text-black dark:text-white px-4 py-2 sm:px-6 md:px-8 sm:py-3 bg-gray-100 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent h-[64px] md:h-[74px] lg:h-[64px] flex items-center overflow-hidden">
           <Logo />
@@ -104,25 +105,42 @@ function Dashboard() {
         <Tags />
       </div>
 
-      <div className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[64px] md:top-[57px] lg:top-[64px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>        <MobileTaggedNotes />      </div>
+      <div className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[64px] md:top-[57px] lg:top-[64px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20 overflow-y-auto`}>
+        <MobileTaggedNotes />
+      </div>
 
       <div
-        className={`lg:col-start-3 lg:col-span-2 lg:row-start-2 overflow-hidden ${
+        className={`lg:col-start-3 lg:col-span-2 lg:row-start-2 overflow-y-auto overscroll-contain ${
           showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'
-        } pb-[60px] md:pb-[70px]`}
+        } pb-[60px] md:pb-[70px] h-[calc(100vh-124px)] md:h-[calc(100vh-134px)] lg:h-auto lg:pb-0`}
+        style={{
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
+        }}
       >
         <NoteBars />
       </div>
 
       <div
-        className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-auto scrollbar-hide ${
+        className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-y-auto overscroll-contain ${
           (showNote || settingsActive) ? 'block' : 'hidden lg:block'
-        }`}
+        } h-[calc(100vh-124px)] md:h-[calc(100vh-134px)] lg:h-auto`}
+        style={{
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
+        }}
       >
               {newNoteI || (allOrArchiveNotes.length > 0 && !settingsActive) ? <NoteForm /> : settingsActive && <Settings />}
             </div>
 
-      <div className="lg:col-start-9 lg:col-span-2 lg:row-start-2 overflow-auto hidden lg:block">
+      <div className="lg:col-start-9 lg:col-span-2 lg:row-start-2 overflow-y-auto overscroll-contain hidden lg:block"
+        style={{
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
+        }}>
         {!settingsActive && allOrArchiveNotes.length > 0 && <CleanSweep />}
       </div>
 
