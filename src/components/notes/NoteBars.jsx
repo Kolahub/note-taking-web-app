@@ -159,38 +159,46 @@ function NoteBars() {
 
   if (notesLoading) {
     return (
-      <div className="flex-1 space-y-4 animate-pulse px-2 sm:px-4">
-        {/* Search bar skeleton */}
-        <div className="flex gap-2 items-center">
-          <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded-lg flex-1"></div>
-        </div>
+      <div className="h-full overflow-y-auto overscroll-contain" style={{
+        WebkitOverflowScrolling: 'touch',
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+        height: '100%',
+        maxHeight: '100%'
+      }}>
+        <div className="flex-1 space-y-4 animate-pulse px-2 sm:px-4">
+          {/* Search bar skeleton */}
+          <div className="flex gap-2 items-center">
+            <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded-lg flex-1"></div>
+          </div>
 
-        {/* Notes list skeleton */}
-        <div className="space-y-3">
-          {[1, 2, 3].map((item) => (
-            <div key={item} className="p-3 sm:p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-              <div className="space-y-2 sm:space-y-3">
-                {/* Title */}
-                <div className="h-4 sm:h-5 bg-gray-200 dark:bg-gray-700 rounded w-1/2 sm:w-1/3"></div>
+          {/* Notes list skeleton */}
+          <div className="space-y-3">
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="p-3 sm:p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                <div className="space-y-2 sm:space-y-3">
+                  {/* Title */}
+                  <div className="h-4 sm:h-5 bg-gray-200 dark:bg-gray-700 rounded w-1/2 sm:w-1/3"></div>
 
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2">
-                  <div className="h-5 sm:h-6 w-14 sm:w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                  <div className="h-5 sm:h-6 w-16 sm:w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-2">
+                    <div className="h-5 sm:h-6 w-14 sm:w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    <div className="h-5 sm:h-6 w-16 sm:w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                  </div>
+
+                  {/* Date */}
+                  <div className="h-3 sm:h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 sm:w-24"></div>
                 </div>
-
-                {/* Date */}
-                <div className="h-3 sm:h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 sm:w-24"></div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-<div
+    <div
       className="p-4 sm:px-8 sm:py-4 lg:px-4 lg:py-5 border-r-2 dark:border-gray-800 flex flex-col w-full relative note-bars-height"
       style={{ 
 
@@ -231,7 +239,7 @@ function NoteBars() {
           </button>
         </div>
       ) : (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col gap-4 h-full w-full">
           <button
             className="flex justify-center items-center lg:w-full py-3 rounded-full lg:rounded-lg absolute lg:static right-9 bottom-12
             h-16 w-16 lg:h-auto bg-blue-500 hover:bg-blue-600 

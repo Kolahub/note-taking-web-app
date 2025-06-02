@@ -75,19 +75,31 @@ function Dashboard() {
 
   // Add fixed positioning and proper height for mobile view
   return (
-    <div className="bg-white dark:bg-black lg:grid lg:grid-cols-10 h-full min-h-screen lg:h-screen lg:grid-rows-[auto,1fr] overflow-hidden">
-      <div className="border-r-2 dark:border-gray-800 lg:px-4 lg:pt-3 lg:row-span-2 lg:col-start-1 lg:col-span-2">
-        <div className="text-black dark:text-white px-4 py-2 sm:px-6 md:px-8 sm:py-3 bg-gray-100 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent h-[64px] md:h-[74px] lg:h-[64px] flex items-center overflow-hidden">
+    <div className="bg-white dark:bg-black flex flex-col h-screen overflow-hidden">
+      {/* Mobile header */}
+      <div className="lg:hidden">
+        <div className="text-black dark:text-white px-4 py-2 bg-gray-100 dark:bg-gray-800 h-[64px] flex items-center">
+          <Logo />
+        </div>
+        <div className="border-b-2 dark:border-gray-800">
+          <SubNav />
+        </div>
+      </div>
+
+      {/* Main content area - with padding bottom to account for mobile navbar */}
+      <div className="flex-1 flex flex-col lg:grid lg:grid-cols-10 lg:grid-rows-[auto,1fr] overflow-hidden pb-[72px] lg:pb-0">
+      {/* Desktop sidebar */}
+      <div className="hidden lg:block border-r-2 dark:border-gray-800 lg:px-4 lg:pt-3 lg:row-span-2 lg:col-start-1 lg:col-span-2">
+        <div className="text-black dark:text-white px-4 py-2 h-[64px] flex items-center">
           <Logo />
         </div>
         <Navbar />
       </div>
 
-      <div
-        className={`border-b-2 dark:border-gray-800 lg:col-start-3 lg:col-span-8 lg:row-start-1 ${
-          showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'
-        }`}
-      >
+      {/* Desktop subnav */}
+      <div className={`hidden lg:block border-b-2 dark:border-gray-800 lg:col-start-3 lg:col-span-8 lg:row-start-1 ${
+          showNote || showSearch || showTag || showTaggedNotes ? 'lg:hidden' : settingsActive ? 'lg:hidden' : ''
+        }`}>
         <SubNav />
       </div>
 
@@ -117,48 +129,36 @@ function Dashboard() {
         <MobileTaggedNotes />
       </div>
 
-      <div
-        className={`lg:col-start-3 lg:col-span-2 lg:row-start-2 overflow-y-auto overscroll-contain ${
-          showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'
-        } lg:pb-0`}
-        style={{
-          height: 'calc(100vh - 124px)',
-          maxHeight: 'calc(100vh - 124px)',
-          WebkitOverflowScrolling: 'touch',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-          paddingBottom: 'env(safe-area-inset-bottom, 60px)',
-          overflowAnchor: 'none',
-          overscrollBehaviorY: 'contain'
-        }}
-      >
-        <NoteBars />
+      {/* Notes list */}
+      <div className={`flex-1 overflow-hidden ${
+          showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'flex flex-col'
+        }`}>
+        <div className="flex-1 overflow-y-auto">
+          <NoteBars />
+        </div>
       </div>
 
-      <div
-        className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-y-auto overscroll-contain ${
+      {/* Note form / settings */}
+      <div className={`flex-1 overflow-auto ${
           (showNote || settingsActive) ? 'block' : 'hidden lg:block'
-        } h-[calc(100vh-124px)] md:h-[calc(100vh-134px)] lg:h-auto`}
-        style={{
-          WebkitOverflowScrolling: 'touch',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none'
-        }}
-      >
-              {newNoteI || (allOrArchiveNotes.length > 0 && !settingsActive) ? <NoteForm /> : settingsActive && <Settings />}
-            </div>
+        }`}>
+        {newNoteI || (allOrArchiveNotes.length > 0 && !settingsActive) ? <NoteForm /> : settingsActive && <Settings />}
+      </div>
 
-      <div className="lg:col-start-9 lg:col-span-2 lg:row-start-2 overflow-y-auto overscroll-contain hidden lg:block"
-        style={{
-          WebkitOverflowScrolling: 'touch',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none'
-        }}>
+      {/* Clean sweep */}
+      <div className="hidden lg:block lg:col-start-9 lg:col-span-2 lg:row-start-2 overflow-y-auto">
         {!settingsActive && allOrArchiveNotes.length > 0 && <CleanSweep />}
       </div>
 
-      <div className="">
+      {/* Toast */}
+      <div className="fixed bottom-4 right-4 z-50">
         {toastState.show && <Toast message={toastState.message} subText={toastState.subText} onClose={() => dispatch(toastAction.hideToast())} />}
+      </div>
+      </div> {/* End main content area */}
+      
+      {/* Mobile navbar - positioned at the bottom of the viewport */}
+      <div className="lg:hidden">
+        <Navbar />
       </div>
     </div>
   );
