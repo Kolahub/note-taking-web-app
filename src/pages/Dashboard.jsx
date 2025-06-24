@@ -91,8 +91,13 @@ function Dashboard() {
       </div>
 
       {showNote && (
-        <div className="bg-white dark:bg-black">
-          <MobileNoteAction />
+        <div className="flex flex-col h-screen bg-white dark:bg-black fixed inset-0 z-20">
+          <div className="flex-none">
+            <MobileNoteAction />
+          </div>
+          <div className="flex-1 overflow-y-auto pb-safe">
+            {newNoteI || (allOrArchiveNotes.length > 0 && !settingsActive) ? <NoteForm /> : settingsActive && <Settings />}
+          </div>
         </div>
       )}
 
@@ -116,7 +121,7 @@ function Dashboard() {
 
       <div
         className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-auto scrollbar-hide ${
-          (showNote || settingsActive) ? 'block' : 'hidden lg:block'
+          (settingsActive) ? 'block' : (!showNote ? 'hidden lg:block' : 'hidden')
         }`}
       >
               {newNoteI || (allOrArchiveNotes.length > 0 && !settingsActive) ? <NoteForm /> : settingsActive && <Settings />}
