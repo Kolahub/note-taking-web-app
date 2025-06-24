@@ -7,12 +7,11 @@ import SettingsIcon from '../../assets/images/icon-settings.svg?react';
 import TagIcon from '../../assets/images/icon-tag.svg?react';
 import { useDispatch, useSelector } from 'react-redux';
 import { mobileAction, noteAction } from '../../store';
-import Tags from '../notes/Tags';
 import { useEffect } from 'react';
 /**
  * Responsive Navbar component that handles both desktop sidebar navigation and mobile bottom navigation.
  * This component consolidates what was previously separate MobileNav and Navbar components.
- * - For desktop: Displays as a sidebar with navigation links and Tags component
+ * - For desktop: Displays as a sidebar with navigation links component
  * - For mobile: Displays as a fixed bottom navigation bar with icon buttons
  */
 function Navbar() {
@@ -30,6 +29,13 @@ function Navbar() {
   const archiveNotePath = currentPath === '/archive-notes';
   const allNotePath = currentPath === '/' || currentPath === '/all-notes';
 
+    // Determine which icon should be active for mobile
+    const isHomeActive = (currentPath === '/' || currentPath === '/all-notes') && !showSearch && !settingsActive && !showTag && !showTaggedNotes;
+    const isArchiveActive = currentPath === '/archive-notes' && !showSearch && !settingsActive && !showTag && !showTaggedNotes;
+    const isSearchActive = showSearch;
+    const isTagActive = !settingsActive && (showTag || showTaggedNotes);
+    const isSettingsActive = settingsActive;
+
   useEffect(() => {
     if (newNoteI && archiveNotePath) {
       const timer = setTimeout(() => {
@@ -42,6 +48,18 @@ function Navbar() {
   useEffect(() => {
     dispatch(noteAction.clearFilters());
   }, [dispatch]);
+
+  useEffect(() => {
+    let active = 'none';
+    if (isHomeActive) active = 'All Notes';
+    else if (isArchiveActive) active = 'Archive Notes';
+    else if (isSearchActive) active = 'Search';
+    else if (isTagActive) active = 'Tags';
+    else if (isSettingsActive) active = 'Settings';
+  
+    dispatch(mobileAction.setActiveMobileNav(active));
+  }, [isHomeActive, isArchiveActive, isSearchActive, isTagActive, isSettingsActive, dispatch]);
+  
 
   const handleOnclickNav = function () {
     dispatch(noteAction.clearFilters());
@@ -82,13 +100,6 @@ function Navbar() {
     }
   };
 
-  // Determine which icon should be active for mobile
-  const isHomeActive = (currentPath === '/' || currentPath === '/all-notes') && !showSearch && !settingsActive && !showTag && !showTaggedNotes;
-  const isArchiveActive = currentPath === '/archive-notes' && !showSearch && !settingsActive && !showTag && !showTaggedNotes;
-  const isSearchActive = showSearch;
-  const isTagActive = !settingsActive && (showTag || showTaggedNotes);
-  const isSettingsActive = settingsActive;
-
   if (notesLoading) {
     return (
       <div className="lg:mt-4 lg:flex flex-col gap-2 sm:gap-3 animate-pulse">
@@ -102,7 +113,7 @@ function Navbar() {
   return (
     <>
       {/* Desktop navigation - hidden on mobile and tablet screens */}
-      <div className="hidden lg:block">
+      <div className="hidden lg:flex flex-col h-full border-b-2 dark:border-gray-800">
         <div className="lg:mt-4 lg:flex flex-col gap-2">
           <NavLink
             to={'/all-notes'}
@@ -155,10 +166,6 @@ function Navbar() {
               <ArrowLeft />
             </div>
           </NavLink>
-        </div>
-
-        <div className="">
-          <Tags />
         </div>
       </div>
 

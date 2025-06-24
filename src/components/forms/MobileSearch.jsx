@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { mobileAction, noteAction } from '../../store';
 import IconSearch from '../../assets/images/icon-search.svg?react';
-import ArrowLeft from '../../assets/images/icon-arrow-left.svg?react';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
-function MobileSearch({ onClose }) {
+function MobileSearch() {
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
   const searchQueryNotes = useSelector((state) => state.note.searchQueryNotes);
@@ -15,13 +14,6 @@ function MobileSearch({ onClose }) {
     const query = e.target.value;
     dispatch(noteAction.allSearchQueryNotes(query));
     setSearchText(query);
-  };
-
-  const handleGoBack = function () {
-    dispatch(noteAction.clearFilters());
-    dispatch(noteAction.allSearchQueryNotes(''));
-    setSearchText('');
-    onClose();
   };
 
   const handleClearSearch = function () {
@@ -51,11 +43,8 @@ function MobileSearch({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bottom-16 bg-white dark:bg-black z-40 flex flex-col">
-      <div className="px-4 py-4 sm:px-8 sm:py-6 flex items-center gap-3 border-b dark:border-gray-800">
-        <button className="text-gray-700 dark:text-gray-300 active:scale-95" onClick={handleGoBack}>
-          <ArrowLeft />
-        </button>
+    <div className=" bg-white dark:bg-black mb-16">
+      <div className="fixed w-full bg-white dark:bg-black px-4 py-4 sm:px-8 sm:py-6 flex items-center gap-3 border-b dark:border-gray-800">
 
         <div className="flex-1 flex items-center gap-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 px-4 py-3">
           <div className="text-black dark:text-gray-400">
@@ -67,7 +56,6 @@ function MobileSearch({ onClose }) {
             value={searchText}
             placeholder="Search by title, content, or tags…"
             onChange={handleSearchQueryNotes}
-            autoFocus
           />
           {searchText && (
             <button className="text-gray-500 dark:text-gray-400 text-sm" onClick={handleClearSearch}>
@@ -77,7 +65,7 @@ function MobileSearch({ onClose }) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto scrollbar-hide p-4 sm:p-8">
+      <div className="pt-12 scrollbar-hide p-4 sm:p-8">
         {searchText ? (
           <>
             <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">

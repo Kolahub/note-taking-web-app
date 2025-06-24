@@ -140,6 +140,7 @@ const mobileInitialState = {
   showTag: false,
   showTaggedNotes: false,
   previousView: null,
+  activeMobileNav: 'home',
 };
 
 const mobileSlice = createSlice({
@@ -205,6 +206,10 @@ const mobileSlice = createSlice({
     callHideTaggedNotes(state) {
       state.showTaggedNotes = false;
     },
+
+    setActiveMobileNav(state, action) {
+      state.activeMobileNav = action.payload;
+    },    
   },
 });
 
@@ -249,6 +254,7 @@ export const {
   callHideTag,
   callShowTaggedNotes,
   callHideTaggedNotes,
+  setActiveMobileNav, 
 } = mobileSlice.actions;
 
 export const noteAction = noteSlice.actions;

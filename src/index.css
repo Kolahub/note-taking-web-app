@@ -56,22 +56,3 @@ textarea::-webkit-scrollbar {
 .font-sans { font-family: theme('fontFamily.sans'); }
 .font-serif { font-family: theme('fontFamily.serif'); }
 .font-mono { font-family: theme('fontFamily.mono'); }
-
-/* In your global CSS file */
-@media (min-width: 1024px) {
-  .note-bars-height {
-    height: calc(100vh - 85px) !important;
-  }
-}
-@media (max-width: 1023px) {
-  .note-bars-height {
-    height: calc(100vh - 199px) !important;
-  }
-}
-
-
-@media (min-width: 768px) {
-  .custom-height {
-    height: calc(100vh - 85px);
-  }
-}

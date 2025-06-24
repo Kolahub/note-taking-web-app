@@ -78,9 +78,6 @@ function MobileSettings() {
   // Main settings list view
   return (
     <div className="h-full flex flex-col bg-white dark:bg-black">
-      <div className="px-4 sm:px-6 md:px-8 shrink-0 border-b dark:border-gray-800 h-[57px] md:h-[72px] flex items-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
-      </div>
 
       <div className="flex-1 overflow-y-auto pb-20">
         <div className="flex flex-col">

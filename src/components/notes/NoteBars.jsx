@@ -191,11 +191,7 @@ function NoteBars() {
 
   return (
 <div
-      className="p-4 sm:px-8 sm:py-4 lg:px-4 lg:py-5 border-r-2 dark:border-gray-800 flex flex-col w-full relative note-bars-height"
-      style={{ 
-
-        overflow: 'auto',
-      }}
+      className="p-4 sm:px-8 sm:py-4 lg:px-4 lg:py-5 border-r-2 dark:border-gray-800 flex flex-col w-full relative h-full"
     >
       {settingsActive ? (
         <div>
@@ -248,7 +244,7 @@ function NoteBars() {
             <p className="capitalize hidden lg:block">create new note</p>
           </button>
 
-          <div className="flex-1 overflow-y-auto scrollbar-hide">
+          <div className="flex-1 overflow-auto scrollbar-hide h-full">
             {archiveNotePath && !filteredTag && (
               <div className="w-full mb-4 text-gray-700 dark:text-gray-300">
                 All your archived notes are stored here. You can restore or delete them anytime.

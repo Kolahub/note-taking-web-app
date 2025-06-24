@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import IconSearch from '../../assets/images/icon-search.svg?react';
 import IconSettings from '../../assets/images/icon-settings.svg?react';
-import { mobileAction, noteAction } from '../../store';
+import { noteAction } from '../../store';
 import { useLocation } from 'react-router-dom';
 
 function SubNav() {
@@ -10,6 +10,7 @@ function SubNav() {
   const filteredTag = useSelector((state) => state.note.filteredTag);
   const searchQuery = useSelector((state) => state.note.searchQuery);
   const settingsActive = useSelector((state) => state.note.settingsActive);
+  const activeMobileNav = useSelector((state) => state.mobile.activeMobileNav);
   const [searchText, setSearchText] = useState('');
   const notesLoading = useSelector((state) => state.note.loading);
 
@@ -27,10 +28,6 @@ function SubNav() {
     const query = e.target.value;
     dispatch(noteAction.allSearchQueryNotes(query));
     setSearchText(query);
-  };
-
-  const handleMobileSearch = function () {
-    dispatch(mobileAction.callShowSearch());
   };
 
   useEffect(() => {
@@ -72,8 +69,7 @@ function SubNav() {
 
   return (
     <div className="w-full flex gap-4 items-center justify-between px-4 pt-5 pb-4 sm:px-8 sm:pt-6 lg:px-8 lg:py-[18.5px]">
-      <div>
-        <h1 className="capitalize text-3xl font-bold text-gray-900 dark:text-gray-100">
+        <h1 className="capitalize text-3xl font-bold text-gray-900 dark:text-gray-100 hidden lg:block">
           {!otherDisplayHeading ? (
             allNotePath ? (
               'All Notes'
@@ -98,14 +94,9 @@ function SubNav() {
           )}
         </h1>
 
-        {/* Mobile search indicator */}
-        {searchQuery && !settingsActive && (
-          <div className="lg:hidden flex items-center text-gray-600 dark:text-gray-400 text-sm mt-1">
-            <span>Search results for: </span>
-            <span className="text-gray-900 dark:text-gray-100 ml-1 truncate max-w-[150px]">{searchQuery}</span>
-          </div>
-        )}
-      </div>
+        <h1 className="lg:hidden text-3xl font-bold text-gray-900 dark:text-gray-100">
+          {activeMobileNav}
+        </h1>
 
       <div className="flex gap-4 lg:gap-8 items-center">
         {/* Desktop search */}
@@ -132,11 +123,6 @@ function SubNav() {
             </button>
           )}
         </div>
-
-        {/* Mobile search button - now hidden */}
-        <button className="hidden" onClick={handleMobileSearch}>
-          <IconSearch />
-        </button>
 
         <button
           type="button"

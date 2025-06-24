@@ -14,7 +14,7 @@ import MobileNoteAction from '../components/mobile/MobileNoteAction';
 import MobileSearch from '../components/forms/MobileSearch';
 import Tags from '../components/notes/Tags';
 import MobileTaggedNotes from '../components/mobile/MobileTaggedNotes';
-import { mobileAction, noteAction } from '../store';
+import { noteAction } from '../store';
 import supabase from '../config/SupabaseConfig';
 
 function Dashboard() {
@@ -74,54 +74,61 @@ function Dashboard() {
   // console.log(showNote, '🤣🤣')
 
   return (
-    <div className="bg-white dark:bg-black lg:grid lg:grid-cols-10 h-screen lg:grid-rows-[auto,1fr]">
-      <div className="border-r-2 dark:border-gray-800 lg:px-4 lg:pt-3 lg:row-span-2 lg:col-start-1 lg:col-span-2">
+    <div className="bg-white dark:bg-black flex flex-col lg:grid lg:grid-cols-10 h-screen lg:grid-rows-[auto,1fr]">
+      {/* <div className="flex flex-col h-screen lg:block"> */}
+      <div className="flex flex-col border-r-2 dark:border-gray-800 lg:px-4 lg:pt-3 lg:row-span-2 lg:col-start-1 lg:col-span-2">
         <div className="text-black dark:text-white px-4 py-2 sm:px-6 md:px-8 sm:py-3 bg-gray-100 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent h-[64px] md:h-[74px] lg:h-[64px] flex items-center overflow-hidden">
           <Logo />
         </div>
-        <Navbar />
+        <div className="">
+          <Navbar />
+        </div>
+
+        <div className="flex-1 overflow-auto scrollbar-hide hidden lg:block">
+                    <Tags />
+          
+        </div>
       </div>
 
-      <div
-        className={`border-b-2 dark:border-gray-800 lg:col-start-3 lg:col-span-8 lg:row-start-1 ${
-          showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'
-        }`}
-      >
+      <div className="border-b-2 dark:border-gray-800 lg:col-start-3 lg:col-span-8 lg:row-start-1">
         <SubNav />
       </div>
 
       {showNote && (
-        <div className="flex flex-col h-screen bg-white dark:bg-black fixed inset-0 z-20">
-          <div className="flex-none">
-            <MobileNoteAction />
-          </div>
-          <div className="flex-1 overflow-y-auto pb-safe">
+        <div className="bg-white dark:bg-black flex flex-col h-screen">
+          <MobileNoteAction />
+          <div className="flex-1 overflow-auto">
             {newNoteI || (allOrArchiveNotes.length > 0 && !settingsActive) ? <NoteForm /> : settingsActive && <Settings />}
           </div>
         </div>
       )}
 
-      <div className={`${showSearch ? 'block' : 'hidden'}`}>
-        <MobileSearch onClose={() => dispatch(mobileAction.callHideSearch())} />
+      <div className={`${showSearch ? 'block' : 'hidden'} flex-1 overflow-auto`}>
+        <MobileSearch />
       </div>
 
-      <div className={`${showTag ? 'block' : 'hidden'} bg-white dark:bg-black z-20`}>
+      <div className={`${showTag ? 'block' : 'hidden'} bg-white dark:bg-black flex-1 overflow-auto`}>
         <Tags />
       </div>
 
       <div className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[64px] md:top-[57px] lg:top-[64px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>        <MobileTaggedNotes />      </div>
 
       <div
-        className={`lg:col-start-3 lg:col-span-2 lg:row-start-2 overflow-hidden ${
-          showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'
-        } pb-[60px] md:pb-[70px]`}
-      >
-        <NoteBars />
-      </div>
+  className={`flex flex-col${
+    showNote || showSearch || showTag || showTaggedNotes
+      ? 'hidden lg:flex'
+      : settingsActive
+      ? 'hidden lg:flex'
+      : 'flex flex-1 pb-16 lg:pb-0'
+  } lg:col-start-3 lg:col-span-2 lg:row-start-2 overflow-hidden`}
+>
+  <NoteBars />
+</div>
+
 
       <div
-        className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-auto scrollbar-hide ${
-          (settingsActive) ? 'block' : (!showNote ? 'hidden lg:block' : 'hidden')
+        className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-auto scrollbar-hide flex flex-col h-full ${
+          (showNote) ? 'hidden' : settingsActive ? 'block' : 'hidden lg:block'
         }`}
       >
               {newNoteI || (allOrArchiveNotes.length > 0 && !settingsActive) ? <NoteForm /> : settingsActive && <Settings />}
@@ -134,6 +141,8 @@ function Dashboard() {
       <div className="">
         {toastState.show && <Toast message={toastState.message} subText={toastState.subText} onClose={() => dispatch(toastAction.hideToast())} />}
       </div>
+      {/* </div> */}
+     
     </div>
   );
 }
