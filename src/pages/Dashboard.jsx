@@ -80,13 +80,10 @@ function Dashboard() {
         <div className="text-black dark:text-white px-4 py-2 sm:px-6 md:px-8 sm:py-3 bg-gray-100 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent h-[64px] md:h-[74px] lg:h-[64px] flex items-center overflow-hidden">
           <Logo />
         </div>
-        <div className="">
-          <Navbar />
-        </div>
+        <Navbar />
 
         <div className="flex-1 overflow-auto scrollbar-hide hidden lg:block">
-                    <Tags />
-          
+          <Tags />
         </div>
       </div>
 
@@ -114,17 +111,12 @@ function Dashboard() {
       <div className={`${showTaggedNotes ? 'block' : 'hidden'} fixed top-[64px] md:top-[57px] lg:top-[64px] left-0 right-0 bottom-[60px] bg-white dark:bg-black z-20`}>        <MobileTaggedNotes />      </div>
 
       <div
-  className={`flex flex-col${
-    showNote || showSearch || showTag || showTaggedNotes
-      ? 'hidden lg:flex'
-      : settingsActive
-      ? 'hidden lg:flex'
-      : 'flex flex-1 pb-16 lg:pb-0'
-  } lg:col-start-3 lg:col-span-2 lg:row-start-2 overflow-hidden`}
->
-  <NoteBars />
-</div>
-
+        className={`flex-1 lg:col-start-3 lg:col-span-2 lg:row-start-2 overflow-auto ${
+          showNote || showSearch || showTag || showTaggedNotes ? 'hidden lg:block' : settingsActive ? 'hidden lg:block' : 'block'
+        } pb-[60px] md:pb-[70px] lg:pb-0`}
+      >
+        <NoteBars />
+      </div>
 
       <div
         className={`lg:col-start-5 lg:col-span-4 lg:row-start-2 overflow-auto scrollbar-hide flex flex-col h-full ${
